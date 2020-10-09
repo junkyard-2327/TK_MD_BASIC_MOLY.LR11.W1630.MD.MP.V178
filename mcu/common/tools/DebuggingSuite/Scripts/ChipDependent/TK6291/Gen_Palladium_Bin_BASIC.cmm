@@ -1,0 +1,124 @@
+;===============================================
+;CMM START
+;===============================================
+SETUP.BAKfile OFF
+
+; ======================
+; Reset all configuration
+; ======================
+winclear
+AREA.RESet
+AREA.Create dram
+AREA.Select dram
+AREA.view   dram
+AREA.Clear  dram
+SYStem.RESet //Reset all configuration
+
+; ======================
+; attach on PSCore
+; ======================
+; DO MD_P_Attach.cmm
+system.down
+system.cpu cortexr4
+system.up
+
+; ======================
+; Load PSCore code
+; ======================
+; define and init elf,src,bin path
+GLOBAL &OPT_MD_P_ELF_PATH
+GLOBAL &OPT_MD_P_SRC_PATH
+GLOBAL &OPT_MD_P_BIN_PATH
+GLOBAL &L_CMM_RELATIVE_PATH
+DO P_BuildInfo.cmm
+
+data.load.elf &OPT_MD_P_ELF_PATH /AnySym
+
+; ======================
+; Do region initialize
+; ======================
+v INT_InitShareRegions()
+v INT_InitRegions()
+
+; ======================
+; Backup 0x0 -- Image$$L1CORE_DUMP_REGION__ITCM$$Length
+; ======================
+GLOBAL &L1CORE_TCM_SIZE
+&L1CORE_TCM_SIZE=V.VALUE(&Image$$L1CORE_DUMP_REGION__ITCM$$Length)
+data.copy 0x0--&L1CORE_TCM_SIZE VM:0x0
+
+; ======================
+; Save &Image$$EXECUTION_VIEW_END$$ZI$$Limit
+; ======================
+LOCAL &EXTSRAM_END 
+&EXTSRAM_END=V.VALUE(&Image$$EXECUTION_VIEW_END$$ZI$$Limit)
+
+; ======================
+; load L1Core code
+; ======================
+; change folder to l1core/cmm
+cd &L_CMM_RELATIVE_PATH
+; define and init elf,src,bin path
+GLOBAL &OPT_MD_L_ELF_PATH
+GLOBAL &OPT_MD_L_SRC_PATH
+GLOBAL &OPT_MD_L_BIN_PATH
+GLOBAL &P_CMM_RELATIVE_PATH
+DO L_BuildInfo.cmm
+
+data.load.elf &OPT_MD_L_ELF_PATH /AnySym
+
+; ======================
+; call region init api
+; ======================
+v INT_InitRegions()
+// init bootvector
+data.copy Load$$INTSRAM_CODE$$Base--(Load$$INTSRAM_CODE$$Base+0x40) 0x0
+
+; ======================
+; Move l1core tcm content to 0x72000000
+; ======================
+data.copy Image$$INTSRAM_CODE$$Base--(Image$$INTSRAM_DATA_ZI$$ZI$$Limit) 0x72000000
+
+; ======================
+; Move back orignal 0x0 for pcore
+; ======================
+data.copy VM:0x0--&L1CORE_TCM_SIZE 0x0
+
+; ======================
+; Load dsp
+; ======================
+
+LOCAL &DSP_ADDR 
+&DSP_ADDR=V.VALUE(dsp_bin_ro)
+D.LOAD.BINARY ../../bin/DSP_TK6291_UMOLY_W15_14_LTE_P10_EL1S_UPTOCL1224171.bin &DSP_ADDR /byte /nosymbol
+
+
+; change folder back to cmm
+cd &P_CMM_RELATIVE_PATH
+
+; ======================
+; Create PalladiumReleaseBin folder
+; ======================
+IF !OS.DIR(PalladiumReleaseBin)
+(
+    mkdir ./PalladiumReleaseBin
+)
+
+; ======================
+; dump all bins
+; ======================
+
+d.save.binary .\PalladiumReleaseBin\md_emi.bin 0x00000000--&EXTSRAM_END
+PRINT "EXTSTAM:md_emi.bin generated"
+d.save.binary .\PalladiumReleaseBin\md_ps_tcm.bin 0x70000000--0x70080000
+PRINT "PCORE TCM:md_ps_tcm.bin generated"
+d.save.binary .\PalladiumReleaseBin\md_l1_tcm.bin 0x72000000--0x72080000
+PRINT "L1CORE TCM:md_l1_tcm.bin generated"
+d.save.binary .\PalladiumReleaseBin\md_l1_sram.bin Image$$L2SRAM_CODE$$Base--Image$$L2SRAM_DATA_ZI$$ZI$$Limit
+PRINT "L1CORE L2SRAM:md_l1_sram.bin generated"
+
+;===============================================
+;CMM END
+;===============================================
+PRINT "Init Done"
+ENDDO

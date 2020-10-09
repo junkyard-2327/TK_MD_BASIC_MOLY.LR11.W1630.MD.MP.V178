@@ -1,0 +1,100 @@
+; brp clock enable
+d.s 0xF9280000 %long 0xFFFFFFFF
+d.s 0xF9280004 %long 0xFFFFFFFF
+d.s 0xF9280008 %long 0xFFFFFFFF
+
+PRINT "MD32 start to download ..."
+
+; Load brp pm/dm
+d.s 0xf935101c %long 0x62910001
+d.load.binary ../../bin/dsp_bin/brp_pm.bin 0xf9380000 /nosymbol
+d.load.binary ../../bin/dsp_bin/brp_dm.bin 0xf93e0000 /nosymbol
+d.s 0xf935101c %long 0x62910000
+; Ungate brp
+;d.s 0xf935100c %long 0x62910000
+
+; Load dfe pm/dm and ungate
+d.s 0xf7b5101c %long 0x62910001
+d.load.binary ../../bin/dsp_bin/dfe_pm.bin 0xf7b80000 /nosymbol
+d.load.binary ../../bin/dsp_bin/dfe_dm.bin 0xf7be0000 /nosymbol
+d.s 0xf7b5101c %long 0x62910000
+; Ungate dfe
+;d.s 0xf7b5100c %long 0x62910000
+
+; Load rake pm/dm and ungate
+d.s 0xf9b5101c %long 0x62910001
+d.load.binary ../../bin/dsp_bin/rake_pm.bin 0xf9b80000 /nosymbol
+d.load.binary ../../bin/dsp_bin/rake_dm.bin 0xf9be0000 /nosymbol
+d.s 0xf9b5101c %long 0x62910000
+; Ungate rake
+;d.s 0xf9b5100c %long 0x62910000
+
+PRINT "MD32 download done..."
+
+&ICC_DSPBT_BASE=0xFEF20000
+&IMC_DSPBT_BASE=0xFDF20000
+&MPC_DSPBT_BASE=0xFD720000
+
+&ICC_PM_ADDR=0xFE800000
+&ICC_ICM_ADDR=0xFEC00000
+&IMC_PM_ADDR=0xFD800000
+&IMC_ICM_ADDR=0xFDC00000
+&MPC_PM_ADDR=0xFD000000
+&MPC_ICM_ADDR=0xFD400000
+
+&ICC_PM_ICM_ACCESS_ADDR=0xFEE00E68 ;ICC 0xFEE00000+E68 (DSPDMA_CTRL(922)*4=0xE68)
+&IMC_PM_ICM_ACCESS_ADDR=0xFDE03AE8 ;IMC 0xFDE00000+3AE8 (DSPDMA_CTRL(1170)*4=0x1268)
+&MPC_PM_ICM_ACCESS_ADDR=0xFD601268 ;MPC 0xFD600000+1268 (DSPDMA_CTRL(3770)*4=0x1268)
+
+&ICC_DSPBT_CTRL=&ICC_DSPBT_BASE
+&IMC_DSPBT_CTRL=&IMC_DSPBT_BASE
+&MPC_DSPBT_CTRL=&MPC_DSPBT_BASE
+
+&ICC_DSPBT_C2CRF=&ICC_DSPBT_BASE+0x34
+&IMC_DSPBT_C2CRF=&IMC_DSPBT_BASE+0x34
+&MPC_DSPBT_C2CRF=&MPC_DSPBT_BASE+0x34
+
+MWRITEO32 ASD:(&ICC_DSPBT_C2CRF) 1
+MWRITEO32 ASD:(&IMC_DSPBT_C2CRF) 1
+MWRITEO32 ASD:(&MPC_DSPBT_C2CRF) 1
+
+MWRITEO32 ASD:(&ICC_PM_ICM_ACCESS_ADDR) 5
+MWRITEO32 ASD:(&IMC_PM_ICM_ACCESS_ADDR) 5
+MWRITEO32 ASD:(&MPC_PM_ICM_ACCESS_ADDR) 5
+
+; DSPBT_EN=1, CIPHER_EN=1, CIPHER_KEY_LEVEL=1, CIPHER_KEY_SEL=00, BOOT_MODE=manaul mode
+MWRITEO32 ASD:(&ICC_DSPBT_CTRL) 0x2E7
+MWRITEO32 ASD:(&IMC_DSPBT_CTRL) 0x2E7
+MWRITEO32 ASD:(&MPC_DSPBT_CTRL) 0x2E7
+
+PRINT "Coresonic start to download ..."
+
+wait 5.ms
+; load icc pm
+D.LOAD.BINARY   ../../bin/dsp_bin/icc_pm.bin &ICC_PM_ADDR /nosymbol
+;wait 1000.ms
+; load icc icm
+D.LOAD.BINARY   ../../bin/dsp_bin/icc_icm.bin &ICC_ICM_ADDR /nosymbol
+;wait 1000.ms
+
+; load imc pm
+D.LOAD.BINARY   ../../bin/dsp_bin/imc_pm.bin &IMC_PM_ADDR /nosymbol
+;wait 1000.ms
+; load imc icm
+D.LOAD.BINARY   ../../bin/dsp_bin/imc_icm.bin &IMC_ICM_ADDR /nosymbol
+;wait 1000.ms
+
+; load mpc pm
+D.LOAD.BINARY   ../../bin/dsp_bin/mpc_pm.bin &MPC_PM_ADDR /nosymbol
+;wait 1000.ms
+; load mpc icm
+D.LOAD.BINARY   ../../bin/dsp_bin/mpc_icm.bin &MPC_ICM_ADDR /nosymbol
+;wait 1000.ms
+
+; DSPBT_EN=1, CIPHER_EN=1, CIPHER_KEY_LEVEL=1, CIPHER_KEY_SEL=00, BOOT_MODE=manaul mode
+;MWRITEO32 ASD:(&ICC_DSPBT_CTRL) 0x2A7
+;MWRITEO32 ASD:(&IMC_DSPBT_CTRL) 0x2A7
+;MWRITEO32 ASD:(&MPC_DSPBT_CTRL) 0x2A7
+
+PRINT "Coresonic download done..."
+

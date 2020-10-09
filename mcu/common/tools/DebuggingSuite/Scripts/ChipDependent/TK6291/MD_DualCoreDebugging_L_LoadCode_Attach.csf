@@ -1,0 +1,82 @@
+;===============================================
+;CMM START
+;===============================================
+
+; ==================
+; Set up port info
+; ==================
+Do MD_DualCoreDebugging_L1Core.csf
+
+; MD Only BringUp Type
+&OPT_MD_BRINGUP_TYPE=0
+;; 0: CA7 CVD load AP .elf to init EMI,PMIC,GIO
+;; 1: Already Flash download DummyAP by flash tool
+
+; ==================
+; Open debugging tool bar
+; ==================
+menu.reset
+menu.reprogram MD_DualCoreDebugging_PlatformInit
+
+; ==================
+; Open Customer tool bar
+; ==================
+Do MD_L_Customer_ToolBar.cmm
+
+;VectorCatch.RESET OFF
+
+; ==================
+; Load code to RAM
+; ==================
+Do MD_DualCoreDebugging_PlatformInit.cmm &OPT_MD_BRINGUP_TYPE
+
+; ==================
+; load L1Core symbol
+; ==================
+DO MD_L_LoadSymbol.cmm
+
+; ==================
+; attach on L1CORE
+; ==================
+DO MD_L_Attach.cmm
+
+; ==================
+; Initialize boot vector in TCM
+; ==================
+data.copy Load$$INTSRAM_CODE$$Base--(Load$$INTSRAM_CODE$$Base+0x40) 0x0
+
+; ==================
+; set L1Core PC to INT_Initialize
+; untrap L1Core from bootslave
+; ==================
+;D.S SD:0xF60F0104 %LE %LONG 0x6291F8EE
+;D.S SD:0xF60F0100 %LE %LONG 0x1
+R.S PC VARADDR(INT_Initialize)
+
+; ==================
+; untrap PSCore from bootslave
+; ==================
+  
+
+; ==================
+; EMI MPU, set code section as RO
+; ==================
+DO EMI_MPU_Set.cmm
+
+; ==================
+; set breakpoint
+; ==================
+DO MD_DualCoreDebugging_L_BreakPoint.cmm
+
+winclear
+winpos 0% 0% 70% 80%
+d.l
+winpos 70% 0% 30% 80%
+Register
+winpos 0% 76% 50% 50%
+Break.List
+winpos 50% 76% 50% 50%
+sYmbol.Browse
+
+PRINT "Init Done"
+ENDDO

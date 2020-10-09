@@ -1,0 +1,1 @@
+        . += Image$$SHARED_NC_MCURW_HWRW_LENGTH$$Length;

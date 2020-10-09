@@ -1,0 +1,60 @@
+;===============================================
+;CMM START
+;===============================================
+LOCAL &MAIN_FOLDER
+&MAIN_FOLDER=".."
+
+LOCAL &PALLADIUM_FOLDER
+&PALLADIUM_FOLDER="./Palladium"
+
+; ==================
+; Set up port info
+; ==================
+Do MD_DualCoreDebugging_L1Core.csf
+
+; ==================
+; Open debugging tool bar
+; ==================
+menu.reset
+menu.reprogram MD_DualCoreDebugging_PlatformInit
+
+; ==================
+; Open Customer tool bar
+; ==================
+Do MD_L_Customer_ToolBar.cmm
+
+;VectorCatch.RESET OFF
+
+; ==================
+; attach on L1CORE
+; ==================
+CD &PALLADIUM_FOLDER
+DO MD_L_Palladium_Attach.cmm
+; ==================
+; load L1Core symbol
+; ==================
+CD &MAIN_FOLDER
+DO MD_L_LoadSymbol.cmm
+
+; ==================
+; set breakpoint
+; ==================
+CD &PALLADIUM_FOLDER
+DO MD_DualCoreDebugging_L_BreakPoint_Pallaidum.cmm
+
+CD &MAIN_FOLDER
+
+winclear
+winpos 0% 0% 70% 80%
+d.l
+winpos 70% 0% 30% 80%
+Register
+winpos 0% 76% 50% 50%
+Break.List
+winpos 50% 76% 50% 50%
+sYmbol.Browse
+
+VectorCatch.RESET OFF
+
+PRINT "Init Done"
+ENDDO

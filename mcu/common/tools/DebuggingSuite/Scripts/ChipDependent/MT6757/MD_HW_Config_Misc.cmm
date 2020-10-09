@@ -1,0 +1,19 @@
+
+
+PRINT "start MD_HW_Config_Misc.cmm"
+
+; ==================
+; power up TCM SRAM for Pcore TCM only load(should be done by AP in full load).
+; ==================
+D.S SD:0xF00D0114 %LE %LONG 0xFFFFFFFF
+D.S SD:0xF00D0118 %LE %LONG 0xFFFFFFFF
+D.S SD:0xF00D011C %LE %LONG 0xFFFFFFFF
+D.S SD:0xF00D0120 %LE %LONG 0xFFFFFFFA
+
+; ==================
+; RF
+; ==================
+D.S SD:0xC000C2C8 %LE %LONG 0x446D12E1 
+D.S SD:0xC0006008 %LE %LONG 0x00215830 
+	
+	

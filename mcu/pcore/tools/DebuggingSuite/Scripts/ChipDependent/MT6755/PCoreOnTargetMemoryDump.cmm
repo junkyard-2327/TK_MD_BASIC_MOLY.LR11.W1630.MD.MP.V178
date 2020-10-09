@@ -1,0 +1,489 @@
+; Copyright Statement:
+; --------------------
+; This software is protected by Copyright and the information contained
+; herein is confidential. The software may not be copied and the information
+; contained herein may not be used or disclosed except with the written
+; permission of MediaTek Inc. (C) 2005
+; 
+; BY OPENING THIS FILE, BUYER HEREBY UNEQUIVOCALLY ACKNOWLEDGES AND AGREES
+; THAT THE SOFTWARE/FIRMWARE AND ITS DOCUMENTATIONS ("MEDIATEK SOFTWARE")
+; RECEIVED FROM MEDIATEK AND/OR ITS REPRESENTATIVES ARE PROVIDED TO BUYER ON
+; AN "AS-IS" BASIS ONLY. MEDIATEK EXPRESSLY DISCLAIMS ANY AND ALL WARRANTIES,
+; EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF
+; MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR NONINFRINGEMENT.
+; NEITHER DOES MEDIATEK PROVIDE ANY WARRANTY WHATSOEVER WITH RESPECT TO THE
+; SOFTWARE OF ANY THIRD PARTY WHICH MAY BE USED BY, INCORPORATED IN, OR
+; SUPPLIED WITH THE MEDIATEK SOFTWARE, AND BUYER AGREES TO LOOK ONLY TO SUCH
+; THIRD PARTY FOR ANY WARRANTY CLAIM RELATING THERETO. MEDIATEK SHALL ALSO
+; NOT BE RESPONSIBLE FOR ANY MEDIATEK SOFTWARE RELEASES MADE TO BUYER'S
+; SPECIFICATION OR TO CONFORM TO A PARTICULAR STANDARD OR OPEN FORUM.
+; 
+; BUYER'S SOLE AND EXCLUSIVE REMEDY AND MEDIATEK'S ENTIRE AND CUMULATIVE
+; LIABILITY WITH RESPECT TO THE MEDIATEK SOFTWARE RELEASED HEREUNDER WILL BE,
+; AT MEDIATEK'S OPTION, TO REVISE OR REPLACE THE MEDIATEK SOFTWARE AT ISSUE,
+; OR REFUND ANY SOFTWARE LICENSE FEES OR SERVICE CHARGE PAID BY BUYER TO
+; MEDIATEK FOR SUCH MEDIATEK SOFTWARE AT ISSUE.
+; 
+; THE TRANSACTION CONTEMPLATED HEREUNDER SHALL BE CONSTRUED IN ACCORDANCE
+; WITH THE LAWS OF THE STATE OF CALIFORNIA, USA, EXCLUDING ITS CONFLICT OF
+; LAWS PRINCIPLES.  ANY DISPUTES, CONTROVERSIES OR CLAIMS ARISING THEREOF AND
+; RELATED THERETO SHALL BE SETTLED BY ARBITRATION IN SAN FRANCISCO, CA, UNDER
+; THE RULES OF THE INTERNATIONAL CHAMBER OF COMMERCE (ICC).
+
+; This cmm is for dumping memory on Target directly.
+
+system.down
+SYSTEM.OPTION.EnReset OFF
+SYSTEM.OPTION.WaitReset OFF
+System.Option ResBreak OFF
+System.OPTION TRST off
+system.JtagClock 20MHz
+CPUTYPE CORTEXR4
+system.cpu cortexr4
+system.multicore SWDP OFF
+
+;MD view
+;system.multicore COREBASE 0xF00A1000
+
+;AP view
+system.multicore COREBASE 0xF0471000
+
+system.up
+
+
+LOCAL &SWLA_DUMP
+GLOBAL &store_folder
+
+dialog
+(
+	header "folder select"
+	pos 1. 1. 27. 1.
+	text "select memory dump folder:"
+
+	pos 1. 2. 20. 1.
+tmp:	edit "" "" 
+
+	pos 22. 2. 5. 1.
+	button "..."
+	(
+		dialog.setdir tmp "lib*"
+	)
+	pos 1. 3. 20. 1.
+check:	checkbox "Dump SWLA?" ""
+	
+	pos 11. 4. 5. 1.
+	defbutton "OK" "continue"
+)
+stop
+	&store_folder=dialog.string(tmp)
+IF DIALOG.BOOLEAN(check)
+(
+	&SWLA_DUMP=1
+)
+ELSE
+(
+	&SWLA_DUMP=0
+)
+dialog.end	
+
+AREA.RESet
+mkdir "&store_folder"
+mkdir "&store_folder\pcore"
+cd "&store_folder"
+;=========================== +Dump PCORE REGIONS+  ========================
+PRINT "Preparing to dump PCORE regions..."
+[CMMAUTOGEN_DUMP_PCORE_REGIONS]
+;=========================== -Dump PCORE REGIONS-  ========================
+
+;=========================== +Dump PCORE ARM REGS+  ========================
+
+;do store_regs.cmm "&store_folder\pcore\pcore_arm_regs.bin"
+print "Preparing to dump pcore arm regitsters..."
+LOCAL &BIN_FILE_NAME
+&BIN_FILE_NAME="&store_folder\pcore\pcore_arm_regs.bin"
+&REG_STORE_BASE_ADDR=0x70040000
+GOSUB SUB_DUMP_REG &REG_STORE_BASE_ADDR
+ENTRY &MPU_REGION_ADDR
+print "Dumping pcore_arm_regs.bin..."
+D.SAVE.BINARY "&BIN_FILE_NAME" &REG_STORE_BASE_ADDR--&MPU_REGION_ADDR
+
+;=========================== -Dump PCORE ARM REGS-  ========================
+
+;=========================== +Dump BBREG+  ========================
+
+
+;=========================== -Dump BBREG-  ========================
+
+;=========================== +Dump PCORE SWLA+  ========================
+IF (&SWLA_DUMP==1)
+(
+    PRINT "Preparing to dump PCORE SWLA..."
+    GOSUB SUB_DUMP_SWLA "pcore"
+)
+;=========================== -Dump PCORE SWLA-  ========================
+
+;=========================== +Dump Coresonic memory+  ========================
+PRINT "Preparing to dump Coresonic memory..."
+AREA.Create coresonicmem
+AREA.Select coresonicmem
+AREA.view coresonicmem
+AREA.Clear coresonicmem
+
+; For Coresonic memory dump
+LOCAL &CORESONIC_CORE_NUM
+LOCAL &CORESONIC_MEM_NUM
+LOCAL &CORESONIC_DBG_APB_NUM
+LOCAL &CORESONIC_REGION_INFO_OFFSET
+LOCAL &CORESONIC_REGION_BASE
+LOCAL &CORESONIC_REGION_LEN
+LOCAL &CORESONIC_BUFF_BASE
+LOCAL &CORESONIC_CURR_BUFF
+LOCAL &CORESONIC_BUFF_LEN
+LOCAL &CORESONIC_SAVE_FILENAME
+LOCAL &CORESONIC_AHB_EN_REG
+LOCAL &CORESONIC_DBG_APB_OFFSET
+LOCAL &CORESONIC_AHB_PROTECTION_OFFSET
+LOCAL &CORESONIC_CRF_PROTECTION_OFFSET
+LOCAL &CORESONIC_REG_VAL
+LOCAL &CORESONIC_REG_ADDR
+LOCAL &CORESONIC_REG_STAT
+LOCAL &CORESONIC_REG_COUNT
+LOCAL &CORESONIC_HALTED
+
+&CORESONIC_SAVE_FILENAME=""
+
+IF !(Y.EXIST(cs_dsp_memory_info))
+(
+    PRINT "Coresonic memory info not found!"
+    PRINT "Skip Coresonic memory dump"
+)
+ELSE
+(
+    IF !(Y.EXIST(cs_dsp_crf_protec_reg))
+    (
+        PRINT "Coresonic crf protection register address not found!"
+        PRINT "Skip Coresonic memory dump"
+    )
+    ELSE
+    (
+        PRINT "Disable Coresonic CRF access protection"
+        &CORESONIC_CORE_NUM=VARSIZE(cs_dsp_crf_protec_reg)/0x4
+        &CORESONIC_COREBASE=DATA.LONG(cs_dsp_crf_protec_reg)
+        &CORESONIC_CRF_PROTECTION_OFFSET=0x0
+    
+        WHILE &CORESONIC_CORE_NUM!=0
+        (
+            &CORESONIC_AHB_EN_REG=DATA.LONG(cs_dsp_crf_protec_reg+&CORESONIC_CRF_PROTECTION_OFFSET)
+            &CORESONIC_REG_VAL=MREAD("S32", ASD:(&CORESONIC_AHB_EN_REG))
+            &CORESONIC_REG_VAL=(&CORESONIC_REG_VAL)|0x1
+            D.S &CORESONIC_AHB_EN_REG %LE %LONG (&CORESONIC_REG_VAL)
+            &CORESONIC_CRF_PROTECTION_OFFSET=&CORESONIC_CRF_PROTECTION_OFFSET+0x4
+            &CORESONIC_CORE_NUM=&CORESONIC_CORE_NUM-1
+        )
+        PRINT "Disable Coresonic CRF access protection done"
+
+         ; +++ Dump CRF +++
+        &CORESONIC_MEM_NUM=VARSIZE(cs_dsp_memory_info)/0x8-1
+        &CORESONIC_REGION_INFO_OFFSET=0x8
+
+        WHILE &CORESONIC_MEM_NUM!=0
+        (
+            ; dump CRF content
+            &CORESONIC_REGION_BASE=DATA.LONG(cs_dsp_memory_info+&CORESONIC_REGION_INFO_OFFSET)
+            &CORESONIC_REGION_LEN=DATA.LONG(cs_dsp_memory_info+&CORESONIC_REGION_INFO_OFFSET+0x4)
+            PRINT "BASE_ADDR=&CORESONIC_REGION_BASE, LEN=&CORESONIC_REGION_LEN"
+            &CORESONIC_SAVE_FILENAME="&store_folder\coresonic_mem_"+"&CORESONIC_REGION_BASE"+".bin"
+            DATA.SAVE.BINARY "&CORESONIC_SAVE_FILENAME" &CORESONIC_REGION_BASE--(&CORESONIC_REGION_BASE+&CORESONIC_REGION_LEN-1)
+        
+            ; go to next memory region
+            &CORESONIC_REGION_INFO_OFFSET=&CORESONIC_REGION_INFO_OFFSET+0x20
+            &CORESONIC_MEM_NUM=&CORESONIC_MEM_NUM-4
+        )
+        ; --- Dump CRF ---
+
+        IF !(Y.EXIST(cs_dsp_ahb_protec_reg))
+        (
+            PRINT "Coresonic ahb protection register address not found!"
+            PRINT "Skip Coresonic PM/ICM memory dump"
+        )
+        ELSE
+        (
+            ; +++ Stop coresonic execution  +++
+            PRINT "Halt coresonic"
+            &CORESONIC_HALTED=0x1
+            PRINT "Halt coresonic done"
+            ; --- Stop coresonic execution  ---
+
+            PRINT "Disable Coresonic PM/ICM access protection"
+            &CORESONIC_CORE_NUM=VARSIZE(cs_dsp_ahb_protec_reg)/0x4
+            &CORESONIC_COREBASE=DATA.LONG(cs_dsp_ahb_protec_reg)
+            &CORESONIC_AHB_PROTECTION_OFFSET=0x0
+    
+            WHILE &CORESONIC_CORE_NUM!=0
+            (
+                &CORESONIC_AHB_EN_REG=DATA.LONG(cs_dsp_ahb_protec_reg+&CORESONIC_AHB_PROTECTION_OFFSET)
+                &CORESONIC_REG_VAL=MREAD("S32", ASD:(&CORESONIC_AHB_EN_REG))
+                &CORESONIC_REG_VAL=(&CORESONIC_REG_VAL)&0xFFFFFFF5
+                D.S &CORESONIC_AHB_EN_REG %LE %LONG &CORESONIC_REG_VAL
+                &CORESONIC_AHB_PROTECTION_OFFSET=&CORESONIC_AHB_PROTECTION_OFFSET+0x4
+                &CORESONIC_CORE_NUM=&CORESONIC_CORE_NUM-1
+            )
+            PRINT "Disable coresonic PM/ICM access protection done"
+  
+            ; +++ Dump ICM/CSIF/PM +++
+            &CORESONIC_MEM_NUM=VARSIZE(cs_dsp_memory_info)/0x8-1
+            &CORESONIC_REGION_INFO_OFFSET=0x0
+
+            WHILE &CORESONIC_MEM_NUM!=0
+            (
+                ; dump ICM content
+                &CORESONIC_REGION_BASE=DATA.LONG(cs_dsp_memory_info+&CORESONIC_REGION_INFO_OFFSET)
+                &CORESONIC_REGION_LEN=DATA.LONG(cs_dsp_memory_info+&CORESONIC_REGION_INFO_OFFSET+0x4)
+                PRINT "BASE_ADDR=&CORESONIC_REGION_BASE, LEN=&CORESONIC_REGION_LEN"
+                &CORESONIC_SAVE_FILENAME="&store_folder\coresonic_mem_"+"&CORESONIC_REGION_BASE"+".bin"
+                DATA.SAVE.BINARY "&CORESONIC_SAVE_FILENAME" &CORESONIC_REGION_BASE--(&CORESONIC_REGION_BASE+&CORESONIC_REGION_LEN-1)
+        
+                ; dump CSIF content
+                &CORESONIC_REGION_INFO_OFFSET=&CORESONIC_REGION_INFO_OFFSET+0x10
+                &CORESONIC_REGION_BASE=DATA.LONG(cs_dsp_memory_info+&CORESONIC_REGION_INFO_OFFSET)
+                &CORESONIC_REGION_LEN=DATA.LONG(cs_dsp_memory_info+&CORESONIC_REGION_INFO_OFFSET+0x4)
+                PRINT "BASE_ADDR=&CORESONIC_REGION_BASE, LEN=&CORESONIC_REGION_LEN"
+                &CORESONIC_SAVE_FILENAME="&store_folder\coresonic_mem_"+"&CORESONIC_REGION_BASE"+".bin"
+                DATA.SAVE.BINARY "&CORESONIC_SAVE_FILENAME" &CORESONIC_REGION_BASE--(&CORESONIC_REGION_BASE+&CORESONIC_REGION_LEN-1)
+
+                ; dump PM content
+                &CORESONIC_REGION_INFO_OFFSET=&CORESONIC_REGION_INFO_OFFSET+0x8
+                IF (&CORESONIC_HALTED!=0)
+                (
+                    &CORESONIC_REGION_BASE=DATA.LONG(cs_dsp_memory_info+&CORESONIC_REGION_INFO_OFFSET)
+                    &CORESONIC_REGION_LEN=DATA.LONG(cs_dsp_memory_info+&CORESONIC_REGION_INFO_OFFSET+0x4)
+                    PRINT "BASE_ADDR=&CORESONIC_REGION_BASE, LEN=&CORESONIC_REGION_LEN"
+                    map.bus32 &CORESONIC_REGION_BASE--(&CORESONIC_REGION_BASE+&CORESONIC_REGION_LEN-1)
+                    &CORESONIC_SAVE_FILENAME="&store_folder\coresonic_mem_"+"&CORESONIC_REGION_BASE"+".bin"
+                    DATA.SAVE.BINARY "&CORESONIC_SAVE_FILENAME" &CORESONIC_REGION_BASE--(&CORESONIC_REGION_BASE+&CORESONIC_REGION_LEN-1) /LONG
+                )
+
+                ; go to next memory region
+                &CORESONIC_REGION_INFO_OFFSET=&CORESONIC_REGION_INFO_OFFSET+0x8
+                &CORESONIC_MEM_NUM=&CORESONIC_MEM_NUM-4
+            )
+            ; --- Dump ICM/CSIF/PM ---
+        )
+    )
+
+    ; +++ Dump PC trace +++
+    ; dump PC trace content in case that exception handler has been triggered
+    &CORESONIC_REGION_INFO_OFFSET=0x60
+    &CORESONIC_REGION_BASE=DATA.LONG(cs_dsp_memory_info+&CORESONIC_REGION_INFO_OFFSET)
+    &CORESONIC_REGION_LEN=DATA.LONG(cs_dsp_memory_info+&CORESONIC_REGION_INFO_OFFSET+0x4)
+    &CORESONIC_SAVE_FILENAME="&store_folder\coresonic_mem_"+"&CORESONIC_REGION_BASE"+".bin"
+    DATA.SAVE.BINARY "&CORESONIC_SAVE_FILENAME" &CORESONIC_REGION_BASE--(&CORESONIC_REGION_BASE+&CORESONIC_REGION_LEN-1)
+
+    ; dump PC trace content in case that exception handler has NOT been triggered
+    IF !(Y.EXIST(csdebug_regs))
+    (
+        PRINT "Coresonic debug apb register address not found!"
+        PRINT "Skip Coresonic PC trace dump"
+    )
+    ELSE
+    (
+
+        &CORESONIC_DBG_APB_NUM=VARSIZE(csdebug_regs)/0x18
+        &CORESONIC_DBG_APB_OFFSET=0x0
+        &CORESONIC_REGION_INFO_OFFSET=0x0
+        &CORESONIC_REG_ADDR=0x0
+        &CORESONIC_REG_COUNT=0
+
+        ; put PC trace header
+        &CORESONIC_BUFF_LEN=(&CORESONIC_REGION_LEN-0x4)/&CORESONIC_DBG_APB_NUM
+        D.S VM:&CORESONIC_REGION_BASE %LE %LONG 0x52544350
+        &CORESONIC_BUFF_BASE=&CORESONIC_REGION_BASE
+        &CORESONIC_CURR_BUFF=&CORESONIC_BUFF_BASE+0x4
+
+        PRINT "extract PC trace"
+        WHILE &CORESONIC_DBG_APB_NUM!=0
+        (
+            ; turn off PC trace via CDTCFG
+            &CORESONIC_REGION_INFO_OFFSET=&CORESONIC_REGION_INFO_OFFSET+0x8
+            &CORESONIC_REG_ADDR=DATA.LONG(csdebug_regs+&CORESONIC_REGION_INFO_OFFSET)
+            D.S &CORESONIC_REG_ADDR %LE %LONG 0x0
+            &CORESONIC_REG_VAL=MREAD("S32", ASD:(&CORESONIC_REG_ADDR))
+            PRINT "DBG_REG_ADDR=&CORESONIC_REG_ADDR, DBG_REG_VAL=&CORESONIC_REG_VAL"
+            ; check PC trace status via CDSTAT
+            &CORESONIC_REGION_INFO_OFFSET=&CORESONIC_REGION_INFO_OFFSET+0x8
+            &CORESONIC_REG_STAT=DATA.LONG(csdebug_regs+&CORESONIC_REGION_INFO_OFFSET)
+            &CORESONIC_REG_VAL=MREAD("S32", ASD:(&CORESONIC_REG_STAT))
+            PRINT "DBG_REG_ADDR=&CORESONIC_REG_STAT, DBG_REG_VAL=&CORESONIC_REG_VAL"
+            &CORESONIC_REG_VAL=&CORESONIC_REG_VAL&0x80
+            ; extract PC trace content via CDTRW
+            &CORESONIC_REGION_INFO_OFFSET=&CORESONIC_REGION_INFO_OFFSET-0x4
+            &CORESONIC_REG_ADDR=DATA.LONG(csdebug_regs+&CORESONIC_REGION_INFO_OFFSET)
+            WHILE &CORESONIC_REG_VAL!=0x80
+            (
+                &CORESONIC_REG_VAL=MREAD("S32", ASD:(&CORESONIC_REG_ADDR))
+                D.S VM:&CORESONIC_CURR_BUFF %LE %LONG &CORESONIC_REG_VAL
+                PRINT "DBG_REG_ADDR=&CORESONIC_REG_ADDR, DBG_REG_COUNT=&CORESONIC_REG_COUNT DBG_REG_VAL=&CORESONIC_REG_VAL"
+                &CORESONIC_CURR_BUFF=&CORESONIC_CURR_BUFF+0x4
+                &CORESONIC_REG_VAL=MREAD("S32", ASD:(&CORESONIC_REG_ADDR))
+                D.S VM:&CORESONIC_CURR_BUFF %LE %LONG &CORESONIC_REG_VAL
+                PRINT "DBG_REG_ADDR=&CORESONIC_REG_ADDR, DBG_REG_COUNT=&CORESONIC_REG_COUNT DBG_REG_VAL=&CORESONIC_REG_VAL"
+                &CORESONIC_CURR_BUFF=&CORESONIC_CURR_BUFF+0x4
+                &CORESONIC_REG_COUNT=&CORESONIC_REG_COUNT+1
+                ; check PC trace buffer status
+                &CORESONIC_REG_VAL=MREAD("S32", ASD:(&CORESONIC_REG_STAT))
+                &CORESONIC_REG_VAL=&CORESONIC_REG_VAL&0x80
+            )
+            &CORESONIC_DBG_APB_NUM=&CORESONIC_DBG_APB_NUM-1
+            &CORESONIC_REG_COUNT=0x0
+            &CORESONIC_BUFF_BASE=&CORESONIC_BUFF_BASE+&CORESONIC_BUFF_LEN
+            &CORESONIC_CURR_BUFF=&CORESONIC_BUFF_BASE+0x4
+            &CORESONIC_REGION_INFO_OFFSET=&CORESONIC_REGION_INFO_OFFSET+0xC
+        )
+        &CORESONIC_SAVE_FILENAME="&store_folder\coresonic_mem_vm_"+"&CORESONIC_REGION_BASE"+".bin"
+        DATA.SAVE.BINARY "&CORESONIC_SAVE_FILENAME" VM:&CORESONIC_REGION_BASE--(&CORESONIC_REGION_BASE+&CORESONIC_REGION_LEN-1)
+        ; --- Dump PC trace ---
+    )
+)
+
+;=========================== -Dump Coresonic memory-  ========================
+
+PRINT "Dumping Finished! :)"
+
+ENDDO
+STOP
+END
+
+;========================================================================
+; function
+;========================================================================
+
+SUB_DUMP_REG:
+    ENTRY &REG_STORE_BASE_ADDR
+    ;general register
+    D.S (&REG_STORE_BASE_ADDR+0x0000) %LONG r(R0)
+    D.S (&REG_STORE_BASE_ADDR+0x0004) %LONG r(R1)
+    D.S (&REG_STORE_BASE_ADDR+0x0008) %LONG r(R2)
+    D.S (&REG_STORE_BASE_ADDR+0x000C) %LONG r(R3)
+    D.S (&REG_STORE_BASE_ADDR+0x0010) %LONG r(R4)
+    D.S (&REG_STORE_BASE_ADDR+0x0014) %LONG r(R5)
+    D.S (&REG_STORE_BASE_ADDR+0x0018) %LONG r(R6)
+    D.S (&REG_STORE_BASE_ADDR+0x001C) %LONG r(R7)
+    D.S (&REG_STORE_BASE_ADDR+0x0020) %LONG r(R8)
+    D.S (&REG_STORE_BASE_ADDR+0x0024) %LONG r(R9)
+    D.S (&REG_STORE_BASE_ADDR+0x0028) %LONG r(R10)
+    D.S (&REG_STORE_BASE_ADDR+0x002C) %LONG r(R11)
+    D.S (&REG_STORE_BASE_ADDR+0x0030) %LONG r(R12)
+    D.S (&REG_STORE_BASE_ADDR+0x0034) %LONG r(R13)
+    D.S (&REG_STORE_BASE_ADDR+0x0038) %LONG r(R14)
+    D.S (&REG_STORE_BASE_ADDR+0x003C) %LONG r(R15)
+    D.S (&REG_STORE_BASE_ADDR+0x0040) %LONG r(cpsr)
+    D.S (&REG_STORE_BASE_ADDR+0x0044) %LONG r(spsr)
+    D.S (&REG_STORE_BASE_ADDR+0x0048) %LONG r(R13_IRQ)
+    D.S (&REG_STORE_BASE_ADDR+0x004C) %LONG r(R14_IRQ)
+    D.S (&REG_STORE_BASE_ADDR+0x0050) %LONG r(SPSR_IRQ)
+    D.S (&REG_STORE_BASE_ADDR+0x0054) %LONG r(R13_FIQ)
+    D.S (&REG_STORE_BASE_ADDR+0x0058) %LONG r(R14_FIQ)
+    D.S (&REG_STORE_BASE_ADDR+0x005C) %LONG r(SPSR_FIQ)
+    D.S (&REG_STORE_BASE_ADDR+0x0060) %LONG r(R13_SVC)
+    D.S (&REG_STORE_BASE_ADDR+0x0064) %LONG r(R14_SVC)
+    D.S (&REG_STORE_BASE_ADDR+0x0068) %LONG r(SPSR_SVC)
+    D.S (&REG_STORE_BASE_ADDR+0x006C) %LONG r(R13_UND)
+    D.S (&REG_STORE_BASE_ADDR+0x0070) %LONG r(R14_UND)
+    D.S (&REG_STORE_BASE_ADDR+0x0074) %LONG r(SPSR_UND)
+    D.S (&REG_STORE_BASE_ADDR+0x0078) %LONG r(R13_ABT)
+    D.S (&REG_STORE_BASE_ADDR+0x007C) %LONG r(R14_ABT)
+    D.S (&REG_STORE_BASE_ADDR+0x0080) %LONG r(SPSR_ABT)
+    
+    ;cp15 register
+    D.S (&REG_STORE_BASE_ADDR+0x0100) %LONG DATA.LONG(C15:0x0001) ;CR control register
+    D.S (&REG_STORE_BASE_ADDR+0x0104) %LONG DATA.LONG(C15:0x0005) ;DFSR
+    D.S (&REG_STORE_BASE_ADDR+0x0108) %LONG DATA.LONG(C15:0x0105) ;IFAR
+    D.S (&REG_STORE_BASE_ADDR+0x010C) %LONG DATA.LONG(C15:0x0119) ;ATCM Region
+    D.S (&REG_STORE_BASE_ADDR+0x0110) %LONG DATA.LONG(C15:0x0019) ;BTCM Region
+    D.S (&REG_STORE_BASE_ADDR+0x0114) %LONG DATA.LONG(C15:0x010D) ;Context ID
+    D.S (&REG_STORE_BASE_ADDR+0x0118) %LONG DATA.LONG(C15:0x0006) ;DFAR
+    D.S (&REG_STORE_BASE_ADDR+0x011C) %LONG DATA.LONG(C15:0x0206) ;IFAR
+    D.S (&REG_STORE_BASE_ADDR+0x0120) %LONG DATA.LONG(C15:0x0026) ;MPU Region Number
+    D.S (&REG_STORE_BASE_ADDR+0x0124) %LONG DATA.LONG(C15:0x0016) ;MPU Base Addr
+    D.S (&REG_STORE_BASE_ADDR+0x0128) %LONG DATA.LONG(C15:0x0216) ;MPU Size/Enable
+    D.S (&REG_STORE_BASE_ADDR+0x012C) %LONG DATA.LONG(C15:0x0416) ;MPU Access Control
+    
+    ;;get MPU setting
+    &CURRENT_REGION_NUM=0
+    &MPU_REGION_ADDR=&REG_STORE_BASE_ADDR+0180
+    &MAX_REGION_COUNT=0xC
+    WHILE &CURRENT_REGION_NUM<&MAX_REGION_COUNT
+    (
+        D.S C15:0x0026 %LONG &CURRENT_REGION_NUM                  ; Select Region
+        D.S (&MPU_REGION_ADDR+0x00) %LONG DATA.LONG(C15:0x0016) ;MPU Base Addr
+        D.S (&MPU_REGION_ADDR+0x04) %LONG DATA.LONG(C15:0x0216) ;MPU Size/Enable
+        D.S (&MPU_REGION_ADDR+0x08) %LONG DATA.LONG(C15:0x0416) ;MPU Access Control
+        &MPU_REGION_ADDR=&MPU_REGION_ADDR+0xC
+        &CURRENT_REGION_NUM=&CURRENT_REGION_NUM+1.
+    )
+
+    
+RETURN &MPU_REGION_ADDR
+
+
+SUB_DUMP_SWLA:
+    ENTRY &CORE
+    LOCAL &BINNAME
+    &BINNAME=&CORE+"_sla_mem_no_header.bin"
+    IF Y.EXIST(SA_LoggingIndex)
+    (
+        &start_addr=V.VALUE(SA_LoggingStart)
+        &stop_addr=V.VALUE(SA_LoggingStop)
+        &cur_addr=V.VALUE(SA_LoggingIndex)
+        &wrap=V.VALUE((unsigned int)SA_Wrap)
+        &node_size=V.VALUE(SA_LoggingNodeSize)
+        &addon_cnt=V.VALUE(SA_AddonInfoCnt)
+        &header_size=&addon_cnt*V.SIZEOF(SA_FileHeader.addon_info[0])
+        &header_size=&header_size+V.SIZEOF(SA_FileHeader.main_desc)
+    
+        PRINT "SA_LoggingStart=0x" format.hex(8,&start_addr)
+        PRINT "SA_LoggingIndex=0x" format.hex(8,&cur_addr)
+        PRINT "SA_LoggingStop=0x" format.hex(8,&stop_addr)
+        PRINT "SA_Wrap=" &wrap
+
+        IF (&node_size!=0)
+        (
+            IF (&wrap!=0)
+            (
+                &total_size=&stop_addr-&start_addr
+                &total_size=&total_size/&node_size
+                &total_size=&total_size*&node_size
+                &end_addr=&start_addr+&total_size
+    
+                PRINT "total_size=0x", format.hex(8,&total_size)
+                PRINT "end_addr=", format.hex(8,&end_addr)
+    
+                PRINT "dumping sla_mem_no_header.bin(part1)..."
+                data.save.binary "&store_folder\swla1.bin" &cur_addr--(&end_addr-1)
+                PRINT "dumping sla_mem_no_header.bin(part2)..."
+                data.save.binary "&store_folder\swla2.bin" &start_addr--(&cur_addr-1)
+    
+                OS.Area copy /b swla1.bin+swla2.bin &BINNAME
+                OS.Area del swla1.bin
+                OS.Area del swla2.bin
+            )
+            ELSE
+            (
+                &total_size=&cur_addr-&start_addr
+                
+                PRINT "total_size=0x" format.hex(8,&total_size)
+                PRINT "dumping &BINNAME..."
+                data.save.binary "&store_folder\&BINNAME" &start_addr--(&cur_addr-1)
+            )
+        )
+        ELSE
+        (
+            PRINT "SWLA not enabled"
+        )
+    )
+    ELSE
+    (
+        PRINT "SWLA not compiled"
+    )
+
+RETURN

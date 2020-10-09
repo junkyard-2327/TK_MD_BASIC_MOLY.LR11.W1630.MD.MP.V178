@@ -1,0 +1,6 @@
+;===============================================
+;CMM START
+;===============================================
+
+D.S SD:INT_PCoreSchedulingSync %LE %WORD 0x0
+D.S SD:INT_L1CoreSchedulingSync %LE %WORD 0x0

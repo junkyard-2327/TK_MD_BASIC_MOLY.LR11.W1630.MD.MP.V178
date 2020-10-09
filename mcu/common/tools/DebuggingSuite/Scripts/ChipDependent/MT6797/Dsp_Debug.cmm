@@ -1,0 +1,308 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Debug Information for User
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; General Setting
+
+
+; CMIF Debug Guide
+
+; Create the Guide Window
+AREA.Create IO-Area
+AREA.Select IO-Area
+AREA.view IO-Area
+
+&MD32_SS_FIRST_LINE_SUPPORT="Jhih-Shun Yang(23237)"
+&DFE_FIRST_LINE_SUPPORT="Wayne Wang / Chih-Wei (3G)/ Owen(4G) / 2nd manager Canson"
+&BRP_FIRST_LINE_SUPPORT="Chemy Lin(3G) / KJ Lan (4G) / 2nd manager Cynthia"
+&RAKE_FIRST_LINE_SUPPORT="Weily Kuo / 2nd manager Cynthia"
+&SONIC_SS_FIRST_LINE_SUPPORT="Shawn.Wang(23138)"
+&SONIC_FW_FIRST_LINE_SUPPORT="Leo Wu"
+
+; show md32 debug information
+&BRP_CMIF_BASE=0xF9358000
+&DFE_CMIF_BASE=0xF7B58000
+&RAKE_CMIF_BASE=0xF9B58000
+&EX_CMIF_LOG_OFFSET=0x50
+&EX_CMIF_FINISH_FILL_OFFSET=0x50
+&EX_CMIF_EX_TYPE_OFFSET=0x54
+;ASSERT
+&EX_CMIF_EX_ASSERT_CODE1_OFFSET=0x58
+&EX_CMIF_EX_ASSERT_CODE2_OFFSET=0x5C
+&EX_CMIF_EX_ASSERT_CODE3_OFFSET=0x60
+&EX_CMIF_EX_ASSERT_LINE_OFFSET=0x64
+&EX_CMIF_EX_ASSERT_FILENAME_OFFSET=0x68
+;FATAL_ERROR
+&EX_CMIF_EX_FATAL_ERROR_CODE_OFFSET=0x58
+
+&BRP_FINISH_FILL=MREAD("S32",ASD:(&BRP_CMIF_BASE+&EX_CMIF_FINISH_FILL_OFFSET))
+&DFE_FINISH_FILL=MREAD("S32",ASD:(&DFE_CMIF_BASE+&EX_CMIF_FINISH_FILL_OFFSET))
+&RAKE_FINISH_FILL=MREAD("S32",ASD:(&RAKE_CMIF_BASE+&EX_CMIF_FINISH_FILL_OFFSET))
+
+&BRP_CMIF_EX_LOG=&BRP_CMIF_BASE+&EX_CMIF_LOG_OFFSET
+&DFE_CMIF_EX_LOG=&DFE_CMIF_BASE+&EX_CMIF_LOG_OFFSET
+&RAKE_CMIF_EX_LOG=&RAKE_CMIF_BASE+&EX_CMIF_LOG_OFFSET
+
+
+&BRP_SYS_BASE=0xF9300000
+&DFE_SYS_BASE=0xF7B00000
+&RAKE_SYS_BASE=0xF9B00000
+&EX_SYS_BOOTSLAVE_OFFSET=0x5101C
+&EX_SYS_MD32_PM_OFFSET=0x80000
+&EX_SYS_MD32_DM_OFFSET=0xE0000
+
+&BRP_SYS_PM=&BRP_SYS_BASE+&EX_SYS_MD32_PM_OFFSET
+&BRP_SYS_DM=&BRP_SYS_BASE+&EX_SYS_MD32_DM_OFFSET
+&DFE_SYS_PM=&DFE_SYS_BASE+&EX_SYS_MD32_PM_OFFSET
+&DFE_SYS_DM=&DFE_SYS_BASE+&EX_SYS_MD32_DM_OFFSET
+&RAKE_SYS_PM=&RAKE_SYS_BASE+&EX_SYS_MD32_PM_OFFSET
+&RAKE_SYS_DM=&RAKE_SYS_BASE+&EX_SYS_MD32_DM_OFFSET
+
+; show coresonic debug information
+&ICC_CSIF_BASE=0xFEE80000
+&IMC_CSIF_BASE=0xFDE80000
+&MPC_CSIF_BASE=0xFD680000
+
+&CSIF_CAUSE=0x4
+&CSIF_CTI=0x18
+&CSIF_FILE_NAME_OF=0x2C
+&CSIF_LINE_NUM_OF=0x1C
+&CSIF_BOOT_DONE=0x104
+
+&ICC_DSPBT=0xFEF20000+0x4
+&IMC_DSPBT=0xFDF20000+0x4
+&MPC_DSPBT=0xFD720000+0x4
+
+GLOBAL &MD32_SS_DEBUG_SUPPORT
+GLOBAL &MD32_SS_DEBUG_STRING
+GLOBAL &MD32_FW_DEBUG_SUPPORT
+GLOBAL &MD32_FW_DEBUG_STRING
+GLOBAL &SONIC_SS_DEBUG_SUPPORT
+GLOBAL &SONIC_SS_DEBUG_STRING
+GLOBAL &SONIC_FW_DEBUG_SUPPORT
+GLOBAL &SONIC_FW_DEBUG_STRING
+
+&MD32_SS_DEBUG_SUPPORT=0
+&MD32_FW_DEBUG_SUPPORT=0
+&SONIC_SS_DEBUG_SUPPORT=0
+&SONIC_FW_DEBUG_SUPPORT=0
+
+PRINT "/********************************************/"
+PRINT " *DSP Debugging Guide"
+PRINT " ********************************************/"
+
+PRINT "  DSP first line support list:"
+PRINT "    MD32 System Service: &MD32_SS_FIRST_LINE_SUPPORT"
+PRINT "    DFE: &DFE_FIRST_LINE_SUPPORT"
+PRINT "    BRP: &BRP_FIRST_LINE_SUPPORT"
+PRINT "    RAKE: &RAKE_FIRST_LINE_SUPPORT"
+PRINT ""
+PRINT "    SONIC System Service: &SONIC_SS_FIRST_LINE_SUPPORT"
+PRINT "    ICC/IMC/MPC: &SONIC_FW_FIRST_LINE_SUPPORT"
+
+PRINT ""
+PRINT "# MD32 Status:"
+
+GOFUNC GET_MD32_STATUS &BRP_FINISH_FILL BRP &BRP_CMIF_BASE &BRP_SYS_BASE
+GOFUNC GET_MD32_STATUS &DFE_FINISH_FILL DFE &DFE_CMIF_BASE &DFE_SYS_BASE
+GOFUNC GET_MD32_STATUS &RAKE_FINISH_FILL RAKE &RAKE_CMIF_BASE &RAKE_SYS_BASE
+
+; CSIF Debug Guide
+PRINT ""
+PRINT "# Sonic Status:"
+
+GOFUNC GET_SONIC_STATUS ICC &ICC_CSIF_BASE &ICC_DSPBT
+GOFUNC GET_SONIC_STATUS IMC &IMC_CSIF_BASE &IMC_DSPBT
+GOFUNC GET_SONIC_STATUS MPC &MPC_CSIF_BASE &MPC_DSPBT
+
+; Summary
+PRINT ""
+PRINT "#############################################"
+PRINT "# Summary                                   #"
+PRINT "#############################################"
+
+IF &MD32_SS_DEBUG_SUPPORT!=0
+(
+	PRINT "&MD32_SS_DEBUG_STRING"
+)
+IF &MD32_FW_DEBUG_SUPPORT!=0
+(
+	PRINT "&MD32_FW_DEBUG_STRING"
+)
+IF &SONIC_SS_DEBUG_SUPPORT!=0
+(
+	PRINT "&SONIC_SS_DEBUG_STRING"
+)
+IF &SONIC_FW_DEBUG_SUPPORT!=0
+(
+	PRINT "&SONIC_FW_DEBUG_STRING"
+)
+
+
+END
+	
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Debug Information for SS member
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; md32 debug mode enable
+d.s 0xf935101c %long 0x62910001
+d.s 0xf7b5101c %long 0x62910001
+d.s 0xf9b5101c %long 0x62910001
+
+; See the MD32 CMIF excpetion log 
+Var.AddWatch (MD32_ExceptionLogCore_T*)&BRP_CMIF_EX_LOG
+Var.AddWatch (MD32_ExceptionLogCore_T*)&RAKE_CMIF_EX_LOG
+Var.AddWatch (MD32_ExceptionLogCore_T*)&DFE_CMIF_EX_LOG
+
+; read md32 ex_log address
+&BRP_EX_LOG=MREAD("S32",ASD:0xF93580A8)+0xF93E0000
+&DFE_EX_LOG=MREAD("S32",ASD:0xF7B580A8)+0xF7BE0000
+&RAKE_EX_LOG=MREAD("S32",ASD:0xF9B580A8)+0xF9BE0000
+
+Var.AddWatch (MD32_EX_Log*)&BRP_EX_LOG
+Var.AddWatch (MD32_EX_Log*)&RAKE_EX_LOG
+Var.AddWatch (MD32_EX_Log*)&DFE_EX_LOG
+
+ENDEXE
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Global Function
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+GET_MD32_STATUS:
+	POP &a &b &c &d
+	PRINT "    /===============&b================/"
+	IF &a==0x32FF32FF
+		PRINT "    &b has finished boot up flow and no exception happened"
+	ELSE IF &a==0xFD32FD32
+	(
+		PRINT "    &b has finished exception flow"
+		GOFUNC GET_MD32_EX_INFO &c &b
+	)
+	ELSE IF &a==0x32DE32DE
+		PRINT "    &b is in powered down status"
+	ELSE
+	(
+		PRINT "    &b has NOT finished the boot up flow"
+		PRINT "    Checking the &b PM and status:"
+		GOFUNC GET_MD32_MEM_INFO &d
+	)
+	RETURN
+	
+GET_MD32_EX_INFO:
+	POP &a &b
+	&EX_TYPE=MREAD("S32",ASD:(&a+&EX_CMIF_EX_TYPE_OFFSET))
+	IF &EX_TYPE==4
+	(
+		PRINT "    Cross Triggered, please check the status of other cores"
+	)
+	ELSE IF ((&EX_TYPE==2)||(&EX_TYPE==1))
+	(
+		&CODE1=MREAD("S32", ASD:(&a+&EX_CMIF_EX_ASSERT_CODE1_OFFSET))
+		&CODE2=MREAD("S32", ASD:(&a+&EX_CMIF_EX_ASSERT_CODE2_OFFSET))
+		&CODE3=MREAD("S32", ASD:(&a+&EX_CMIF_EX_ASSERT_CODE3_OFFSET))
+		&LINE=MREAD("S32", ASD:(&a+&EX_CMIF_EX_ASSERT_LINE_OFFSET))
+		&FILENAME=MREADSTRING(ASD:(&a+&EX_CMIF_EX_ASSERT_FILENAME_OFFSET))
+		PRINT "    Assert failed"
+		PRINT "    Please contact file owner of &FILENAME"
+		PRINT "    Line: &LINE Code1: &CODE1 Code2: &CODE1 Code3: &CODE3"
+		
+		&MD32_FW_DEBUG_SUPPORT=1
+		&MD32_FW_DEBUG_STRING="Please contact &b file owner of &FILENAME, http://mtkswgbm101/find_owner_moly.php"
+	)
+	ELSE
+	(
+		&CODE1=MREAD("S32",ASD:(&a+&EX_CMIF_EX_FATAL_ERROR_CODE_OFFSET))
+		PRINT "    Fatal Error, Code1 &CODE1, please contact SS1 Jhih-Shun Yang/Yuan-Yuan Wang"
+		
+		&MD32_SS_DEBUG_SUPPORT=1
+		&MD32_SS_DEBUG_STRING="Fatal Error, Code1 &CODE1, please contact SS1 Jhih-Shun Yang/Yuan-Yuan Wang"
+	)
+	RETURN
+
+GET_MD32_MEM_INFO:
+	pop &a
+	IF MREAD("S32",ASD:(&a+&EX_SYS_MD32_PM_OFFSET))!=0x5900001E
+	(
+		PRINT "    PM has not loaded yet!"
+		PRINT "    Please contact SS1 Yen-Tsung"
+		
+		&MD32_SS_DEBUG_STRING="Please contact Yen-Tsung"
+	)
+	ELSE IF MREAD("S32",ASD:(&a+&EX_SYS_BOOTSLAVE_OFFSET))!=1
+	(
+		PRINT "    PM is OK, but MD32 has not ungated yet!"
+		PRINT "    Please contact Dean Lu/Yen-Tsung"
+		
+		&MD32_SS_DEBUG_STRING="Please contact Dean Lu/Yen-Tsung"		
+		
+	)
+	ELSE
+	(
+		PRINT "    PM is OK, MD32 has ungated"
+		PRINT "    Please contact SS1 Jhih-Shun Yang/Yuan-Yuan Wang/Yen-Tsung"
+		
+		&MD32_SS_DEBUG_STRING="Please contact SS1 Jhih-Shun Yang/Yuan-Yuan Wang/Yen-Tsung"
+	)
+	&MD32_SS_DEBUG_SUPPORT=1
+	RETURN
+
+GET_SONIC_STATUS:
+	POP &a &b &c
+	PRINT "    /===============&a================/"
+	&status=MREAD("S32", ASD:(&c))
+	&status=(&status&(0x2))
+	IF (&status!=0x2)
+	(
+		print "    &a download fail"
+		print "    Please contact SS1/Shawn.Wang"
+			&SONIC_SS_DEBUG_SUPPORT=1
+			&SONIC_SS_DEBUG_STRING="Please contact SS1/Shawn.Wang"
+	)
+	ELSE
+	(
+		&status=MREAD("S32", ASD:(&b+&CSIF_BOOT_DONE))
+		IF (&status!=0x0d57ffff)
+		(
+			print "    &a boot up fail"
+			print "    Please contact SS1/Shawn.Wang"
+			&SONIC_SS_DEBUG_SUPPORT=1
+			&SONIC_SS_DEBUG_STRING="Please contact SS1/Shawn.Wang"
+		)
+		ELSE
+		(
+			print "    &a BOOT DONE"
+		)
+
+		&status=MREAD("S32", ASD:(&b+&CSIF_CAUSE))
+		&status1=MREAD("S32", ASD:(&b+&CSIF_CTI))
+		IF ((&status==0xFF04)&&(&status1==0x1))
+		(
+			print "    Cross Triggered, please check the status of other cores."
+		)
+		ELSE IF (&status==0xFF04)
+		(
+			print "    &a external exception : &status1"
+			print "    Please contact SS1/Shawn.Wang"
+			&SONIC_SS_DEBUG_SUPPORT=1
+			&SONIC_SS_DEBUG_STRING="Please contact SS1/Shawn.Wang"
+		)
+		ELSE IF (&status==0xFF00)
+		(
+			&FILENAME=MREADSTRING(ASD:(&b+&CSIF_FILE_NAME_OF))
+			&status1=MREAD("S32", ASD:(&b+&CSIF_LINE_NUM_OF))
+			print "    Assert failed"
+			print "    file name : &FILENAME"
+			print "    line num  : &status1"
+			print "    Please contact MSP1/Leo.Wu or SS1/Shawn.Wang"
+			&SONIC_FW_DEBUG_SUPPORT=1
+			&SONIC_FW_DEBUG_STRING="Please contact &a file owner of &FILENAME, http://mtkswgbm101/find_owner_moly.php"
+		)
+		ELSE
+		(
+			print "    &a status unknow"
+			print "    Please contact SS1/Shawn.Wang if there is no core assert/exception"
+		)
+	)
+	RETURN

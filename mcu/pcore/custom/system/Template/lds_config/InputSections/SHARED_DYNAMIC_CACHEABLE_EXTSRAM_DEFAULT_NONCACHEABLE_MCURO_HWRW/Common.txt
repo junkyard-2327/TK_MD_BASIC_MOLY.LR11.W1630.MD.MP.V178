@@ -1,0 +1,1 @@
+        * (SHARED_BUFF_MCURO_HWRW_DYNAMICCACHEABLERW_NC)  /* the start of MCURW_HWRO should align to cacheline size */  

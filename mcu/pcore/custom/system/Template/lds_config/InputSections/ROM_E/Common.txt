@@ -1,0 +1,2 @@
+        /* add this padding*/
+        . = Image$$ROM1_PADDING$$Length;

@@ -1,0 +1,5 @@
+
+winclear
+menu.reset
+menu.reprogram MD_DualCoreDebugging_PlatformInit
+winclear

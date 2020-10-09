@@ -1,0 +1,9 @@
+        LONG(0);        
+        . += Image$$PCORE_DSP_RX_LENGTH$$Length;
+
+        L1CORE_EXTRAM_RXDATA$$ZI$$Base = .;		
+        * (EXTRAM_RXDATA)
+        . = ALIGN(4);
+        L1CORE_EXTRAM_RXDATA$$ZI$$Limit = .;
+        L1CORE_EXTRAM_RXDATA$$ZI$$Length = ABSOLUTE(L1CORE_EXTRAM_RXDATA$$ZI$$Limit - L1CORE_EXTRAM_RXDATA$$ZI$$Base);
+        LONG(0);

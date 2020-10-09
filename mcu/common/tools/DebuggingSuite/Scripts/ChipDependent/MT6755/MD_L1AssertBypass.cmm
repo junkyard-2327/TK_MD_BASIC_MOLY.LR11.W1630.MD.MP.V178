@@ -1,0 +1,20 @@
+;===============================================
+;CMM START
+;===============================================
+
+;2/3 Assert bypass
+IF ISSYMBOLEXIST(L1_ASSERT_BYPASS)
+(
+    D.S SD:L1_ASSERT_BYPASS %LE %WORD 0x0003
+)
+IF ISSYMBOLEXIST(p_L1_ASSERT_BYPASS)
+(
+	&L1_ASSERT_BYPASS_ADDR=D.L(SD:VARADDR(p_L1_ASSERT_BYPASS))
+    D.S SD:&L1_ASSERT_BYPASS_ADDR %LE %WORD 0x0003
+)
+
+;4G Assert bypass
+IF ISSYMBOLEXIST(el1d_tc_ena_sf_tick_hrt_assert)
+(
+    D.S SD:el1d_tc_ena_sf_tick_hrt_assert %LE %WORD 0x0
+)

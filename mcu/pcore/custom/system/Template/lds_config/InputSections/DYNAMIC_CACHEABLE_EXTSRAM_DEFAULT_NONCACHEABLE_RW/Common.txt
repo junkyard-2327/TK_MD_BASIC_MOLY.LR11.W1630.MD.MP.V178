@@ -1,0 +1,2 @@
+        * (DYNAMICCACHEABLERW_NC)
+        . = ALIGN(CACHELINESIZE);       /* the end of DNC shold align to cacheline size */

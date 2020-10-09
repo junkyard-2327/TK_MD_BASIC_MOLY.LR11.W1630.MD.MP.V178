@@ -1,0 +1,57 @@
+;===============================================
+;CMM START
+;===============================================
+
+; ==================
+; Set up port info
+; ==================
+Do MD_DualCoreDebugging_PSCore.csf
+
+wait 3s
+
+; ==================
+; Open debugging tool bar
+; ==================
+menu.reset
+menu.reprogram MD_DualCoreDebugging_PlatformInit
+
+; ==================
+; Open Customer tool bar
+; ==================
+Do MD_P_Customer_ToolBar.cmm
+
+VectorCatch.RESET OFF
+
+; ==================
+; load PSCore symbol
+; ==================
+DO MD_P_LoadSymbol.cmm
+
+; ==================
+; attach on PSCORE
+; ==================
+DO MD_P_Attach.cmm
+
+; ==================
+; set PSCore PC to INT_Initialize
+; untrap PSCore from bootslave
+; ==================
+R.S PC VARADDR(INT_Initialize)
+
+; ==================
+; set breakpoint
+; ==================
+DO MD_DualCoreDebugging_P_BreakPoint.cmm
+
+winclear
+winpos 0% 0% 70% 80%
+d.l
+winpos 70% 0% 30% 80%
+Register
+winpos 0% 76% 50% 50%
+Break.List
+winpos 50% 76% 50% 50%
+sYmbol.Browse
+
+PRINT "Init Done"
+ENDDO

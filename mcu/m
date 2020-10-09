@@ -1,0 +1,104 @@
+#!/bin/bash
+#
+# Copyright Statement:
+# --------------------
+# This software is protected by Copyright and the information contained
+# herein is confidential. The software may not be copied and the information
+# contained herein may not be used or disclosed except with the written
+# permission of MediaTek Inc. (C) 2011
+#
+# BY OPENING THIS FILE, BUYER HEREBY UNEQUIVOCALLY ACKNOWLEDGES AND AGREES
+# THAT THE SOFTWARE/FIRMWARE AND ITS DOCUMENTATIONS ("MEDIATEK SOFTWARE")
+# RECEIVED FROM MEDIATEK AND/OR ITS REPRESENTATIVES ARE PROVIDED TO BUYER ON
+# AN "AS-IS" BASIS ONLY. MEDIATEK EXPRESSLY DISCLAIMS ANY AND ALL WARRANTIES,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR NONINFRINGEMENT.
+# NEITHER DOES MEDIATEK PROVIDE ANY WARRANTY WHATSOEVER WITH RESPECT TO THE
+# SOFTWARE OF ANY THIRD PARTY WHICH MAY BE USED BY, INCORPORATED IN, OR
+# SUPPLIED WITH THE MEDIATEK SOFTWARE, AND BUYER AGREES TO LOOK ONLY TO SUCH
+# THIRD PARTY FOR ANY WARRANTY CLAIM RELATING THERETO. MEDIATEK SHALL ALSO
+# NOT BE RESPONSIBLE FOR ANY MEDIATEK SOFTWARE RELEASES MADE TO BUYER'S
+# SPECIFICATION OR TO CONFORM TO A PARTICULAR STANDARD OR OPEN FORUM.
+#
+# BUYER'S SOLE AND EXCLUSIVE REMEDY AND MEDIATEK'S ENTIRE AND CUMULATIVE
+# LIABILITY WITH RESPECT TO THE MEDIATEK SOFTWARE RELEASED HEREUNDER WILL BE,
+# AT MEDIATEK'S OPTION, TO REVISE OR REPLACE THE MEDIATEK SOFTWARE AT ISSUE,
+# OR REFUND ANY SOFTWARE LICENSE FEES OR SERVICE CHARGE PAID BY BUYER TO
+# MEDIATEK FOR SUCH MEDIATEK SOFTWARE AT ISSUE.
+#
+# THE TRANSACTION CONTEMPLATED HEREUNDER SHALL BE CONSTRUED IN ACCORDANCE
+# WITH THE LAWS OF THE STATE OF CALIFORNIA, USA, EXCLUDING ITS CONFLICT OF
+# LAWS PRINCIPLES.  ANY DISPUTES, CONTROVERSIES OR CLAIMS ARISING THEREOF AND
+# RELATED THERETO SHALL BE SETTLED BY ARBITRATION IN SAN FRANCISCO, CA, UNDER
+# THE RULES OF THE INTERNATIONAL CHAMBER OF COMMERCE (ICC).
+#
+#
+export USERNAME=$LOGNAME
+
+ARGV=($*)
+# Set core. Default is pcore
+if [ "${ARGV[0]}" == '-l1core' ]; then
+	CORE='l1core'
+	unset ARGV[0]
+fi
+if [ "${ARGV[0]}" == '-pcore' ]; then
+	CORE='pcore'
+	unset ARGV[0]
+fi
+
+#Read project makefile to find out the SINGLE_CORE_ONLY property
+for var in "$@"
+do
+    if [[ "$var" == *\.mak* ]]; then
+      PROJECT_MAKEFILE=$var
+    fi
+done
+
+SINGLE_CORE_ONLY=$(grep "SINGLE_CORE_ONLY" "make/projects/$PROJECT_MAKEFILE")
+
+if [[ "$SINGLE_CORE_ONLY" == *PCORE* ]]; then
+    if [ "$CORE" == "l1core" ]; then
+        echo "Error: Project $PROJECT_MAKEFILE does not support -l1core command option.";
+        exit 1;
+    else
+        CORE='pcore'
+    fi
+else
+if [[ "$SINGLE_CORE_ONLY" == *L1CORE* ]]; then
+    if [ "$CORE" == "pcore" ]; then
+        echo "Error: Project $PROJECT_MAKEFILE does not support -pcore command option.";
+        exit 1;
+    else
+        CORE='l1core'
+    fi
+else
+    if [ "$CORE" != "l1core" ] && [ "$CORE" != "pcore" ] ; then
+        CORE='both'
+    fi
+fi
+fi
+
+
+if [ "$MTK_INTERNAL" == "TRUE" ] && [ "$MTK_CF" != "TRUE" ] && [ "$LTE_DOMAIN" != "TRUE" ]; then
+	#molyq perl make.pl $*
+	QUEUE='molyq'
+else
+if [ "$MTK_INTERNAL" == "TRUE" ] && [ "$MTK_CF" != "TRUE" ] && [ "$LTE_DOMAIN" == "TRUE" ] && [ "$LOGNAME" != "root" ]; then
+	#lteq perl make.pl $*
+	QUEUE='lteq'
+else
+	QUEUE=
+	#perl make.pl $*
+fi
+fi
+
+
+if [ "$CORE" == 'l1core' ]; then
+	$QUEUE perl l1core/make.pl single_core ${ARGV[*]}
+else
+if  [ "$CORE" == 'pcore' ]; then
+	$QUEUE perl make.pl single_core ${ARGV[*]}
+else
+	$QUEUE perl make.pl ${ARGV[*]}
+fi
+fi

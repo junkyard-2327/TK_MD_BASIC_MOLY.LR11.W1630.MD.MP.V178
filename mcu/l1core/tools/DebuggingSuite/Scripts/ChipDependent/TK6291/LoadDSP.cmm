@@ -1,0 +1,8 @@
+GLOBAL &DSP_BIN_NC_ADDR
+&DSP_BIN_NC_ADDR=Var.VALUE(dsp_bin_ro)
+IF &DSP_BIN_NC_ADDR>0xA0000000
+    &DSP_BIN_NC_ADDR=&DSP_BIN_NC_ADDR-0xA0000000
+    
+d.load.binary dsp.bin &DSP_BIN_NC_ADDR /nosymbol
+
+PRINT "Load DSP image done!"

@@ -1,0 +1,104 @@
+;===============================================
+;CMM START
+;===============================================
+
+winclear
+AREA.RESet
+AREA.Create dram
+AREA.Select dram
+AREA.view   dram
+AREA.Clear  dram
+
+;DO PMIC_Init.cmm
+
+&SW_MISC_L_ADDR=0xF0000010
+
+; ==================
+; Options
+; ==================
+; ==========
+; MD Boot Mode
+; ==========
+&OPT_MD_BOOT_MODE=0
+;; 0: Normal
+;; 1: Meta
+
+VectorCatch.RESET OFF
+
+; ==================
+; attach on PCORE
+; ==================
+DO MD_P_Attach.cmm
+
+; ==================
+; DO Misc HW Config
+; ==================
+DO MD_HW_Config_Misc.cmm
+
+; ==================
+; Config TCM for TCM Only load
+; ==================
+; Set ATCM / BTCM to 0x0
+; use default setting: 0x70000000
+D.S C15:0x0019 %LONG 0x1           ; BTCM: 0 ~ 256KB
+D.S C15:0x0119 %LONG 0x00040001    ; ATCM: 256KB ~ 512KB
+
+; ==================
+; Config Boot Mode
+; ==================
+IF &OPT_MD_BOOT_MODE==1
+(
+    &VAL=D.L(EAHB:&SW_MISC_L_ADDR)
+    &VAL=&VAL|0x1
+    Data.Set EAHB:&SW_MISC_L_ADDR %Long &VAL
+)
+
+; ==================
+; WDT Disable for load code to long
+; ==================
+DO disable_WDT.cmm
+
+; ==================
+; EMI Initialize
+; ==================
+;DO emi_init.cmm
+
+; ==================
+; load PSCore code
+; ==================
+; define and init elf,src,bin path
+GLOBAL &OPT_MD_P_ELF_PATH
+GLOBAL &OPT_MD_P_SRC_PATH
+GLOBAL &OPT_MD_P_BIN_PATH
+DO P_BuildInfo.cmm
+
+; load elf and source code
+D.LOAD.ELF &OPT_MD_P_ELF_PATH /RELPATH /PATH &OPT_MD_P_SRC_PATH /PATH &OPT_MD_P_SRC_PATH/pcore /PATH &OPT_MD_P_SRC_PATH/common
+
+; ==================
+; untrap PSCore from bootslave
+; ==================
+R.S PC VARADDR(INT_Initialize)
+
+; set needed breakpoint
+setbreak INT_Initialize %hw
+setbreak kal_fatal_error_handler_int %hw
+setbreak kal_assert_fail_specific %hw
+setbreak IdleTask %hw
+setbreak TCCT_Schedule %hw
+
+winclear
+winpos 0% 0% 70% 80%
+d.l
+winpos 70% 0% 30% 80%
+Register
+winpos 0% 76% 50% 50%
+Break.List
+winpos 50% 76% 50% 50%
+sYmbol.Browse
+
+;===============================================
+;CMM END
+;===============================================
+PRINT "Init Done"
+ENDDO

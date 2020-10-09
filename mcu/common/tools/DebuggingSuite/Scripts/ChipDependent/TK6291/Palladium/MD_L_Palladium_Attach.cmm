@@ -1,0 +1,33 @@
+system.down
+system.JtagClock 400KHz
+SYSTEM.OPTION.EnReset OFF
+SYSTEM.OPTION.WaitReset OFF
+System.Option ResBreak OFF
+System.OPTION TRST off
+
+CPUTYPE CORTEXR4
+system.cpu cortexr4
+system.multicore SWDP off
+
+
+; setting attribute of breakpoints
+Break.Select Program OnChip
+Break.Select Hll OnChip
+Break.Select Read OnChip
+Break.Select Write OnChip
+
+sys.m prepare
+Data.Set EAHB:0xF60F020C %Long 0xE3000710
+system.down
+
+system.multicore COREBASE 0xF0091000
+system.up
+
+; Disable Rst 
+&BASE_MADDR_MDRGU=0x800F0000
+&BASE_MADDR_APRGU=0x93670000
+&L1_BASE_ADDR_L1RGU=0x86010000
+
+D.S SD:&BASE_MADDR_MDRGU+0x0100 %LE %LONG (0x55000000|data.long(SD:&BASE_MADDR_MDRGU+0x0100)&~(0x1))
+D.S SD:&BASE_MADDR_APRGU+0x0100 %LE %LONG (0x55000000|data.long(SD:&BASE_MADDR_APRGU+0x0100)&~(0x1))
+D.S SD:&L1_BASE_ADDR_L1RGU %LE %LONG (0x2200|data.long(SD:&L1_BASE_ADDR_L1RGU)&~(0x1))

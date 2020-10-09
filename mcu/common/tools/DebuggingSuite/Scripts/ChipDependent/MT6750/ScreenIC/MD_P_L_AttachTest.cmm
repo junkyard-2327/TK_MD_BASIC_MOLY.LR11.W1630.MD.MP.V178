@@ -1,0 +1,61 @@
+;===============================================
+;CMM START
+;===============================================
+CPUTYPE CORTEXR4
+system.cpu cortexr4
+system.multicore SWDP on
+
+;winclear
+AREA.RESet
+AREA.Create dram
+AREA.Select dram
+AREA.view   dram
+AREA.Clear  dram
+
+winpos 0% 0% 20% 30%
+dram
+
+&CHIP_ID_ADDR=0xF0000008
+; ================
+; DAP Test
+; ================
+system.mode prepare
+&VAL=D.L(EAHB:&CHIP_ID_ADDR)
+IF &VAL!=0x6291
+(
+	PRINT "Prepare Mode Test Fail!"
+	GOTO TEST_END
+)
+system.mode down
+
+; ================
+; PCore Attach Test
+; ================
+DO MD_P_Attach.cmm
+&VAL=D.L(UM:&CHIP_ID_ADDR)
+IF &VAL!=0x6291
+(
+	PRINT "Prepare Mode Test Fail!"
+	GOTO TEST_END
+)
+system.mode down
+
+; ================
+; PCore Attach Test
+; ================
+DO MD_L_Attach.cmm
+&VAL=D.L(UM:&CHIP_ID_ADDR)
+IF &VAL!=0x6291
+(
+	PRINT "Prepare Mode Test Fail!"
+	GOTO TEST_END
+)
+
+PRINT "Attach Test Pass!"
+
+system.mode down
+
+;LoadLastWindow
+
+
+TEST_END:

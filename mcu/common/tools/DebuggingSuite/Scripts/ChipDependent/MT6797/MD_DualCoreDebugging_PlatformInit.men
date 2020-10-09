@@ -1,0 +1,324 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// DualCore Debugging Customer toolbar
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ADD
+TOOLBAR
+(
+	SEPARATOR
+  TOOLITEM "MT6797 GO GO GO!" " "
+	[
+
+
+
+BB     BBBBBBBBB
+BBB   BBBBBBBBBB
+BBBB BBBBBBBBBBB
+BBBBBBBBB  BBB
+BBBBBBBBB  BBB
+BBB B BBB  BBB
+BBB   BBB  BBB
+BBB   BBB  BBB
+BBB   BBB  BBB
+BBB   BBB  BBB
+
+
+
+	]
+	TOOLITEM "MT6797 GO GO GO!" " "
+	[
+
+
+
+     BBBBBB
+    BBBBBBB
+   BBBBB
+   BBBBBBBB
+   BBBBBBBBB
+   BBBB  BBB
+   BBBB  BBB
+   BBBBBBBBB
+    BBBBBBB
+     BBBBB
+
+
+
+	]
+	TOOLITEM "MT6797 GO GO GO!" " "
+	[
+
+
+
+   BBBBBBBBB
+   BBBBBBBBB
+         BBB
+       BBBB
+      BBBB
+     BBB
+    BBB
+    BBB
+    BBB
+    BBB
+
+
+
+	]
+	TOOLITEM "MT6797 GO GO GO!" " "
+	[
+
+
+
+     BBBBB
+    BBBBBBB
+   BBBBBBBBB
+   BBB  BBBB
+   BBB  BBBB
+   BBBBBBBBB
+    BBBBBBBB
+        BBBB
+    BBBBBBB
+    BBBBBB
+
+
+
+	]
+	TOOLITEM "MT9797 GO GO GO!" " "
+	[
+
+
+
+   BBBBBBBBB
+   BBBBBBBBB
+         BBB
+       BBBB
+      BBBB
+     BBB
+    BBB
+    BBB
+    BBB
+    BBB
+
+
+
+	]
+)
+
+
+
+TOOLBAR
+(	
+	SEPARATOR
+  TOOLITEM "Platform initialization" "DO MD_DualCoreDebugging_PlatformInit.cmm"
+[
+ 
+ 
+RRR  RRRRR   RRR
+RRR  RRRRRR  RRR
+RRR  RRR  RRRRRR
+RRR  RRR   RRRRR
+RRR  RRR    RRRR
+
+RRR  RRRRRRRRRRR
+RRR  RRRRRRRRRRR
+RRR      RRR
+RRR      RRR
+RRR      RRR
+ 
+ 
+]
+
+  
+  TOOLITEM "PCore initialize and attach" "DO MD_DualCoreDebugging_P_LoadSym_Attach_SetPC.csf"
+[
+
+
+
+    RRRRRRR
+    RRRRRRRRR
+    RRR  RRRRR
+    RRR   RRRR
+    RRR  RRRRR
+    RRRRRRRRR
+    RRRRRRR
+    RRR
+    RRR
+    RRR
+ 
+ 
+ 
+]
+
+  
+  TOOLITEM "L1Core initialize and attach" "DO MD_DualCoreDebugging_L_LoadSym_Attach.csf"
+[
+
+
+
+   RRR    RRR
+   RRR   RRRR
+   RRR    RRR
+   RRR    RRR
+   RRR    RRR
+   RRR    RRR
+   RRR    RRR
+   RRR    RRR
+   RRRRR RRRRR
+   RRRRR RRRRR
+ 
+ 
+ 
+]
+
+	SEPARATOR  
+  TOOLITEM "PSCore load symbol and attach" "DO MD_DualCoreDebugging_P_LoadSym_Attach.csf"
+[
+
+
+
+    RRRRRRR
+    RRRRRRRRR
+    RRR  RRRRR
+    RRR   RRRR
+ BBBBRRBBBBRRBBBB
+ BBBBBRBBBBBRBBBBB
+ BB BBRBBRBB    BB
+ BB BBRBBBB  BB BB
+ BB BBRBBBB  BB BB
+ BB BBRBB BB BB BB
+ BBBBB BBBBB BBBBB
+ BBBB  BBBB  BBBB
+ 
+]
+
+  
+  TOOLITEM "L1Core load symbol and attach" "DO MD_DualCoreDebugging_L_LoadSym_Attach.csf"
+[
+
+
+
+   RRR    RRR
+   RRR   RRRR
+   RRR    RRR
+   RRR    RRR
+ BBBBR BBBBRRBBBB
+ BBBBB BBBBBRBBBBB
+ BBRBB BB BBR   BB
+ BBRBB BBBBRRBB BB
+ BBRBBRBBBBRRBB BB
+ BBRBBRBBRBBRBB BB
+ BBBBB BBBBB BBBBB
+ BBBB  BBBB  BBBB
+ 
+]
+
+	SEPARATOR
+  TOOLITEM "PCore attach" "DO MD_P_Attach.cmm"
+[
+
+           BBBBBB
+          BBBBBBBB
+    RRRRRRBB    BB
+    RRRRRRBBRBB BB
+    RRR  RBBRBB BB
+    RRR   BBRBB BB
+    RRR  RBBBBB BB
+    RRRRRRRBBB  BB
+    RRRRRRR     BB
+    RRR   BBBBBBBB
+    RRR   BBBBBBB
+    RRR      
+
+ 
+ 
+]
+
+  
+  TOOLITEM "L1Core attach" "DO MD_L_Attach.cmm"
+[
+
+           BBBBBB
+          BBBBBBBB
+   RRR    BBR   BB
+   RRR   RBBRBB BB
+   RRR    BBRBB BB
+   RRR    BBRBB BB
+   RRR    BBBBB BB
+   RRR    RBBB  BB
+   RRR    RRR   BB
+   RRR    BBBBBBBB
+   RRRRR RBBBBBBB
+   RRRRR RRRRR
+ 
+ 
+ 
+]
+)
+
+
+
+TOOLBAR
+(
+	SEPARATOR
+  TOOLITEM "Memory Attibute Viewer" "DO Cortex-R_MPU_View.cmm"
+[
+
+
+
+ RRRRR    RRRRR
+ RRRRRR  RRRRRR
+ RRRRRRRRRRRRRR
+ RRR RRRRRR RRR
+ RRR  RRRR  RRR
+ RRR        RRR
+ RRR        RRR
+ RRR        RRR
+ RRR        RRR
+
+
+
+]
+
+  TOOLITEM "In Target Reset" "DO InTargetReset.cmm"
+[
+
+      RRRRRR
+    RRRRRRRRRR
+   RRR      RRR
+  RRR        RRR
+  RR         RRR
+           RRRRRRR
+   RRR      RRRRR
+  RRRRR      RRR
+ RRRRRRR        
+   RRR         RR
+   RRR        RRR
+    RRR      RRR 
+     RRRRRRRRRR 
+       RRRRRR
+]
+)
+
+
+
+TOOLBAR
+(
+	TOOLITEM "L1 Assert bypass after BREAK" "DO MD_L1AssertBypass.cmm"
+	[
+RRRR       gggg
+ R RR     gg   g
+ R  R  Y  g
+ RRRR YYY g
+ R  RR Y  g  ggg
+ R   R    gg  gg
+RRRRRR     ggg g
+
+
+ ccc  ccc  c  c
+ c c  c cc c c
+ c c  c  c cc
+ cccc ccc  ccc
+ c  c c c  c c
+ c  c c  c c  c
+ cccc c  c c  c
+	]
+	SEPARATOR
+)

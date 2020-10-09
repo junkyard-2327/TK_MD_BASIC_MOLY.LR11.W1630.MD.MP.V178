@@ -1,0 +1,59 @@
+
+PRINT "MD GPIO Configuration by CMM"
+;;;;;;;;;; register base
+; MD access AP view: 0xC, AP access AP view: 0x1
+&AP_GPIO_base=0xC0005000
+&mclass="pm"
+
+&tmp1=0
+&tmp2=0
+
+;Uart init
+&GPIO_BASE=0xC0005000
+&GPIO_R_BASE=0xC0002800
+
+
+// Set GPIO45/46 to GPIO mode (dws configed to MDUART0)
+D.S SD:&GPIO_BASE+0x35C %LE %LONG ((0x88|0x00)<<20.)
+
+// Set GPIO232/233 to MDUART0, (UART2 on debug board)
+D.S SD:&GPIO_BASE+0x4DC %LE %LONG (0x88|0x33)
+
+// Set URXD Pull up
+D.S SD:&GPIO_R_BASE+0xC8 %LE %LONG (0x1<<6.)
+D.S SD:&GPIO_R_BASE+0xE4 %LE %LONG (0x1<<6.)
+
+;;GPIO settings, this was removed when AP OK....
+;D.S SD:0xC00053FC %LE %LONG (0x99<<24.)
+;D.S SD:0xC000540C %LE %LONG (0x9)
+;D.S SD:0xC000543C %LE %LONG (0x999<<12.)
+;D.S SD:0xC0002500 %LE %LONG (0x1B818036)
+
+;PRINT "------------------------------------------------------------------------"
+;PRINT "BSI driving config"
+;PRINT "-------------------"
+;&GPIO_DRV0_G2_9=(&AP_GPIO_base+0x0A74)
+;&GPIO_DRV0_G2_9_MASK=0x60
+;&GPIO_DRV0_G2_9_VAL=0x20
+;&tmp1=DATA.LONG(&mclass:&GPIO_DRV0_G2_9)
+;&tmp2=(((&tmp1)&(~&GPIO_DRV0_G2_9_MASK))|(&GPIO_DRV0_G2_9_VAL))
+;PRINT "GPIO_DRV0_G2_9(0x" &GPIO_DRV0_G2_9 ") = 0x" FORMAT.HEX(8,&tmp1)
+;PRINT "GPIO_DRV0_G2_9_MASK = 0x" FORMAT.HEX(8,&GPIO_DRV0_G2_9_MASK)
+;PRINT "GPIO_DRV0_G2_9_VAL = 0x" FORMAT.HEX(8,&GPIO_DRV0_G2_9_VAL)
+;PRINT "        TARGET = 0x" FORMAT.HEX(8,&tmp2)
+;Data.Set &mclass:&GPIO_DRV0_G2_9 %LE %LONG &tmp2
+
+;&GPIO_DRV0_G3_0=(&AP_GPIO_base+0x1B70)
+;&GPIO_DRV0_G3_0_MASK=0x06
+;&GPIO_DRV0_G3_0_VAL=0x02
+;&tmp1=DATA.LONG(&mclass:&GPIO_DRV0_G3_0)
+;&tmp2=(((&tmp1)&(~&GPIO_DRV0_G3_0_MASK))|(&GPIO_DRV0_G3_0_VAL))
+;PRINT "GPIO_DRV0_G3_0(0x" &GPIO_DRV0_G3_0 ") = 0x" FORMAT.HEX(8,&tmp1)
+;PRINT "GPIO_DRV0_G3_0_MASK = 0x" FORMAT.HEX(8,&GPIO_DRV0_G3_0_MASK)
+;PRINT "GPIO_DRV0_G3_0_VAL = 0x" FORMAT.HEX(8,&GPIO_DRV0_G3_0_VAL)
+;PRINT " 	   TARGET = 0x" FORMAT.HEX(8,&tmp2)
+;Data.Set &mclass:&GPIO_DRV0_G3_0 %LE %LONG &tmp2
+
+PRINT "MD GPIO Configuration Completed"
+
+

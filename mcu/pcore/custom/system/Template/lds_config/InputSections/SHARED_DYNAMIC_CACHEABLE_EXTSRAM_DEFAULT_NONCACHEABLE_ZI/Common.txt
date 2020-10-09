@@ -1,0 +1,2 @@
+        * (SHARED_BUFF_DYNAMICCACHEABLEZI_NC)
+        . = ALIGN(CACHELINESIZE); /* the end of DNC should align to cacheline size */

@@ -1,0 +1,1 @@
+        * (DYNAMICCACHEABLERW_C)    /* the start of DNC should align to cacheline size */

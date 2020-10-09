@@ -1,0 +1,384 @@
+/*****************************************************************************
+*  Copyright Statement:
+*  --------------------
+*  This software is protected by Copyright and the information contained
+*  herein is confidential. The software may not be copied and the information
+*  contained herein may not be used or disclosed except with the written
+*  permission of MediaTek Inc. (C) 2005
+*
+*  BY OPENING THIS FILE, BUYER HEREBY UNEQUIVOCALLY ACKNOWLEDGES AND AGREES
+*  THAT THE SOFTWARE/FIRMWARE AND ITS DOCUMENTATIONS ("MEDIATEK SOFTWARE")
+*  RECEIVED FROM MEDIATEK AND/OR ITS REPRESENTATIVES ARE PROVIDED TO BUYER ON
+*  AN "AS-IS" BASIS ONLY. MEDIATEK EXPRESSLY DISCLAIMS ANY AND ALL WARRANTIES,
+*  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF
+*  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR NONINFRINGEMENT.
+*  NEITHER DOES MEDIATEK PROVIDE ANY WARRANTY WHATSOEVER WITH RESPECT TO THE
+*  SOFTWARE OF ANY THIRD PARTY WHICH MAY BE USED BY, INCORPORATED IN, OR
+*  SUPPLIED WITH THE MEDIATEK SOFTWARE, AND BUYER AGREES TO LOOK ONLY TO SUCH
+*  THIRD PARTY FOR ANY WARRANTY CLAIM RELATING THERETO. MEDIATEK SHALL ALSO
+*  NOT BE RESPONSIBLE FOR ANY MEDIATEK SOFTWARE RELEASES MADE TO BUYER'S
+*  SPECIFICATION OR TO CONFORM TO A PARTICULAR STANDARD OR OPEN FORUM.
+*
+*  BUYER'S SOLE AND EXCLUSIVE REMEDY AND MEDIATEK'S ENTIRE AND CUMULATIVE
+*  LIABILITY WITH RESPECT TO THE MEDIATEK SOFTWARE RELEASED HEREUNDER WILL BE,
+*  AT MEDIATEK'S OPTION, TO REVISE OR REPLACE THE MEDIATEK SOFTWARE AT ISSUE,
+*  OR REFUND ANY SOFTWARE LICENSE FEES OR SERVICE CHARGE PAID BY BUYER TO
+*  MEDIATEK FOR SUCH MEDIATEK SOFTWARE AT ISSUE. 
+*
+*  THE TRANSACTION CONTEMPLATED HEREUNDER SHALL BE CONSTRUED IN ACCORDANCE
+*  WITH THE LAWS OF THE STATE OF CALIFORNIA, USA, EXCLUDING ITS CONFLICT OF
+*  LAWS PRINCIPLES.  ANY DISPUTES, CONTROVERSIES OR CLAIMS ARISING THEREOF AND
+*  RELATED THERETO SHALL BE SETTLED BY ARBITRATION IN SAN FRANCISCO, CA, UNDER
+*  THE RULES OF THE INTERNATIONAL CHAMBER OF COMMERCE (ICC).
+*
+*****************************************************************************/
+
+/*******************************************************************************
+ * Filename:
+ * ---------
+ *   hif_mw_data_path_trace.tmd
+ *
+ * Project:
+ * --------
+ *   TATAKA
+ *
+ * Description:
+ * ------------
+ *   HIF middleware common data path trace Log.
+ *
+ * Author:
+ * -------
+ *   YiLun Chen
+ *
+ *==============================================================================
+ *                 HISTORY
+ * Below this line, this part is controlled by PVCS VM. DO NOT MODIFY!! 
+ *------------------------------------------------------------------------------
+ * $Log$
+ *
+ * 08 01 2016 cs.huang
+ * [MOLY00182402] [MT6291] Trace reduction -- Phase 3
+ * [CCCI] Log reduction
+ *
+ * 06 17 2016 peter.hsu
+ * [MOLY00177961] Multiple-PS
+ * [Multiple PS][IPCORE] Use the MSB of netif_id to be SIM idx
+ * - Wrapper function for UPCM & ipc_send_ul/dl_pkt()
+ *
+ *
+ * 05 04 2016 peter.hsu
+ * [MOLY00171352] [WW FT][MT6755][Jade-M][H3G][UK][VoLTE][SQC Excluded] No "manage conference" menu
+ * [IPCORE][MTU] Config MTU by CCCI runtime data instead of SBP
+ *
+ * 11 03 2015 peter.hsu
+ * [MOLY00146648] [IPCORE] Uplink QoS mechanism
+ * [IPCORE] Change ipc_send_ul_pkt() & ipc_send_ul_pkt_by_pdn() to ILM based API
+ * - Queue packets and forward to UPCM in IPCore's own context
+ *
+ * 11 03 2015 peter.hsu
+ * [MOLY00146500] [MT6755][Jade M5][MP1][MTBF][Lab][HQ][Ericsson] (MCU_PCORE)[Fatal error (data abort)] err_code1:0x00000004 err_code2:0x0047E930 err_code3:0x00000010 CaDeFa Supported
+ * [IPCORE] Change ipc_send_ul_pkt() & ipc_send_ul_pkt_by_pdn() to ILM based API
+ * - Queue packets and forward to UPCM in IPCore's own context
+ *
+ * 09 22 2015 hsin-jun.tang
+ * [MOLY00142648] [LTM_SIM] Data-generation refine
+ * [LTM_SIM] Generate data refine - LR11
+ *
+ * 08 24 2015 peter.hsu
+ * [MOLY00138390] UL Data Throttling v2
+ * [TMC][IPCORE] UL Data Throttling v2
+ * - Add new module TMC (Thermal Management Controller)
+ * - Add IMS Blocking mode
+ *
+ * 08 07 2015 cs.huang
+ * [MOLY00136043] cccidev_qbm.h assertion
+ * [CCMNI] Fix SPD EOL problem
+ *
+ * 08 06 2015 peter.hsu
+ * [MOLY00135742] [IPCORE] Add more log for SPD
+ * [SPD][IPCORE] Add more log for SPD entry being ignored case
+ *
+ * 07 28 2015 cs.huang
+ * [MOLY00131268] [CCMNI] Add SPD trace
+ * [CCMNI] Add SPD trace
+ *
+ * 07 23 2015 cs.huang
+ * [MOLY00131268] [CCMNI] Add SPD trace
+ * [CCMNI] Add SPD trace
+ *
+ * 03 27 2015 ap.wang
+ * [MOLY00100246] [UMOLY] Fix SPD type3 re-layout error
+ * Add CCCI Len for SPD DL v2
+ *
+ * 02 26 2015 hsin-jun.tang
+ * [MOLY00097014] [CCCI CCMNI] log reduction .tmd
+ * [CCCI CCMNI] log reduction UMOLY .tmd files
+ *
+ * 11 25 2014 peter.hsu
+ * [MOLY00085013] [VoLTE] IPcore support IP/UDP header size and PDN interface
+ * [IPCORE] Support LG VoLTE
+ * - Carry packet data offset to RTP header in the filter info.
+ * - New API: Send UL packet to the PDN
+ *
+ * 11 25 2014 peter.hsu
+ * [MOLY00084258] [MT6795][Modem][Feature]Please support Garbage filter from network
+ * [PFM] [IPCORE] Packet Filter Manager & Garbage Filter Implementation
+ *
+ * 11 14 2014 peter.hsu
+ * [MOLY00081425] [TK6291_DEV] Add SPD sw solution
+ * [SPD] [IPCORE] SPD v2 implementation
+ *
+ * 11 13 2014 cs.huang
+ * [MOLY00075481] Add CCCI SPD DL support
+ * Merging
+ * 	
+ * 	//UMOLY/DEV/MT6291_DEV/mcu/pcore/...
+ * 	
+ * 	to //UMOLY/TRUNK/UMOLY/mcu/pcore/...
+ *
+ * 11 11 2014 bo-kai.huang
+ * [MOLY00081425] [TK6291_DEV] Add SPD sw solution
+ * [USBCORE][USB_HIF_SIM] Add SPD support
+ *
+ * 08 14 2014 peter.hsu
+ * [MOLY00075474] Throughput Throttling
+ * [IPCORE] T-put Throttling
+ *
+ * 07 09 2014 peter.hsu
+ * [MOLY00071814] [IPCORE] Prevent the race condition of UL reload retry global variable
+ * + [IPCORE] Add set-need-reload flag to detect the race condition
+ *
+ * 06 27 2014 ap.wang
+ * [MOLY00070335] Inter rat FLC size change HIF notify
+ * Add QBM pool status notify
+ *
+ * 06 25 2014 bo-kai.huang
+ * [MOLY00069324] MD USB power saving enhancement
+ * .
+ *
+ * 05 14 2014 ap.wang
+ * [MOLY00063866] [ROME] data/ack?queue? IT
+ * CCMNI Fast Ack Patch and linkdown fast reload
+ *
+ * 03 11 2014 yilun.chen
+ * [MOLY00059133] IPCore log refining
+ * 	* [HIF MW L2 trace] remove redundant log messages.
+ *
+ * 03 11 2014 yilun.chen
+ * [MOLY00059133] IPCore log refining
+ * 1. Add new SAP to define IPCORE data path ILM (for futher ELT filtering in performance test)
+ * 2. Add new class of IPCORE L2 logging
+ *
+ * 03 06 2014 ap.wang
+ * [MOLY00058479] [CCMNI] CCMNI log reduction
+ * CCMNI Log reduction
+ *
+ * 02 18 2014 bo-kai.huang
+ * [MOLY00056447] HIF logging reduction
+ * : Reduce L2 trace for USBCORE module
+ *
+ * 02 14 2014 cw.wang
+ * [MOLY00056071] [MP1 Post MP patch]IPCORE drop invalid length packet
+ * IPCORE drop invalid length packet & UT
+ *
+ * 01 17 2014 bo-kai.huang
+ * [MOLY00054128] Reuse COM port for META mode
+ * 1. Support META COM port reuse. 
+ * 2. Support unique serial number for production release. 
+ * 3. Re-organize the customization part of USB. 
+ * 4. Show GPD/BD length in L2 trace for debugging.
+ *
+ * 10 15 2013 bo-kai.huang
+ * [MOLY00041272] Add USBCORE L2 trace for analysis
+ * 1. Add L2 trace for USBClass submit IO requests.
+ * 2. Print L2 trace only if USBCORE polls non-zero GPDs.
+ *
+ * 10 07 2013 yilun.chen
+ * [MOLY00040390] [IPCORE] filter procedure refining
+ * Filter procedure refining.
+ *
+ * 09 17 2013 yilun.chen
+ * [MOLY00037445] [IPCORE] Flush cache lines of destination packet content in gpd copy
+ * *[IPCORE] Add L2 trace messages to show GPD length in UNITE procedure for further debugging.
+ *
+ * 09 06 2013 ap.wang
+ * [MOLY00036761] [CCCI] Add L2 trace log	[CCCI] Add L2 trace log
+ *
+ * 08 28 2013 bo-kai.huang
+ * [MOLY00035734] Reduction for USBCORE L2 trace
+ * .
+ *
+ * 08 28 2013 ap.wang
+ * [MOLY00035451] [HMU] Add L2 trace log
+ * 	[HMU] Add L2 trace for event trigger
+ *
+ * 08 27 2013 yilun.chen
+ * [MOLY00035353] [IPCORE] unite DL GPD pieces when IPCore doing packet content filtering
+ * + [IPCORE] Add unite feature for DL packet dividing in pieces.
+ *
+ * 08 27 2013 ap.wang
+ * [MOLY00035319] [CCCI_CCMNI] Add l2 trace log
+ * CCMNI L2 trace
+ *
+ * 08 26 2013 yilun.chen
+ * [MOLY00032630] IPCORE : Add L1 trace log
+ * * [IPCORE] Fix IPv6 L2 trace log typo.
+ *
+ * 08 21 2013 yilun.chen
+ * [MOLY00034552] Using hif_data_trace() to pack HIF data path L2 trace logs
+ * +:[IPCORE] : Using hif_data_trace() to pack L2 trace logs
+ *
+ * 08 15 2013 yilun.chen
+ * [MOLY00033889] Change buffer usage for HIF data path trace
+ * * [HIF] Change HIF data path log buffer to L2_Buffer.
+ * * [HIF] Follow codegen variable convention.
+ *
+ * 08 06 2013 yilun.chen
+ * [MOLY00032630] IPCORE : Add L1 trace log
+ * * [IPCORE] only print L1 trace log when UL reload retial is needed.
+ *
+ * 08 06 2013 yilun.chen
+ * [MOLY00032630] IPCORE : Add L1 trace log
+ * +[IPCORE] Add L1 trace log.
+ *
+ * 08 06 2013 yilun.chen
+ * [HIF] Remove prefix "0x" from hex display.
+ *
+ * 08 02 2013 bo-kai.huang
+ * [MOLY00032349] Add ELT log and L1 trace for USBCORE
+ * Add debug log for USBCORE.
+ *
+ *------------------------------------------------------------------------------
+ * Upper this line, this part is controlled by PVCS VM. DO NOT MODIFY!! 
+ *==============================================================================
+ *******************************************************************************/
+
+/*
+Notes:
+	MAX MAX_ARG is 7, But the best MIPS is 4.
+	Set MAX_ARG bigger than 4, only affect MIPS of log use more than 4 ARG.
+*/
+
+[Default]
+	HIF_MW
+	ON
+	L2_Buffer
+	TCMFORCE
+	MAX_ARG 7
+
+[Modem_Type]
+	Generic
+
+[Class]
+	UL                                   on
+	DL                                   on
+	GE                                   on
+	USBCORE_POLL_QUEUE                   on
+    USBCORE_CLASS_REQUEST                on
+	CCMNI                                on
+	CCMNI_DL			     on
+	CCMNI_UL		             on
+	CCMNI_DUMP                           on
+	CCCITTY_DUMP                         on
+	UL_DETAIL                            on
+	DL_DETAIL                            on
+ 
+[String]
+	IPC_IP_TYPE
+	{
+		"IPC_IP_TYPE_MIXED",
+		"IPC_IP_TYPE_IPV4",
+		"IPC_IP_TYPE_IPV6"
+	}
+
+[Message]
+	info	IPC_UL_UPLINK_CALLBACK					UL "[IPCORE] ipc_uplink() : [%d] Callback with UL IP IOR[%xl] for netif[%xl], netif's features[%xl]"
+	info	IPC_UL_DEQUEUE_UPLINK_PRIORITY_QUEUE 	UL "[IPCORE] ipc_on_process_ul_ior_list() : Pending IOR count[%d], Throttling state: blocking-latency-concern[%l]/ims-emergency[%l]. High priority IOR list head[%xl]"
+	info	IPC_UL_DEQUEUE_UPLINK_QUEUE 	        UL "[IPCORE] ipc_on_process_ul_ior_list() : Pending IOR count[%d], Throttling state[%d]: Normal priority IOR list head[%xl]"
+	info	IPC_UL_ON_PROCESS_NORMAL_IOR			UL_DETAIL "[IPCORE] ipc_on_process_ul_ior_list() : [%d] Handle IOR[%xl] belongs to netif[%xl]"
+    info    IPC_UL_THROTTLE_IMS_EMERGEMCY_IND       UL "[IPCORE] ipc_ims_emergency_call_ind_handler(): VDM indication to change ims_block_flag from [%d] to [%l]"
+	info    IPC_TR_TIMER_UL_THROTTLE_TIMEOUT        		UL "[IPCORE] ipc_ul_throttle_timeout(): UL throttle timer timeout, current_tick(%d), current_state(%l), enable(%l), active(%l), suspend(%l)"
+	info    IPC_TR_START_UL_THROTTLE_TIMER          		UL "[IPCORE] ipc_start_ul_throttle_timer(): Start UL throttle timer, current_tick(%d), elapse_time(%l)"
+	info	IPC_UL_RELOAD_UPLINK					UL_DETAIL "[IPCORE] ipc_reload_uplink() : [%d] Reload uplink for netif[%xl], netif_id[%xl], callback[%xl]"  
+	info	IPC_UL_RELOAD_UPLINK_RESULT			UL "[IPCORE] ipc_reload_uplink() : [%d] Reload uplink result for for netif[%xl], netif_id[%xl] : %l"
+	info	IPC_UL_RELOAD_RETRY					UL_DETAIL "[IPCORE] ipc_set_netif_ul_reload_retry() : Update retry-reload flag [%d] for netif[%xl], netif_id[%xl], callback[%xl] while set-need-reload bit-mask[%xl]"
+	info	IPC_UL_RELOAD_RETRY_RACE_COND				UL "[IPCORE] ipc_set_netif_ul_reload_retry() : [%d] Update retry-reload race condition occurred with retry-reload flag [%l], set-need-reload flag [%l] and reload retrial bit-mask[%xl]"
+	info	IPC_UL_RELOAD_RETRY_FLAG				UL_DETAIL "[IPCORE] ipc_set_netif_ul_reload_retry() : [%d] Uplink reload retrial bit-mask[%xl] while set-need-reload bit-mask[%xl]"
+	info	IPC_UL_SET_NEED_RELOAD					UL_DETAIL "[IPCORE] ipc_set_netif_ul_set_need_reload() : Update set-need-reload flag [%d] for netif[%xl], netif_id[%xl], callback[%xl]"
+	info	IPC_UL_SET_NEED_RELOAD_FLAG				UL_DETAIL "[IPCORE] ipc_set_netif_ul_set_need_reload() : [%d] Netif set need reload bit-mask[%xl]"
+	info	IPC_UL_ON_RETRY_RELOAD					UL "[IPCORE] ipc_on_retry_ul_reload() : [%d] Current uplink reload retrial bit-mask[%xl]"
+	info	IPC_UL_ON_RETRY_RELOAD_FOR_NETIF		UL "[IPCORE] ipc_on_retry_ul_reload() : [%d] Reload network interface[%xl] for bit[%xl]"
+	info	IPC_UL_CHECK_UL_RELOAD_RETRY			UL "[IPCORE] ipc_check_ul_reload_retry() : [%d] Current uplink reload retrial bit-mask[%xl] : need retry reload !"
+	info	IPC_UL_DROP_UL_IOR						UL "[IPCORE] ipc_forward_ul_ior() : [%d] Drop UL IOR for netif[%xl], ior[%xl]"
+	info	IPC_UL_LOOPBACK_UL_IOR					UL "[IPCORE] ipc_forward_ul_ior() : [%d] Loopback UL IOR for netif[%xl], ior[%xl], DL callback[%xl]"
+	info	IPC_UL_LOOPBACK_UL_IOR_DROP			UL "[IPCORE] ipc_forward_ul_ior() : [%d] Drop loopback UL IOR due to invalid DL callback for netif[%xl], ior[%xl], DL callback[%xl]"
+	info	IPC_UL_HANDLE_UL_GPD_LIST				UL "[IPCORE] ipc_forward_ul_ior() : IP-Type(%d) - To handle UL GPD : netif_id[%xl], first_gpd[%xl], last_gpd[%xl]"
+	info	IPC_UL_FORWARD_UL_SDU					UL "[IPCORE] ipc_forward_ul_ior() : IP-Type(%d) - Forward UL GPD : pdn_id[%xl], first_gpd[%xl], last_gpd[%xl]"
+	info	IPC_UL_HANDLE_IPV4_UL_GPD_LIST			UL_DETAIL "[IPCORE] ipc_forward_ul_ior() : IP-Type(%d) - To handle IPv4 UL GPD : netif_id[%xl], first_gpd[%xl], last_gpd[%xl]"
+	info	IPC_UL_FORWARD_IPV4_UL_SDU				UL "[IPCORE] ipc_forward_ul_ior() : IP-Type(%d) - Forward IPv4 UL GPD : pdn_id[%xl], first_gpd[%xl], last_gpd[%xl]"
+	info	IPC_UL_HANDLE_IPV6_UL_GPD_LIST			UL "[IPCORE] ipc_forward_ul_ior() : IP-Type(%d) - To handle IPv6 UL GPD : netif_id[%xl], first_gpd[%xl], last_gpd[%xl]"
+	info	IPC_UL_FORWARD_IPV6_UL_SDU				UL "[IPCORE] ipc_forward_ul_ior() : IP-Type(%d) - Forward IPv6 UL GPD : pdn_id[%xl], first_gpd[%xl], last_gpd[%xl]"
+	info	IPC_UL_FORWARD_UL_SDU_MULTI_PS			UL "[IPCORE] IPC_FORWARD_UL_SDU() : Forward UL GPD with pdn_id[%d] and proto_idx[%l]"
+	info	IPC_UL_FORWARD_UL_SDU_BY_EBI_MULTI_PS	UL "[IPCORE] IPC_FORWARD_UL_SDU_BY_EBI() : Forward GPD to UL with EBI(%d) and proto_idx[%l]"
+	info	IPC_UL_DHCP4C_PKT_SESSION				UL "[IPCORE] ipc_on_dhcp4c_packet_ind() : [%d] Send DHCPv4 gpd[%xl], ip_id[%l], session[%xl]"
+	info	IPC_UL_DHCP4C_PKT_UPLINK				UL "[IPCORE] ipc_on_dhcp4c_packet_ind() : [%d] Send DHCPv4 gpd[%xl], session[%xl], netif_id[%xl]"
+	info	IPC_UL_SEND_PKT							UL "[IPCORE] ipc_send_ul_pkt() : Receive GPD to UL with EBI(%d) : head[%xl] ~ tail[%xl]"
+	info	IPC_UL_SEND_PKT_BY_PDN					UL "[IPCORE] ipc_send_ul_pkt_by_pdn() : Receive GPD to UL with PDN(%d), ip_type(%xl) : head[%xl] ~ tail[%xl]"
+	info	IPC_UL_SEND_PKT_MULTI_PS				UL "[IPCORE] ipc_send_ul_pkt_multiple_ps() : Function be called with EBI(%d) and proto_idx(%l)"
+	info	IPC_UL_SEND_PKT_BY_PDN_MULTI_PS			UL "[IPCORE] ipc_send_ul_pkt_by_pdn_multiple_ps() : Function be called with PDN(%d) and proto_idx(%l)"
+	info	IPC_UL_SEND_PKT_FORWARD					UL "[IPCORE] ipc_on_process_ul_ior_list() : Send GPD to UL with EBI(%d) : head[%xl] ~ tail[%xl]"
+	info	IPC_UL_SEND_PKT_BY_PDN_FORWARD			UL "[IPCORE] ipc_on_process_ul_ior_list() : Send GPD to UL with PDN(%d), ip_type(%xl) : head[%xl] ~ tail[%xl]"
+	info	IPC_DL_SEND_IPV4_PKT					DL "[IPCORE] ipc_send_dl_pkt() : [%d] Send IPv4 GPD to netif_id[%xl], first_gpd[%xl], last_gpd[%xl]"
+	info	IPC_DL_SEND_IPV6_PKT					DL "[IPCORE] ipc_send_dl_pkt() : [%d] Send IPv6 GPD to netif_id[%xl], first_gpd[%xl], last_gpd[%xl]"
+	info	IPC_DL_ON_DOWNLINK						DL "[IPCORE] ipc_on_downlink() : Downlink handle from pdn_id[%d], head[%xl], tail[%xl]"
+	info	IPC_DL_ON_DOWNLINK_FILTER_OUT			DL "[IPCORE] ipc_on_downlink() : [%d] Filter out all downlink GPDs : session_type[%l], netif_id[%xl]"
+	info	IPC_DL_ON_DOWNLINK_CALLBACK_INFO		DL_DETAIL "[IPCORE] ipc_on_downlink() : Send DL GPDs from pdn_id[%d] - Session/netif information : session_type[%l], netif_id[%xl]"
+	info	IPC_DL_ON_DOWNLINK_CALLBACK_GPD		DL "[IPCORE] ipc_on_downlink() : Send DL GPDs from pdn_id[%d] - GPD information : first_gpd[%xl], last_gpd[%xl]"
+	info	IPC_DL_ON_DOWNLINK_MULTI_PS				DL "[IPCORE] ipc_on_downlink_multiple_ps() : Downlink handle from pdn_id[%d], proto_idx[%l]"
+	info	IPC_DL_INVALID_LEN_CHK					DL "[IPCORE] ipc_pkt_do_filter() : [%d] dl_invalid_len : cur_gpd[%xl], cur_bd[%xl], pkt_length[%xl], valid_length[%xl]"
+	info	IPC_DL_INVALID_LEN_PKT_IP_HDR			DL "[IPCORE] ipc_pkt_do_filter() : dl_invalid_len ip_header[%d] header data[%xl]"
+    info    IPC_GE_FILTER_RULE_MATCHED              GE "[IPCORE] ipc_pkt_do_filter() : [%d] filter rule matched - filter rules: rules[%xl], features[%xl], valid_fields[%xl]"
+	info	IPC_GE_SPD_ENTRY_IGR_INFO			    GE "[IPCORE] ipc_do_filter() : One of SPD entries has been ignored : uplink[%d], curr_spd[%xl], idx[%l], payload_len[%l]"
+	info	IPC_GE_SPD_ALL_IGR_INFO			        GE "[IPCORE] ipc_do_filter() : All entry of the SPD have been ignored : uplink[%d], curr_spd[%xl], packet_num[%l]"
+	info	IPC_GE_DO_FILTER_GPD_UPDATE			GE "[IPCORE] ipc_do_filter() : GPD update after uniting : uplink[%d], curr_gpd[%xl], united_gpd[%xl]/len[%l]"
+	info	IPC_GE_FILTER_OUT_INFO					GE "[IPCORE] ipc_call_filter_cbk() : filter out and callback - General info : uplink[%d], callback_context[%xl], filter_id[%xl]"
+	info	IPC_GE_FILTER_OUT_GPD					GE "[IPCORE] ipc_call_filter_cbk() : filter out and callback - GPD info : uplink[%d], curr_gpd[%xl], length[%l]"
+	info  IPC_GE_UNITE_FAIL_DROP					GE "[IPCORE] ipc_do_filter() : Unite Failed ! Drop packet with length[%d], orgGPD[%lx]"
+	info  IPC_GE_UNITE_FAIL_DROP_INFO				GE "[IPCORE] ipc_do_filter() : Dropped packet info : FilterID[%d], orgGPD[%lx], pdnID[%l], netifID[%l]"
+	info	IPC_GE_HANDLE_GPD						GE "[IPCORE] ipc_pack_pkt() : [%d] Handle GPD - head[%xl], tail[%xl]"
+	info	IPC_GE_SET_ALLOC_DATA					GE "[IPCORE] ipc_pack_pkt() : Set and allocate GPD for data buffer - data_len[%d], data[%xl], ip_header_len[%l], udp_header_len[%l]"
+	info	IPC_GE_FILL_HEADER						GE "[IPCORE] ipc_pack_pkt() : Fill header with total_le[%d] for GPD[%xl], ip_header_len[%l], udp_header_len[%l]"
+	info	IPC_GE_UNITED_GPD						GE "[IPCORE] ipc_gpd_unite() : GPD is united with new one : uplink[%d}, p_gpd_in[%xl], *pp_gpd_out[%xl]/len[%l]"
+	info	PFM_GE_DROP_PACKET_INFO				    GE "[PFM] pfm_drop_packet_trace(): The packet is dropped! EBI[%d], IPID[%xl], checksum[%xl]"
+	info	PFM_GE_DROP_PACKET_DUMP			        GE "[PFM DUMP] %3d: %10xl %10xl %10xl %10xl"
+	info	USBCORE_POLL_QUEUE_TX					USBCORE_POLL_QUEUE "[USBCORE] polling Tx_q[%d], returns %l GPD(s), first gpd %xl, last gpd %xl"
+	info	USBCORE_POLL_QUEUE_TX_NOTIFY_END		USBCORE_POLL_QUEUE "[USBCORE] finishing notifing poll Tx queue complete:  class id = %d"
+	info	USBCORE_POLL_QUEUE_RX					USBCORE_POLL_QUEUE "[USBCORE] polling Rx_q[%d], returns %l GPD(s), first gpd %xl, last gpd %xl"
+	info	USBCORE_POLL_QUEUE_RX_NOTIFY_END		USBCORE_POLL_QUEUE "[USBCORE] finishing notifing poll Rx queue complete:  class id = %d"
+    info    USBCORE_POLL_QUEUE_LEN_TX               USBCORE_POLL_QUEUE "[USBCORE] polling Tx_q[%d], GPD length = %xl, BD_length = %xl, SPD length = %xl"
+    info    USBCORE_POLL_QUEUE_LEN_RX               USBCORE_POLL_QUEUE "[USBCORE] polling Rx_q[%d], GPD length = %xl, BD_length = %xl, SPD length = %xl"
+    info    USBCORE_CLASS_SUBMIT_IO_REQUEST_HWQ     USBCORE_CLASS_REQUEST "[USBCORE] submit hw_q type/q_no = %xd, first gpd %xl, last gpd %xl"
+    info    USBCORE_CLASS_SUBMIT_IO_REQUEST_SWQ     USBCORE_CLASS_REQUEST "[USBCORE] submit sw_q type/q_no = %xd, first gpd %xl, last gpd %xl"
+    info    USBCORE_CLASS_FLUSH_HW_QUEUE            USBCORE_CLASS_REQUEST "[USBCORE] flush HW_q[%xd], returns %l GPD(s), first gpd %xl, last gpd %xl"
+    info    USBCORE_CLASS_FLUSH_SW_QUEUE            USBCORE_CLASS_REQUEST "[USBCORE] flush SW_q[%xd], returns %l GPD(s), first gpd %xl, last gpd %xl"
+    info    USBCORE_RESTORE_RX_GPD_SWQ2HWQ          USBCORE_CLASS_REQUEST "[USBCORE] restore Rx GPDs from sw_q to hw_q: type/q_no = %xd"
+    info    USBCORE_RESTORE_TX_GPD_SWQ2HWQ          USBCORE_CLASS_REQUEST "[USBCORE] restore Tx GPDs from sw_q to hw_q: type/q_no = %xd"
+	info	CCMNI_DATA_DUMP_TRACE					CCMNI_DUMP "[CCMNI DUMP] %3d: %10xl %10xl %10xl %10xl"
+	info	CCMNI_DATA_DUMP_GPD_PTR					CCMNI_DUMP "[CCMNI DL] CCMNI%d: GDP=%xl BD1=%xl BD2=%xl DATA=%xl"
+	info	CCMNI_DL_DATA_IPv6_PACKET_TRACE			CCMNI_DL 	   "[CCMNI DLv6] Protocol:%d GPD=%xl Checksum=%xl Src Addr=%10xl %10xl %10xl %10xl"
+	info	CCMNI_UL_DATA_IPv6_PACKET_TRACE			CCMNI_UL 	   "[CCMNI ULv6] Protocol:%d GPD=%xl Checksum=%xl Dst Addr=%10xl %10xl %10xl %10xl"
+	info	CCMNI_DL_DATA_PACKET_TRACE				CCMNI_DL 	   "[CCMNI DL] CCMNI%d: CCCIHDR=%xl SEQ=%xl IPID=%xl checksum=%xl"
+        info	CCMNI_DL_DATA_PACKET_NON_IPV4V6_TRACE			CCMNI_DL 	   "[CCMNI DL] CCMNI%d: CCCIHDR=%xl SEQ=%xl PAYLOAD=%xl PAYLOAD_LEN=%d"
+	info	CCMNI_UL_DATA_PACKET_TRACE				CCMNI_UL 	   "[CCMNI UL] CCMNI%d: GPD=%xl IPID=%xl checksum=%xl"
+	info	CCMNI_UL_GPD_IN_HIF						CCMNI_UL 	   "[CCMNI UL] CCMNI%d: Receive GPD=%l, Need Reload=%l, GPD in HIF=%l, Data_Q=%l, Ack_Q=%l"
+	info	CCMNI_UL_RELOAD_RGPD					CCMNI_UL 	   "[CCMNI UL_RELOAD] CCMNI%d: Reload RGPD Want=%l, Allocated=%l, in HIF=%l"
+	info	CCMNI_UL_RELOAD_RGPD_IN_HIF				CCMNI_UL 	   "[CCMNI UL_RELOAD] CCMNI%d: Nor_Q_before=%l, Nor_Q_after=%l, Nor_Q_MAX=%l, Ack_Q_before=%l, Ack_Q_after=%l, Ack_Q_MAX=%l"
+	info	CCMNI_MAX_RELOAD_RGPD_IN_HIF			CCMNI 	   "[CCMNI MAX RGPD] Data_Q_MAX=%d Ack_Q_MAX=%l, Misc_Q_MAX=%l"
+	info	CCMNI_DEVICE_STATUS						CCMNI 	   "[CCMNI STATUS] CCMNI%d: event=%l status=%l -> %l"
+	info	CCCITTY_DATA_DUMP_TRACE					CCCITTY_DUMP "[CCCITTY DUMP] %3d: %10xl %10xl %10xl %10xl"
+        info	CCCIDEV_PROCESS_DL_SPD_TRACE					DL "[CCCIDEV DL SPD] pkt_num:%d current_gpd:%xl"
+        info	CCCIDEV_PROCESS_DL_SPD_SET_IGR_TRACE				DL "[CCCIDEV DL SPD] ignore bit set (%d) in pkt:%d pie:%xl"
+        info	CCCIDEV_SPD_RELAYOUT_SET_PKTNUM_TRACE				DL "[CCCIDEV DL SPD] Get pkt_num:%d from pi:%xl and write to spd_ext:%xl"
+        info	CCCIDEV_SPD_RELAYOUT_GET_EOL_BREAK_TRACE			DL "[CCCIDEV DL SPD] BREAK!!! total pkt_num:%d current pkt_num:%d spd_ph:%xl"
+    info	LTM_SIM_TPUT_ANALYSIS			        GE         "[LTM_SIM] REAL_PKT_NUM : %d, EXPECTED_PKT_NUM : %l, TIME_DIFF : %l, Current_Time: %l, Last_Time : %l, RECYCLE_PKT_NUM : %l."
+	

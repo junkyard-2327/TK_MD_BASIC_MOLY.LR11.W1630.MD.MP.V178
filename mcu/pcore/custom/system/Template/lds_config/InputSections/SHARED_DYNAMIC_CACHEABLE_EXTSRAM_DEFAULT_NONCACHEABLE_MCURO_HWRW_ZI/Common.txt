@@ -1,0 +1,3 @@
+        *el1d_ccutil_common.obj (SHARED_BUFF_MCURO_HWRW_DYNAMICCACHEABLEZI_NC) /* place here to reduce the distance between l1core ROM and lcm_nbr_mpc_5ms_rpt */
+        * (SHARED_BUFF_MCURO_HWRW_DYNAMICCACHEABLEZI_NC)  
+        . = ALIGN(CACHELINESIZE); /* the end of DNC should align to cacheline size */

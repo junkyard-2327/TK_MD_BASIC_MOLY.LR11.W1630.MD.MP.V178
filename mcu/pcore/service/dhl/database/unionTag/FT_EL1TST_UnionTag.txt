@@ -1,0 +1,145 @@
+/*****************************************************************************
+*  Copyright Statement:
+*  --------------------
+*  This software is protected by Copyright and the information contained
+*  herein is confidential. The software may not be copied and the information
+*  contained herein may not be used or disclosed except with the written
+*  permission of MediaTek Inc. (C) 2005
+*
+*  BY OPENING THIS FILE, BUYER HEREBY UNEQUIVOCALLY ACKNOWLEDGES AND AGREES
+*  THAT THE SOFTWARE/FIRMWARE AND ITS DOCUMENTATIONS ("MEDIATEK SOFTWARE")
+*  RECEIVED FROM MEDIATEK AND/OR ITS REPRESENTATIVES ARE PROVIDED TO BUYER ON
+*  AN "AS-IS" BASIS ONLY. MEDIATEK EXPRESSLY DISCLAIMS ANY AND ALL WARRANTIES,
+*  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF
+*  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR NONINFRINGEMENT.
+*  NEITHER DOES MEDIATEK PROVIDE ANY WARRANTY WHATSOEVER WITH RESPECT TO THE
+*  SOFTWARE OF ANY THIRD PARTY WHICH MAY BE USED BY, INCORPORATED IN, OR
+*  SUPPLIED WITH THE MEDIATEK SOFTWARE, AND BUYER AGREES TO LOOK ONLY TO SUCH
+*  THIRD PARTY FOR ANY WARRANTY CLAIM RELATING THERETO. MEDIATEK SHALL ALSO
+*  NOT BE RESPONSIBLE FOR ANY MEDIATEK SOFTWARE RELEASES MADE TO BUYER'S
+*  SPECIFICATION OR TO CONFORM TO A PARTICULAR STANDARD OR OPEN FORUM.
+*
+*  BUYER'S SOLE AND EXCLUSIVE REMEDY AND MEDIATEK'S ENTIRE AND CUMULATIVE
+*  LIABILITY WITH RESPECT TO THE MEDIATEK SOFTWARE RELEASED HEREUNDER WILL BE,
+*  AT MEDIATEK'S OPTION, TO REVISE OR REPLACE THE MEDIATEK SOFTWARE AT ISSUE,
+*  OR REFUND ANY SOFTWARE LICENSE FEES OR SERVICE CHARGE PAID BY BUYER TO
+*  MEDIATEK FOR SUCH MEDIATEK SOFTWARE AT ISSUE.
+*
+*  THE TRANSACTION CONTEMPLATED HEREUNDER SHALL BE CONSTRUED IN ACCORDANCE
+*  WITH THE LAWS OF THE STATE OF CALIFORNIA, USA, EXCLUDING ITS CONFLICT OF
+*  LAWS PRINCIPLES.  ANY DISPUTES, CONTROVERSIES OR CLAIMS ARISING THEREOF AND
+*  RELATED THERETO SHALL BE SETTLED BY ARBITRATION IN SAN FRANCISCO, CA, UNDER
+*  THE RULES OF THE INTERNATIONAL CHAMBER OF COMMERCE (ICC).
+*
+*****************************************************************************/
+/*
+ *  This file is used by cgen for union Tag information.
+ */
+dhl_to_el1tst_struct type param:
+{ 
+    0 puschTxParam;
+    1 pucchTxParam;
+    2 prachTxParam;
+    3 srsTxParam;
+    4 mixRxParam;
+    5 isLocalParamBeUsed;
+    6 isLocalParamBeUsed;
+    7 isLocalParamBeUsed;
+    8 tpcSettingBandIndex;
+    9 tpcSettingBandIndex;
+    10 isLocalParamBeUsed;
+    11 afcSingleToneTxParam;
+    12 isLocalParamBeUsed;
+    13 isLocalParamBeUsed;
+    14 tpcSingleToneTxParam;
+    15 tpcPaGainSetting;
+    16 isLocalParamBeUsed;
+    17 rssiRxParam;
+    18 rxRSSITableBandIndex;
+    19 rxRSSITableBandIndex;
+    20 isLocalParamBeUsed;
+    21 query_op_code;
+    22 getRfTemp;
+    23 isLocalParamBeUsed;
+    24 isLocalParamBeUsed;
+    25 isLocalParamBeUsed;
+    26 contRxParam;
+    27 setMipiCodeWord;
+    28 getMipiCodeWord;
+    29 isLocalParamBeUsed;
+    30 EtModeSetting;
+    31 isLocalParamBeUsed;
+    32 etCalSetting;
+    33 etCalSetting;
+    34 etCalSetting;
+    35 toolUsage;
+    36 nvramInfoReq;
+    37 isLocalParamBeUsed;
+    38 gpsCoClockData;
+    41 setRssiNonCaConfig;
+    42 rssiRxParamCaMode;
+    43 contRxParamCaMode;
+    44 rxRSSITableRouteIndex;
+    45 rssiTableType;
+    46 mixRxParamCaMode;
+    47 isLocalParamBeUsed;
+    48 isLocalParamBeUsed;
+    49 isLocalParamBeUsed;
+    50 isLocalParamBeUsed;
+    51 tpcSettingBandIndex;
+    52 tpcSettingBandIndex;
+    53 tpcSettingBandIndex;
+    54 tpcSettingBandIndex;
+};
+
+el1tst_to_dhl_struct type param:
+{
+    0 result;
+    1 result;
+    2 result;
+    3 result;
+    4 generalResult;
+    5 mixRxRpt;
+    6 result;
+    7 result;
+    8 setTPCResult;
+    9 result;
+    10 isLocalParamBeUsed;
+    11 result;
+    12 result;
+    13 result;
+    14 result;
+    15 result;
+    16 txPowerDetectorValue;
+    17 result;
+    18 result;
+    19 result;
+    20 result;
+    21 CheckIfFuncExist;
+    22 rfTemperature;
+    23 result;
+    24 result;
+    25 generalResult;
+    26 result;
+    27 result;
+    28 getMipiCodeWord;
+    29 rfTemperatureInfo;
+    31 result;
+    36 nvramInfoCnf;
+    37 gpsCoClockData;
+    38 result;
+    41 result;
+    42 result;
+    43 result;
+    44 getRssiResult;
+    45 setRssiResult;
+    46 generalResult;
+    47 mixRxRptCaMode;
+    48 isLocalParamBeUsed;
+    49 result;
+    50 result;
+    51 setTPCResult;
+    52 result;
+    53 setTPCResult;
+    54 result;
+};

@@ -1,0 +1,1 @@
+perl adt_codegen.pl ./../../modem/ul1/common/auto_tcm_function_list_mt6755_ul1_adt.txt ./../../modem/ul1/common/ul1_adt.c ./ul1_adt.h

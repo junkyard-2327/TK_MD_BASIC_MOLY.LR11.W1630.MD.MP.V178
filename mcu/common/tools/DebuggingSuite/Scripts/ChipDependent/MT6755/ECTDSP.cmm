@@ -1,0 +1,3 @@
+d.s g_ect_dsp %LONG 0x2
+
+PRINT "Now DSPs will not break when CR4s break!"

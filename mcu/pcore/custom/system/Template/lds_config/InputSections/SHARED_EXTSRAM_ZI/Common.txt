@@ -1,0 +1,2 @@
+        * (SHARED_BUFF_NONCACHEDZI)
+        . = ALIGN(0x10000);  /* the end of MCURW_HWRO should align to 64KB */

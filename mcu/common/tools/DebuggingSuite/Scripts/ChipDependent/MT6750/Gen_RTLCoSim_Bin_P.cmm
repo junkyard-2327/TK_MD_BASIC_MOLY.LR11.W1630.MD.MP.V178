@@ -1,0 +1,87 @@
+;===============================================
+;CMM START
+;===============================================
+SETUP.BAKfile OFF
+
+; ======================
+; Reset all configuration
+; ======================
+winclear
+AREA.RESet
+AREA.Create dram
+AREA.Select dram
+AREA.view   dram
+AREA.Clear  dram
+SYStem.RESet //Reset all configuration
+
+; ======================
+; attach on PSCore
+; ======================
+; DO MD_P_Attach.cmm
+system.down
+SYSTEM.OPTION.EnReset OFF
+SYSTEM.OPTION.WaitReset OFF
+System.Option ResBreak OFF
+System.OPTION TRST off
+system.JtagClock 8MHz
+system.cpu cortexr4
+system.multicore SWDP on
+system.multicore COREBASE 0xF00A1000
+system.up
+
+; ======================
+; Load PSCore code
+; ======================
+; define and init elf,src,bin path
+GLOBAL &OPT_MD_P_ELF_PATH
+GLOBAL &OPT_MD_P_SRC_PATH
+GLOBAL &OPT_MD_P_BIN_PATH
+GLOBAL &L_CMM_RELATIVE_PATH
+DO P_BuildInfo.cmm
+
+data.load.elf &OPT_MD_P_ELF_PATH /AnySym
+
+; ======================
+; Do region initialize
+; ======================
+v INT_InitShareRegions()
+v INT_InitRegions()
+
+; ======================
+; Create CoSimReleaseBin folder
+; ======================
+IF !OS.DIR(CoSimReleaseBin)
+(
+    mkdir ./CoSimReleaseBin
+)
+
+; ======================
+; dump External SRAM
+; ======================
+&EXTSRAM_END=V.VALUE(&Image$$EXECUTION_VIEW_END$$ZI$$Limit)
+
+;d.save.binary .\CoSimReleaseBin\EXTSRAM_0x00000000_&EXTSRAM_END 0x00000000--&EXTSRAM_END
+d.save.binary .\CoSimReleaseBin\EXTSRAM_0x00000000 0x00000000--&EXTSRAM_END
+
+; ======================
+; dump TCM
+; ======================
+&ATCM_START=V.VALUE(&Image$$EMIINIT_CODE$$Base)
+&BTCM_START=V.VALUE(&Image$$INTSRAM_PHYSICAL_BOUNDARY$$Base)
+&ATCM_END=&BTCM_START-1.
+&BTCM_LEN=V.VALUE(&Image$$INTSRAM_PHYSICAL_BOUNDARY$$Length)
+&BTCM_END=&BTCM_START+&BTCM_LEN-1
+
+;dump ATCM and BTCM as one binary
+d.save.binary .\CoSimReleaseBin\ONE_TCM_&ATCM_START &ATCM_START--&BTCM_END
+
+;dump ATCM and BTCM as two different binary
+d.save.binary .\CoSimReleaseBin\ATCM_&ATCM_START &ATCM_START--&ATCM_END
+d.save.binary .\CoSimReleaseBin\BTCM_&BTCM_START &BTCM_START--&BTCM_END
+
+
+;===============================================
+;CMM END
+;===============================================
+PRINT "Init Done"
+ENDDO

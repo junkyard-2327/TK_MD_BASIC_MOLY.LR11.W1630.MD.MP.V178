@@ -1,0 +1,4 @@
+        LONG(0);
+        /* . = .; */ /* add this to avoid location counter to be moved backwords and cause build fail */
+        . += Image$$L1CORE_DSP_RX_LENGTH$$Length;
+        . = ALIGN(0x10000);  /* the end of MCURW_HWRW should align to 64KB */

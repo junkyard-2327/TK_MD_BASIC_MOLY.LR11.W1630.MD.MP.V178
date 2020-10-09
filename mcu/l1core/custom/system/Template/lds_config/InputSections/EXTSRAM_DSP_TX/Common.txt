@@ -1,0 +1,9 @@
+        LONG(0);
+        . += Image$$PCORE_DSP_TX_LENGTH$$Length;
+
+        L1CORE_EXTRAM_TXDATA$$ZI$$Base = .;		
+        * (EXTRAM_TXDATA)
+        . = ALIGN(4);
+        L1CORE_EXTRAM_TXDATA$$ZI$$Limit = .;
+        L1CORE_EXTRAM_TXDATA$$ZI$$Length = ABSOLUTE(L1CORE_EXTRAM_TXDATA$$ZI$$Limit - L1CORE_EXTRAM_TXDATA$$ZI$$Base);
+        LONG(0);

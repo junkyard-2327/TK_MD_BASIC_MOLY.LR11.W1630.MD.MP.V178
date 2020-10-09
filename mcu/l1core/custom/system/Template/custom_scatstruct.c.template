@@ -1,0 +1,962 @@
+/*****************************************************************************
+*  Copyright Statement:
+*  --------------------
+*  This software is protected by Copyright and the information contained
+*  herein is confidential. The software may not be copied and the information
+*  contained herein may not be used or disclosed except with the written
+*  permission of MediaTek Inc. (C) 2006
+*
+*  BY OPENING THIS FILE, BUYER HEREBY UNEQUIVOCALLY ACKNOWLEDGES AND AGREES
+*  THAT THE SOFTWARE/FIRMWARE AND ITS DOCUMENTATIONS ("MEDIATEK SOFTWARE")
+*  RECEIVED FROM MEDIATEK AND/OR ITS REPRESENTATIVES ARE PROVIDED TO BUYER ON
+*  AN "AS-IS" BASIS ONLY. MEDIATEK EXPRESSLY DISCLAIMS ANY AND ALL WARRANTIES,
+*  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF
+*  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR NONINFRINGEMENT.
+*  NEITHER DOES MEDIATEK PROVIDE ANY WARRANTY WHATSOEVER WITH RESPECT TO THE
+*  SOFTWARE OF ANY THIRD PARTY WHICH MAY BE USED BY, INCORPORATED IN, OR
+*  SUPPLIED WITH THE MEDIATEK SOFTWARE, AND BUYER AGREES TO LOOK ONLY TO SUCH
+*  THIRD PARTY FOR ANY WARRANTY CLAIM RELATING THERETO. MEDIATEK SHALL ALSO
+*  NOT BE RESPONSIBLE FOR ANY MEDIATEK SOFTWARE RELEASES MADE TO BUYER'S
+*  SPECIFICATION OR TO CONFORM TO A PARTICULAR STANDARD OR OPEN FORUM.
+*
+*  BUYER'S SOLE AND EXCLUSIVE REMEDY AND MEDIATEK'S ENTIRE AND CUMULATIVE
+*  LIABILITY WITH RESPECT TO THE MEDIATEK SOFTWARE RELEASED HEREUNDER WILL BE,
+*  AT MEDIATEK'S OPTION, TO REVISE OR REPLACE THE MEDIATEK SOFTWARE AT ISSUE,
+*  OR REFUND ANY SOFTWARE LICENSE FEES OR SERVICE CHARGE PAID BY BUYER TO
+*  MEDIATEK FOR SUCH MEDIATEK SOFTWARE AT ISSUE.
+*
+*  THE TRANSACTION CONTEMPLATED HEREUNDER SHALL BE CONSTRUED IN ACCORDANCE
+*  WITH THE LAWS OF THE STATE OF CALIFORNIA, USA, EXCLUDING ITS CONFLICT OF
+*  LAWS PRINCIPLES.  ANY DISPUTES, CONTROVERSIES OR CLAIMS ARISING THEREOF AND
+*  RELATED THERETO SHALL BE SETTLED BY ARBITRATION IN SAN FRANCISCO, CA, UNDER
+*  THE RULES OF THE INTERNATIONAL CHAMBER OF COMMERCE (ICC).
+*
+*****************************************************************************/
+
+/*****************************************************************************
+ *
+ * Filename:
+ * ---------
+ *   custom_scatstruct.c
+ *
+ * Project:
+ * --------
+ *   Maui_Software
+ *
+ * Description:
+ * ------------
+ *   This file provides the scatter file dependent APIs
+ *
+ * Author:
+ * -------
+ *   Claudia Lo (mtk01876)     [AUTOGEN_GenVersion]
+ * 
+ *============================================================================
+ *             HISTORY
+ * Below this line, this part is controlled by PVCS VM. DO NOT MODIFY!!
+ *------------------------------------------------------------------------------
+ * $Revision$
+ * $Modtime$
+ * $Log$
+ *
+ * 07 11 2015 carl.kao
+ * [MOLY00127706] [UMOLY] [SYSTEM SERVICE] [KAL] [DSMGR] Support DSM in L1core L2SRAM
+ * .
+ *
+ * 06 15 2015 carl.kao
+ * [MOLY00121235] [TK6291] [SystemService][Auto-Gen][Request For Design Change] Query TCM base and end address
+ * .
+ *
+ * 04 16 2015 carl.kao
+ * [MOLY00106652] [TK6291] [SystemService][Auto-Gen] add a dynamic switchable default cached MCU-RW, HW-RW section
+ * add 4 sections for EMI RMPU
+ *   1) (MCU RO, MDHW RW)  DNC 
+ *   2) (MCU RO, MDHW RW)  NC 
+ *   3) (MCU RW, MDHW RW)  DNC 
+ *   4) (MCU RW, MDHW RW)  NC
+ *
+ * 01 16 2015 carl.kao
+ * [MOLY00087999] [TK6291] [SystemService] [DSMGR] phase1: Image layout ready and provide load()/unload interface for RD
+ * adjust MPU range
+ *
+ * 01 16 2015 carl.kao
+ * [MOLY00092576] [TK6291] [SystemService][Auto-Gen] Refine lds for auto adjust 1) shared region, 2)Pcore SWLA, 3)L1core SWLA
+ * adjust MPU range
+ *
+ * 12 23 2014 carl.kao
+ * [MOLY00088578] [TK6291] [SystemService] [Auto-Gen] Support L2SRAM section (in L1CORE)
+ * aa.
+ *
+ * 12 22 2014 carl.kao
+ * [MOLY00087532] [Denali-1] [SystemService][Auto-Gen] Refactor AutoGen Code and Remove Legacy Code
+ * .
+ *
+ * 11 15 2014 carl.kao
+ * [MOLY00083302] [SYSTEM SERVICE][TASK CONFIG] Merge code from MT6291_DEV
+ * mcu/l1core
+ *
+ * 04 14 2014 carl.kao
+ * [MOLY00061797] [SYSTEM SERVICE] porting features from U3G_TK6280_DEV and MOLY.U3G.90IT.DEV branches
+ * add "#include "custom_scatstruct.h""
+ *
+ * 04 14 2014 carl.kao
+ * [MOLY00061134] [SYSTEM SERVICE][AutoGen] AutoGen for MT6291
+ * remove #include "custom_demp.h"
+ *
+ * 04 02 2014 carl.kao
+ * [MOLY00061134] [SYSTEM SERVICE][AutoGen] AutoGen for MT6291
+ * l1core sysgen2
+ *
+ *------------------------------------------------------------------------------
+ * Upper this line, this part is controlled by PVCS VM. DO NOT MODIFY!!
+ *============================================================================
+ ****************************************************************************/
+
+
+#include "kal_general_types.h"
+#include "init.h"
+#include "cache_sw_int.h"
+#include "cache_sw.h"
+#include "custom_scatstruct.h"
+
+
+#ifdef __MTK_TARGET__
+extern kal_uint32 custom_get_fat_addr();
+extern kal_uint32 custom_get_fat_len();
+extern kal_uint32 INT_RetrieveFlashBaseAddr(void);
+/*******************************************************************************
+ * Define import global data.
+ *******************************************************************************/
+
+[AUTOGEN_SCAT_C_Gen_REGION_SYMBOL]
+
+
+/*******************************************************************************
+ * Define import global data.
+ *******************************************************************************/
+
+#if defined(__DYNAMIC_SWITCH_CACHEABILITY__)
+
+[AUTOGEN_SCAT_C_Gen_ARRAY_EXTSRAM_REGION]
+
+#endif /* __DYNAMIC_SWITCH_CACHEABILITY__ */
+
+#define SWLA_SIZE 0x40000
+
+#if defined(__DYNAMIC_SWITCH_CACHEABILITY__)
+
+/************************************************************************
+* FUNCTION
+*  custom_query_dynamic_cached_extsram_default_nc_region
+*
+* DESCRIPTION
+*  This function gets info of dynamic cached default non-cached EXT SRAM regions.
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_int32 custom_query_dynamic_cached_extsram_default_nc_region(EXTSRAM_REGION_INFO_T **region)
+{
+    *region = DYNAMIC_CACHED_EXTSRAM_DNC_REGION;
+
+    return 0;
+}
+
+/************************************************************************
+* FUNCTION
+*  custom_query_dynamic_cached_extsram_default_c_region
+*
+* DESCRIPTION
+*  This function gets info of dynamic cached default cached EXT SRAM regions.
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_int32 custom_query_dynamic_cached_extsram_default_c_region(EXTSRAM_REGION_INFO_T **region)
+{
+    *region = DYNAMIC_CACHED_EXTSRAM_DC_REGION;
+
+    return 0;
+}
+
+/*************************************************************************
+* FUNCTION
+*  custom_query_cached_extsram_region
+*
+* DESCRIPTION
+*  This function gets info of cached EXT SRAM regions.
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_int32 custom_query_cached_extsram_region(EXTSRAM_REGION_INFO_T **region)
+{
+    *region = CACHED_EXTSRAM_REGION;
+
+    return 0;
+}
+
+/*************************************************************************
+* FUNCTION
+*  custom_query_cached_extsram_code_region
+*
+* DESCRIPTION
+*  This function gets info of cached EXT SRAM code regions.
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+__TCMROCODE
+kal_int32 custom_query_cached_extsram_code_region(EXTSRAM_REGION_INFO_T **region)
+{
+    *region = CACHED_EXTSRAM_CODE_REGION;
+
+    return 0;
+}
+
+/*************************************************************************
+* FUNCTION
+*  custom_query_noncached_extsram_region
+*
+* DESCRIPTION
+*  This function gets info of non-cached RW EXT SRAM regions.
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+__TCMROCODE
+kal_int32 custom_query_noncached_extsram_region(EXTSRAM_REGION_INFO_T **region)
+{
+    *region = NONCACHED_EXTSRAM_REGION;
+
+    return 0;
+}
+
+/*************************************************************************
+* FUNCTION
+*  custom_query_noncached_extsram_ro_region
+*
+* DESCRIPTION
+*  This function gets info of non-cached RO EXT SRAM regions.
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+__TCMROCODE
+kal_int32 custom_query_noncached_extsram_ro_region(EXTSRAM_REGION_INFO_T **region)
+{
+    *region = NONCACHED_EXTSRAM_RO_REGION;
+
+    return 0;
+}
+
+#endif /* __DYNAMIC_SWITCH_CACHEABILITY__ */
+
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_1st_ROM_ROMBase
+*
+* DESCRIPTION
+*  Retrieve the base address of the 1st ROM (Load View)
+*  This function must sync with scatter file structure
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_1st_ROM_ROMBase(void)
+{
+    return (kal_uint32)&Image$$[AUTOGEN_SCAT_C_Gen_RegionName_EV_1stROM_BEGIN]$$Base;
+}
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_1st_ROM_ROMLength
+*
+* DESCRIPTION
+*  Retrieve the actual ROM length of 1st ROM (Load View)
+*  This function must sync with scatter file structure
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_1st_ROM_ROMLength(void)
+{
+    kal_uint32 ROMLength = 0;
+[AUTOGEN_SCAT_C_Gen_TEMPLATE_1stROM_LENGTH]
+    return ROMLength; 
+}
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_1st_ROM_RAMBase
+*
+* DESCRIPTION
+*  Retrieve the RAM base address of the 1st ROM (Load View)
+*  This function must sync with scatter file structure
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_1st_ROM_RAMBase(void)
+{
+    return [AUTOGEN_SCAT_C_Gen_TEMPLATE_1stRAM_BEGIN];
+}
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_1st_ROM_RAMLength
+*
+* DESCRIPTION
+*  Retrieve the actual RAM length of 1st ROM (Load View)
+*  This function must sync with scatter file structure
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_1st_ROM_RAMLength(void)
+{
+    kal_uint32 RAMLength = 0;
+    
+    return RAMLength; 
+}
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_1st_ROM_RAMEnd
+*
+* DESCRIPTION
+*  Retrieve the actual end address of 1st ROM (Exec View)
+*  This function must sync with scatter file structure
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_1st_ROM_RAMEnd(void)
+{
+    kal_uint32 EndAddr = 0;
+
+    EndAddr  = (kal_uint32)&Image$$[AUTOGEN_SCAT_C_Gen_RegionName_EV_1stRAM_END]$$ZI$$Limit;
+
+    return EndAddr; 
+}
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_1st_ROM_LoadEnd
+*
+* DESCRIPTION
+*  Retrieve the actual end address of 1st ROM (Load View)
+*  This function must sync with scatter file structure
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_1st_ROM_LoadEnd(void)
+{
+    kal_uint32 EndAddr = 0;
+
+    EndAddr  = (kal_uint32)&Load$$[AUTOGEN_SCAT_C_Gen_RegionName_EV_1stROM_END]$$Base;
+    EndAddr += (kal_uint32)&Image$$[AUTOGEN_SCAT_C_Gen_RegionName_EV_1stROM_END]$$Length;
+
+    return EndAddr; 
+}
+
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_INTSRAMCODE_Base
+*
+* DESCRIPTION
+*  Retrieve the base address of INTSRAM_CODE
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_INTSRAMCODE_Base(void)
+{
+    return (kal_uint32)&Image$$INTSRAM_CODE$$Base;
+}
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_INTSRAMCODE_End
+*
+* DESCRIPTION
+*  Retrieve the END address of INTSRAM_CODE
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_INTSRAMCODE_End(void)
+{
+    return (kal_uint32)&Image$$INTSRAM_CODE$$ZI$$Limit;
+}
+/*************************************************************************
+* FUNCTION
+*  custom_get_INTSRAMDATA_Base
+*
+* DESCRIPTION
+*  Retrieve the base address of INTSRAM_DATA
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_INTSRAMDATA_Base(void)
+{
+    return (kal_uint32)&Image$$INTSRAM_DATA$$Base;
+}
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_INTSRAMDATA_End
+*
+* DESCRIPTION
+*  Retrieve the END address of INTSRAM_DATA
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_INTSRAMDATA_End(void)
+{
+    [AUTOGEN_SCAT_C_Gen_INTSRAMDATA_END]
+}
+
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_INTSRAM_PHYSICAL_BOUNDARY_Base
+*
+* DESCRIPTION
+*  Retrieve the base address of INTSRAM_PHYSICAL_BOUNDARY
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_INTSRAM_PHYSICAL_BOUNDARY_Base(void)
+{
+    return (kal_uint32)&Image$$[AUTOGEN_SCAT_C_Gen_RegionName_EV_INTSRAM_HW_BOUNDARY]$$Base;
+}
+/*************************************************************************
+* FUNCTION
+*  custom_get_INTSRAM_PHYSICAL_BOUNDARY_MaxSize
+*
+* DESCRIPTION
+*  Retrieve the MaxSize of INTSRAM_PHYSICAL_BOUNDARY 
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_INTSRAM_PHYSICAL_BOUNDARY_MaxSize(void)
+{
+    return [AUTOGEN_SCAT_C_Gen_MaxSize_INTSRAM_HW_BOUNDARY];
+}
+/*************************************************************************
+* FUNCTION
+*  custom_get_INTSRAM_Base
+*
+* DESCRIPTION
+*  Retrieve the base address of INTSRAM
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_INTSRAM_Base(void)
+{
+    return custom_get_INTSRAMCODE_Base();
+}
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_INTSRAM_End
+*
+* DESCRIPTION
+*  Retrieve the END address of INTSRAM
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_INTSRAM_End(void)
+{
+    return custom_get_INTSRAM_PHYSICAL_BOUNDARY_Base() + custom_get_INTSRAM_PHYSICAL_BOUNDARY_MaxSize();
+}
+
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_L2SRAMCODE_Base
+*
+* DESCRIPTION
+*  Retrieve the base address of L2SRAM (also base of L2SRAM CODE section)
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_L2SRAMCODE_Base(void)
+{
+    return (kal_uint32)&Image$$L2SRAM_CODE$$Base;
+}
+/*************************************************************************
+* FUNCTION
+*  custom_get_L2SRAMDATA_Base
+*
+* DESCRIPTION
+*  Retrieve the base address of L2SRAM DATA section
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_L2SRAMDATA_Base(void)
+{
+    return (kal_uint32)&Image$$L2SRAM_DATA$$Base;
+}
+/*************************************************************************
+* FUNCTION
+*  custom_get_L2SRAMDATA_End
+*
+* DESCRIPTION
+*  Retrieve the end address of L2SRAM DATA section
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_L2SRAMDATA_End(void)
+{
+[AUTOGEN_SCAT_C_Gen_L2SRAMDATA_END];
+}
+/*************************************************************************
+* FUNCTION
+*  custom_get_L2SRAM_LENGTH
+*
+* DESCRIPTION
+*  Retrieve the length of L2SRAM
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_L2SRAM_LENGTH(void)
+{
+    return [AUTOGEN_SCAT_C_Gen_L2SRAM_LENGTH];
+}
+
+
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_DNC_SharedMem_Base
+*
+* DESCRIPTION
+*  Retrieve the base address of DNC_SharedMem
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_DNC_SharedMem_Base(void)
+{
+    return [AUTOGEN_SCAT_C_Gen_DNC_SharedMem_Base];
+}
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_DNC_SharedMem_C_Base
+*
+* DESCRIPTION
+*  Retrieve the cacheable base address of DNC_SharedMem
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_DNC_SharedMem_C_Base(void)
+{
+    kal_uint32 base = [AUTOGEN_SCAT_C_Gen_DNC_SharedMem_Base];
+    base = MAP2CREGVA(base);
+    return base;
+}
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_DNC_SharedMem_End
+*
+* DESCRIPTION
+*  Retrieve the end address of DNC_SharedMem
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_DNC_SharedMem_End(void)
+{
+    return [AUTOGEN_SCAT_C_Gen_DNC_SharedMem_End];
+}
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_NC_SharedMem_Base
+*
+* DESCRIPTION
+*  Retrieve the base address of NC_SharedMem
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_NC_SharedMem_Base(void)
+{
+    return [AUTOGEN_SCAT_C_Gen_NC_SharedMem_Base];
+}
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_NC_SharedMem_End
+*
+* DESCRIPTION
+*  Retrieve the end address of NC_SharedMem
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_NC_SharedMem_End(void)
+{
+    return [AUTOGEN_SCAT_C_Gen_NC_SharedMem_End];
+}
+
+
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_DNC_MCURO_HWRW_SharedMem_Base
+*
+* DESCRIPTION
+*  Retrieve the base address of DNC_MCURO_HWRW_SharedMem
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_DNC_MCURO_HWRW_SharedMem_Base(void)
+{
+    return [AUTOGEN_SCAT_C_Gen_DNC_MCURO_HWRW_SharedMem_Base];
+}
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_DNC_MCURO_HWRW_SharedMem_End
+*
+* DESCRIPTION
+*  Retrieve the end address of DNC_MCURO_HWRW_SharedMem
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_DNC_MCURO_HWRW_SharedMem_End(void)
+{
+    return [AUTOGEN_SCAT_C_Gen_DNC_MCURO_HWRW_SharedMem_End];
+}
+
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_NC_MCURO_HWRW_SharedMem_Base
+*
+* DESCRIPTION
+*  Retrieve the base address of NC_MCURO_HWRW_SharedMem
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_NC_MCURO_HWRW_SharedMem_Base(void)
+{
+    return [AUTOGEN_SCAT_C_Gen_NC_MCURO_HWRW_SharedMem_Base];
+}
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_NC_MCURO_HWRW_SharedMem_End
+*
+* DESCRIPTION
+*  Retrieve the end address of NC_MCURO_HWRW_SharedMem
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_NC_MCURO_HWRW_SharedMem_End(void)
+{
+    return [AUTOGEN_SCAT_C_Gen_NC_MCURO_HWRW_SharedMem_End];
+}
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_DNC_MCURW_HWRW_SharedMem_Base
+*
+* DESCRIPTION
+*  Retrieve the base address of DNC_MCURW_HWRW_SharedMem
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_DNC_MCURW_HWRW_SharedMem_Base(void)
+{
+    return [AUTOGEN_SCAT_C_Gen_DNC_MCURW_HWRW_SharedMem_Base];
+}
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_DNC_MCURW_HWRW_SharedMem_End
+*
+* DESCRIPTION
+*  Retrieve the end address of DNC_MCURW_HWRW_SharedMem
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_DNC_MCURW_HWRW_SharedMem_End(void)
+{
+    return [AUTOGEN_SCAT_C_Gen_DNC_MCURW_HWRW_SharedMem_End];
+}
+
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_NC_MCURW_HWRW_SharedMem_Base
+*
+* DESCRIPTION
+*  Retrieve the base address of NC_MCURW_HWRW_SharedMem
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_NC_MCURW_HWRW_SharedMem_Base(void)
+{
+    return [AUTOGEN_SCAT_C_Gen_NC_MCURW_HWRW_SharedMem_Base];
+}
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_NC_MCURW_HWRW_SharedMem_End
+*
+* DESCRIPTION
+*  Retrieve the end address of NC_MCURW_HWRW_SharedMem
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_NC_MCURW_HWRW_SharedMem_End(void)
+{
+    return [AUTOGEN_SCAT_C_Gen_NC_MCURW_HWRW_SharedMem_End];
+}
+
+
+
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_DSPTXRX_Base
+*
+* DESCRIPTION
+*  Retrieve the lowest base address of DSP_TX or DSP_RX
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_int32 custom_get_DSPTXRX_Base(void)
+{
+    return [AUTOGEN_SCAT_C_Gen_TEMPLATE_DSPTXRX_BEGIN];
+}
+/*************************************************************************
+* FUNCTION
+*  custom_get_DSPTXRX_MaxSize
+*
+* DESCRIPTION
+*  Retrieve the reserved size of DSP_TX plus DSP_RX
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_int32 custom_get_DSPTXRX_MaxSize(void)
+{
+    return [AUTOGEN_SCAT_C_Gen_TEMPLATE_DSPTXRX_MAXSIZE];
+}
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_MaxAvailableMemorySegment
+*
+* DESCRIPTION
+*  Retrieve the pointer (16 Bytes aligned) and the length that unUsed memory segments
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+
+void custom_get_MaxAvailableMemorySegment(kal_uint32 **Return_begin_addr, kal_uint32 *Return_segment_size)
+{
+    kal_uint32  MaxLength;
+    kal_uint32  MaxBeginAddr;
+    kal_uint32  LastRegionEnd;
+    kal_uint32  ThisRegionBegin;
+
+#if defined(__SWLA_SELFSPACE_ENABLE__)
+    MaxLength = 4*SWLA_SIZE;
+    MaxBeginAddr = (kal_uint32)EXTSRAM_SWLA;
+#else //defined(__SWLA_SELFSPACE_ENABLE__)
+    MaxLength = 0;
+    MaxBeginAddr = 0;
+[AUTOGEN_SCAT_C_Gen_TEMPLATE_MAX_FREERAM_MPU]
+#endif //defined(__SWLA_SELFSPACE_ENABLE__)
+    /* Now we get the maximum segments */
+    *Return_begin_addr   = (kal_uint32 *)MaxBeginAddr;
+    *Return_segment_size = MaxLength;
+}
+
+
+/*************************************************************************
+* FUNCTION
+*  custom_mk_ram_info
+*
+* DESCRIPTION
+*  This function builds up EXTSRAM info tables.
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+#if defined(__ARM9_MMU__) || defined(__ARM11_MMU__) || defined(__MTK_MMU__) || defined(__CR4__) || defined(__MTK_MMU_V2__)
+kal_int32 custom_mk_ram_info()
+{
+    /* This table contains all dynamic cacheable default non-cacheable regions. */
+[AUTOGEN_SCAT_C_Gen_TEMPLATE_EXTSRAM_REGION_DYNAMIC_DNC_ASSIGN]
+
+    /* This table contains all dynamic cacheable default cacheable regions. */
+[AUTOGEN_SCAT_C_Gen_TEMPLATE_EXTSRAM_REGION_DYNAMIC_DC_ASSIGN]
+
+    /* This table contains all cached regions. */
+[AUTOGEN_SCAT_C_Gen_TEMPLATE_EXTSRAM_REGION_CACHED_RW_ASSIGN]
+
+    /* This table contains all cached code regions. */
+[AUTOGEN_SCAT_C_Gen_TEMPLATE_EXTSRAM_REGION_CACHED_RO_ASSIGN]
+
+    /* This table contains all non-cached rw regions. */
+[AUTOGEN_SCAT_C_Gen_TEMPLATE_EXTSRAM_REGION_NONCACHED_RW_ASSIGN]
+
+    /* This table contains all non-cached ro regions. */
+[AUTOGEN_SCAT_C_Gen_TEMPLATE_EXTSRAM_REGION_NONCACHED_RO_ASSIGN]
+
+
+    return 0;
+}
+#endif /* __ARM9_MMU__ || __ARM11_MMU__ || __MTK_MMU__ || __CR4__ || __MTK_MMU_V2__ */
+
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_NVRAM_LTABLE_Base
+*
+* DESCRIPTION
+*  Retrieve the base address of NVRAM_LTABLE
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_NVRAM_LTABLE_Base(void)
+{
+    return [AUTOGEN_SCAT_C_Gen_TEMPLATE_NVRAM_BASE];
+}
+
+/*************************************************************************
+* FUNCTION
+*  custom_get_NVRAM_LTABLE_Length
+*
+* DESCRIPTION
+*  Retrieve the length of NVRAM_LTABLE
+*
+* PARAMETERS
+*
+* RETURNS
+*
+*************************************************************************/
+kal_uint32 custom_get_NVRAM_LTABLE_Length(void)
+{
+    return [AUTOGEN_SCAT_C_Gen_TEMPLATE_NVRAM_LENGTH];
+}
+
+#endif /* __MTK_TARGET__ */

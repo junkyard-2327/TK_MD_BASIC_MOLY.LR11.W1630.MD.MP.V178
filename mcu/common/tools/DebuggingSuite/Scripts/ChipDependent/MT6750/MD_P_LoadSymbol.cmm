@@ -1,0 +1,15 @@
+;===============================================
+;CMM START
+;===============================================
+
+; ==================
+; load PSCore symbol
+; ==================
+; get PSCore information
+DO P_BuildInfo.cmm
+
+; load symbol
+D.LOAD.ELF &OPT_MD_P_ELF_PATH /RELPATH /PATH &OPT_MD_P_SRC_PATH /PATH &OPT_MD_P_SRC_PATH/pcore /PATH &OPT_MD_P_SRC_PATH/common /nocode
+
+PRINT "Load PSCore symbol done"
+ENDDO

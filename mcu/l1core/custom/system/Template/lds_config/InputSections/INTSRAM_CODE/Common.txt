@@ -1,0 +1,4 @@
+        *bootarm_gcc.obj (INT_VECTOR_CODE)
+        * (INTSRAM_ROCODE*)
+        * (INTERNBLOCK2_RO)
+        * (EMIINITCODE EMIINITCONST)

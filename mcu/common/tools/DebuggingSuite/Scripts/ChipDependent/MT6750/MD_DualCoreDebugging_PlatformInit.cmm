@@ -1,0 +1,105 @@
+;===============================================
+;CMM START
+;===============================================
+
+pop &var0
+
+winclear
+AREA.RESet
+AREA.Create dram
+AREA.Select dram
+AREA.view   dram
+AREA.Clear  dram
+
+;DO PMIC_Init.cmm
+
+&SW_MISC_L_ADDR=0xF0000010
+
+; ==================
+; Options
+; ==================
+; MD Boot Mode
+&OPT_MD_BOOT_MODE=0
+;; 0: Normal
+;; 1: Meta
+
+; MD Only BringUp Type
+&OPT_MD_BRINGUP_TYPE=&var0
+;; 0: CA7 CVD load AP .elf to init EMI,PMIC,GIO
+;; 1: Already Flash download DummyAP by flash tool
+
+VectorCatch.RESET OFF
+
+; ==================
+; attach on PCORE
+; ==================
+DO MD_P_Attach.cmm
+
+; ==================
+; Config Boot Mode
+; ==================
+IF &OPT_MD_BOOT_MODE==1
+(
+    &VAL=D.L(UM:&SW_MISC_L_ADDR)
+    &VAL=&VAL|0x1
+    Data.Set UM:&SW_MISC_L_ADDR %Long &VAL
+)
+
+; ==================
+; DO Misc HW Config
+; ==================
+DO MD_HW_Config_Misc.cmm
+
+; ==================
+; WDT Disable for load code to long
+; ==================
+DO disable_WDT.cmm
+
+; ==================
+; EMI Initialize
+; ==================
+;IF &OPT_MD_BRINGUP_TYPE==0
+;(
+;    DO emi_init.cmm AP_Attach.cmm MD_P_Attach.cmm
+;)
+
+; ================
+; load PSCore code
+; ================
+; define and init elf,src,bin path
+GLOBAL &OPT_MD_P_ELF_PATH
+GLOBAL &OPT_MD_P_SRC_PATH
+GLOBAL &OPT_MD_P_BIN_PATH
+GLOBAL &L_CMM_RELATIVE_PATH
+DO P_BuildInfo.cmm
+
+; load source code
+D.LOAD.ELF &OPT_MD_P_ELF_PATH /RELPATH /PATH &OPT_MD_P_SRC_PATH /PATH &OPT_MD_P_SRC_PATH/pcore /PATH &OPT_MD_P_SRC_PATH/common /NosYmbol
+
+; ================
+; load L1Core code
+; ================
+; change execution dir to cmm foler of L1Core
+CHDIR &L_CMM_RELATIVE_PATH
+; define and init elf,src,bin path
+GLOBAL &OPT_MD_L_ELF_PATH
+GLOBAL &OPT_MD_L_SRC_PATH
+GLOBAL &OPT_MD_L_BIN_PATH
+GLOBAL &P_CMM_RELATIVE_PATH
+DO L_BuildInfo.cmm
+
+; load source code
+D.LOAD.ELF &OPT_MD_L_ELF_PATH /RELPATH /PATH &OPT_MD_L_SRC_PATH /PATH &OPT_MD_L_SRC_PATH/l1core /PATH &OPT_MD_L_SRC_PATH/common /NosYmbol
+
+; change back execution dir to cmm foler of PSCore
+CHDIR &P_CMM_RELATIVE_PATH
+
+; make PSCore keep going
+R.S PC 0xFFFF0000
+GO
+system.down
+
+PRINT "================================="
+PRINT "Platform initialization finished."
+PRINT "================================="
+ENDDO

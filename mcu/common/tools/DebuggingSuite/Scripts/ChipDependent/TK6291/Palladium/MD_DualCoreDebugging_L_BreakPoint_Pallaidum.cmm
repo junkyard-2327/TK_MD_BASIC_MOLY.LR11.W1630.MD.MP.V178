@@ -1,0 +1,17 @@
+;===============================================
+;CMM START
+;===============================================
+
+; ==================
+; set breakpoint
+; ==================
+DELeteBreak
+;setbreak kal_fatal_error_handler_int %hw
+;setbreak kal_assert_fail_specific %hw
+;setbreak IdleTask %hw
+;setbreak TCCT_Schedule %hw
+setbreak INT_ExceptionSwitchSP %hw
+setbreak IdleTask %hw
+
+PRINT "BreakPoint set-up done."
+ENDDO

@@ -1,0 +1,9 @@
+        SHARED_EXTSRAM_MCURO_HWRW_ZI$$ZI$$Base = . ;
+        * (SHARED_BUFF_MCURO_HWRW_NONCACHEDZI)
+        . = ALIGN(0x10000);
+        SHARED_EXTSRAM_MCURO_HWRW_ZI$$ZI$$Limit = . ;
+        SHARED_EXTSRAM_MCURO_HWRW_ZI$$ZI$$Length = ABSOLUTE(SHARED_EXTSRAM_MCURO_HWRW_ZI$$ZI$$Limit - SHARED_EXTSRAM_MCURO_HWRW_ZI$$ZI$$Base);
+        
+        /* the base and end of ARM7 should align to 64KB */
+        KEEP(* (SHARED_BUFF__ARM7__MCURO_HWRW_NONCACHEDZI))
+        . = ALIGN(0x10000);  /* the end of MCURO_HWRW should align to 64KB, also for ARM7 */

@@ -1,0 +1,8 @@
+
+        INT_VECTOR_CODE$$Base = .;     
+        *bootarm_gcc.obj (INT_VECTOR_CODE)
+        . = ALIGN(4);
+        INT_VECTOR_CODE$$Limit = .;
+        INT_VECTOR_CODE$$Length = ABSOLUTE(INT_VECTOR_CODE$$Limit - INT_VECTOR_CODE$$Base);
+
+        * (DRAM_EX_ROCODE)  /*CODE_PROTECT*/

@@ -1,0 +1,23 @@
+system.down
+SYSTEM.OPTION.EnReset OFF
+SYSTEM.OPTION.WaitReset OFF
+System.Option ResBreak OFF
+System.OPTION TRST off
+system.JtagClock 8MHz
+CPUTYPE CORTEXR4
+system.cpu cortexr4
+system.multicore SWDP OFF
+
+;MD view
+;system.multicore COREBASE 0xF00A1000
+
+;AP view
+system.multicore COREBASE 0x0D0E1000
+
+; setting attribute of breakpoints
+Break.Select Program OnChip
+Break.Select Hll OnChip
+Break.Select Read OnChip
+Break.Select Write OnChip
+
+system.up

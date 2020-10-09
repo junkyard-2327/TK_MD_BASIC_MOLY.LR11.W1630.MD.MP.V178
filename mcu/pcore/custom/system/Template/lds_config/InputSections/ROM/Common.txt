@@ -1,0 +1,7 @@
+        * (SNORCODE*)
+        * (SECOND_PART*)
+        * (EXCLUDE_FILE (*libsst.a *libdhl.a *drv_l1gdma.obj *init_memory_stack.obj) .text*)
+        * (i.*)
+        * (.ARM.extab*)
+        * (CRYPTO_ASM)
+        KEEP(* (Keep_CODE))

@@ -1,0 +1,172 @@
+LOCAL &PS_STA_ADDR
+LOCAL &L1_STA_ADDR
+LOCAL &MD_STA_ADDR
+LOCAL &PS_CTI_ON_ADDR
+LOCAL &L1_CTI_ON_ADDR
+LOCAL &MD_CTI_ON_ADDR
+LOCAL &PS_STA
+LOCAL &L1_STA
+LOCAL &MD_STA
+LOCAL &PS_CTI_ON
+LOCAL &L1_CTI_ON
+LOCAL &MD_CTI_ON
+
+
+; MD view environment
+;&PS_STA_ADDR=0xF00A8130
+;&L1_STA_ADDR=0xF009B130
+;&MD_STA_ADDR=0xF009C130
+
+;&PS_CTI_ON_ADDR=0xF00A8000
+;&L1_CTI_ON_ADDR=0xF009B000
+;&MD_CTI_ON_ADDR=0xF009C000
+
+; AP view environment
+&PS_STA_ADDR=0xF0478130
+&L1_STA_ADDR=0xF046B130
+&MD_STA_ADDR=0xF046C130
+
+&PS_CTI_ON_ADDR=0xF0478000
+&L1_CTI_ON_ADDR=0xF046B000
+&MD_CTI_ON_ADDR=0xF046C000
+
+; create resource 
+AREA.Create IO-Area
+AREA.Select IO-Area
+AREA.view IO-Area
+
+PRINT "Who triggered Embedded Cross Trigger ?"
+PRINT "======================================"
+
+&PS_CTI_ON=D.L(EAPB:&PS_CTI_ON_ADDR)
+&L1_CTI_ON=D.L(EAPB:&L1_CTI_ON_ADDR)
+&MD_CTI_ON=D.L(EAPB:&MD_CTI_ON_ADDR)
+
+IF (&PS_CTI_ON!=1)
+(
+    PRINT "PS CTI wasn't enabled!"
+)
+
+IF (&L1_CTI_ON!=1)
+(
+    PRINT "L1 CTI wasn't enabled!"
+)
+
+IF (&MD_CTI_ON!=1)
+(
+    PRINT "MD CTI wasn't enabled!"
+)
+PRINT "======================================"
+
+&PS_STA=D.L(EAPB:&PS_STA_ADDR)
+&L1_STA=D.L(EAPB:&L1_STA_ADDR)
+&MD_STA=D.L(EAPB:&MD_STA_ADDR)
+
+; PS CTI
+IF (((&PS_STA)&(0x8))==0x8)
+(
+	PRINT "RMPU !!!"
+)
+
+IF (((&PS_STA)&(0x4))==0x4)
+(
+	PRINT "ARM7 !!!"
+)
+
+IF (((&PS_STA)&(0x80))==0x80)
+(
+	PRINT "PSCore !!!"
+)
+
+IF (((&PS_STA)&(0x02))==0x02)
+(
+	PRINT "C2K !!!"
+)
+
+; L1 CTI
+IF (((&L1_STA)&(0x80))==0x80)
+(
+	PRINT "L1 !!!"
+)
+
+; MD CTI
+IF (((&MD_STA)&(0x4))==0x4)
+(
+	PRINT "MD32 !!!"    
+	
+	Do Dsp_Debug.cmm
+	
+	;LOCAL &BRP_CTI
+	;LOCAL &DFE_CTI
+	;LOCAL &RAKE_CTI
+	;
+	;&BRP_CTI=D.L(UM:0xF9358008)
+	;&DFE_CTI=D.L(UM:0xF7B58008)
+	;&RAKE_CTI=D.L(UM:0xF9B58008)
+	;
+	;IF (&BRP_CTI==1)
+	;(
+	;	PRINT "  BRP"
+	;)
+	;
+	;IF (&DFE_CTI==1)
+	;(
+	;	PRINT "  DFE"
+	;)
+	;
+	;IF (&RAKE_CTI==1)
+	;(
+	;	PRINT "  RAKE"
+	;)
+)
+
+IF (((&MD_STA)&(0x8))==0x8)
+(
+	PRINT "CS !!!"
+	Do Dsp_Debug.cmm
+	
+	;LOCAL &ICC_CTI
+	;LOCAL &IMC_CTI
+	;LOCAL &MPC_CTI
+	;
+	;&ICC_CTI=D.L(UM:0xFEE80004)
+	;
+	;IF (&ICC_CTI!=0xFF04)
+	;(
+	;		PRINT "  ICC"
+	;)
+	;else
+	;(
+	;	&ICC_CTI=D.L(UM:0xFEE80018)
+	;	IF (((&ICC_CTI)&0x1)!=0x1)
+	;		PRINT "  ICC"
+	;)
+	;
+	;&IMC_CTI=D.L(UM:0xFDE80004)
+	;
+	;IF (&IMC_CTI!=0xFF04)
+	;(
+	;		PRINT "  IMC"
+	;)
+	;else
+	;(
+	;	&IMC_CTI=D.L(UM:0xFDE80018)
+	;
+	;	IF (((&IMC_CTI)&0x1)!=0x1)
+	;		PRINT "  IMC"
+	;)
+	;
+	;&MPC_CTI=D.L(UM:0xFD680004)
+	;
+	;IF (&MPC_CTI!=0xFF04)
+	;(
+	;	PRINT "  MPC"
+	;)
+	;else
+	;(
+	;	&MPC_CTI=D.L(UM:0xFD680018)
+	;	
+	;	IF (((&MPC_CTI)&0x1)!=0x1)
+	;		PRINT "  MPC"
+	;)
+)

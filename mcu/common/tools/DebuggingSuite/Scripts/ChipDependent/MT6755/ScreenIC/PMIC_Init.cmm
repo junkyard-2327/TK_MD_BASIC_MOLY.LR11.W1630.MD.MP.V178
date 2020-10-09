@@ -1,0 +1,27 @@
+
+AREA.RESet
+AREA.Create dram
+AREA.Select dram
+AREA.view   dram
+AREA.Clear  dram
+
+; cloase all windows to avoid read DRAM before initializing DRAM
+;WinCloseAll
+
+; attach APCORE
+DO ap_attach.cmm
+
+; load elf
+D.LOAD.ELF PMIC_Init.elf
+GO
+WAIT 0.5s
+DO ap_attach.cmm
+PMIC_INIT_POLLING:
+&VAL=D.L(EAHB:0xC359009C)
+IF &VAL!=0x1
+(
+    GOTO PMIC_INIT_POLLING
+)
+
+PRINT "PMIC Init Done!"
+DELETEBREAK

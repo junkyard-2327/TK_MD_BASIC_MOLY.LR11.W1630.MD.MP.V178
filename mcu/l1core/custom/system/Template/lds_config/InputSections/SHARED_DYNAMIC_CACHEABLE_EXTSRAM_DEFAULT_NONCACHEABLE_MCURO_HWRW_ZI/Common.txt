@@ -1,0 +1,1 @@
+        . += Image$$SHARED_DNC_MCURO_HWRW_LENGTH$$Length;

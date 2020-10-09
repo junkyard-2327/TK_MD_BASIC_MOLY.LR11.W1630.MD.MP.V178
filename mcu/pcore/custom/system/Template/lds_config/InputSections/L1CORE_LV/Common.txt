@@ -1,0 +1,2 @@
+        LONG(0)
+        . = L1CORE_LV_OFFSET;

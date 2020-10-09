@@ -1,0 +1,1 @@
+        * (L2SRAM_RODATA L2SRAM_RW)

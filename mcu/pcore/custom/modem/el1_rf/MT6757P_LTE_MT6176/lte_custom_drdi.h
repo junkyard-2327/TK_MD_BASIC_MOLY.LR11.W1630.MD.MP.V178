@@ -1,0 +1,1690 @@
+/*******************************************************************************
+*  Copyright Statement:
+*  --------------------
+*  This software is protected by Copyright and the information contained
+*  herein is confidential. The software may not be copied and the information
+*  contained herein may not be used or disclosed except with the written
+*  permission of MediaTek Inc. (C) 2001
+*
+*******************************************************************************/
+
+/*******************************************************************************
+ *
+ * Filename:
+ * ---------
+ *  lte_custom_drdi.h
+ *
+ * Project:
+ * --------
+ *  MOLY
+ *
+ * Description:
+ * ------------
+ *  Dynamic Radio-setting Dedicated Image.
+ *  DRDI parameters custom macro definitions
+ *
+ * Author:
+ * -------
+ * -------
+ *
+ *******************************************************************************/
+
+#ifndef  _LTE_CUSTOM_DRDI_H_
+#define  _LTE_CUSTOM_DRDI_H_
+
+/*******************************************************************************
+** Includes
+*******************************************************************************/
+#include "kal_general_types.h"
+#include "el1d_rf_drdi.h"
+#include "mml1_custom_drdi.h"
+
+/*******************************************************************************
+** Define
+*******************************************************************************/
+/****************************************************************************/
+/* Dynamic Radio-setting Dedicated Images                                   */
+/* Let DRDI GPIO/ADC/Barcode BPI setting overwrite NVRAN BPI setting        */
+/****************************************************************************/
+#define  EL1_CUSTOM_DYNAMIC_INIT_ENABLE  IS_MML1_DRDI_ENABLE
+
+/*****************************************************************************
+* Constant    : EL1_CUSTOM_DEBUG_ENABLE
+* Group       : Real target, Customization, EL1 common operation
+* Description : Constants to enable "Dynamic Initialization RF parameters"
+*               debug info logging
+*               For trace output to debug ( EL1_CustomDynamicDebug() )
+*****************************************************************************/
+#define  EL1_CUSTOM_DEBUG_ENABLE         1
+
+/*****************************************************************************
+* Constant    : EL1_CUSTOM_TOTAL_SET_NUMS
+* Group       : Real target, Internals, EL1 common operation
+* Description : Constant to be used as the number of total supported configuration sets
+*****************************************************************************/
+#define  EL1_CUSTOM_TOTAL_SET_NUMS       MML1_CUSTOM_TOTAL_SET_NUMS
+
+/*****************************************************************************
+* Constant    : EL1_CUSTOM_TOTAL_REAL_SET_NUMS
+* Group       : Real target, Internals, EL1 common operation
+* Description : Constant to be used as the number of total REAL configuration sets
+*****************************************************************************/
+#if EL1_CUSTOM_DYNAMIC_INIT_ENABLE
+#define  EL1_CUSTOM_TOTAL_REAL_SET_NUMS  MML1_DRDI_REMAP_LTE_REAL_SET_NUMS
+#else
+#define  EL1_CUSTOM_TOTAL_REAL_SET_NUMS  1
+#endif
+
+
+/*******************************************************************************
+** Macro
+*******************************************************************************/
+#define EL1_CUSTOM_LTE_BAND(s) \
+{                              \
+   BAND_INDICATOR0_##s,        \
+   BAND_INDICATOR1_##s,        \
+   BAND_INDICATOR2_##s,        \
+   BAND_INDICATOR3_##s,        \
+   BAND_INDICATOR4_##s,        \
+   BAND_INDICATOR5_##s,        \
+   BAND_INDICATOR6_##s,        \
+   BAND_INDICATOR7_##s,        \
+   BAND_INDICATOR8_##s,        \
+   BAND_INDICATOR9_##s,        \
+   BAND_INDICATOR10_##s,       \
+   BAND_INDICATOR11_##s,       \
+   BAND_INDICATOR12_##s,       \
+   BAND_INDICATOR13_##s,       \
+   BAND_INDICATOR14_##s,       \
+   BAND_INDICATOR15_##s,       \
+   BAND_INDICATOR16_##s,       \
+   BAND_INDICATOR17_##s,       \
+   BAND_INDICATOR18_##s,       \
+   BAND_INDICATOR19_##s,       \
+   BAND_INDICATOR20_##s,       \
+}
+
+#define EL1_CUSTOM_LTE_DPD_BAND(s) \
+{                                  \
+   BAND_DPD_INDICATOR0_##s,        \
+   BAND_DPD_INDICATOR1_##s,        \
+   BAND_DPD_INDICATOR2_##s,        \
+   BAND_DPD_INDICATOR3_##s,        \
+   BAND_DPD_INDICATOR4_##s,        \
+   BAND_DPD_INDICATOR5_##s,        \
+   BAND_DPD_INDICATOR6_##s,        \
+   BAND_DPD_INDICATOR7_##s,        \
+   BAND_DPD_INDICATOR8_##s,        \
+   BAND_DPD_INDICATOR9_##s,        \
+   BAND_DPD_INDICATOR10_##s,       \
+   BAND_DPD_INDICATOR11_##s,       \
+   BAND_DPD_INDICATOR12_##s,       \
+   BAND_DPD_INDICATOR13_##s,       \
+   BAND_DPD_INDICATOR14_##s,       \
+   BAND_DPD_INDICATOR15_##s,       \
+   BAND_DPD_INDICATOR16_##s,       \
+   BAND_DPD_INDICATOR17_##s,       \
+   BAND_DPD_INDICATOR18_##s,       \
+   BAND_DPD_INDICATOR19_##s,       \
+   BAND_DPD_INDICATOR20_##s,       \
+}
+
+#define EL1_CUSTOM_LTE_CIM3_BAND(s) \
+{                                   \
+   BAND_CIM3_INDICATOR0_##s,        \
+   BAND_CIM3_INDICATOR1_##s,        \
+   BAND_CIM3_INDICATOR2_##s,        \
+   BAND_CIM3_INDICATOR3_##s,        \
+   BAND_CIM3_INDICATOR4_##s,        \
+   BAND_CIM3_INDICATOR5_##s,        \
+   BAND_CIM3_INDICATOR6_##s,        \
+   BAND_CIM3_INDICATOR7_##s,        \
+   BAND_CIM3_INDICATOR8_##s,        \
+   BAND_CIM3_INDICATOR9_##s,        \
+   BAND_CIM3_INDICATOR10_##s,       \
+   BAND_CIM3_INDICATOR11_##s,       \
+   BAND_CIM3_INDICATOR12_##s,       \
+   BAND_CIM3_INDICATOR13_##s,       \
+   BAND_CIM3_INDICATOR14_##s,       \
+   BAND_CIM3_INDICATOR15_##s,       \
+   BAND_CIM3_INDICATOR16_##s,       \
+   BAND_CIM3_INDICATOR17_##s,       \
+   BAND_CIM3_INDICATOR18_##s,       \
+   BAND_CIM3_INDICATOR19_##s,       \
+   BAND_CIM3_INDICATOR20_##s,       \
+}
+
+#define EL1_CUSTOM_LTE_CA_CFG(s) \
+{                                \
+   LTE_CACFG_IND_00_##s,         \
+   LTE_CACFG_IND_01_##s,         \
+   LTE_CACFG_IND_02_##s,         \
+   LTE_CACFG_IND_03_##s,         \
+   LTE_CACFG_IND_04_##s,         \
+   LTE_CACFG_IND_05_##s,         \
+   LTE_CACFG_IND_06_##s,         \
+   LTE_CACFG_IND_07_##s,         \
+   LTE_CACFG_IND_08_##s,         \
+   LTE_CACFG_IND_09_##s,         \
+   LTE_CACFG_IND_10_##s,         \
+   LTE_CACFG_IND_11_##s,         \
+   LTE_CACFG_IND_12_##s,         \
+   LTE_CACFG_IND_13_##s,         \
+   LTE_CACFG_IND_14_##s,         \
+   LTE_CACFG_IND_15_##s,         \
+   LTE_CACFG_IND_16_##s,         \
+   LTE_CACFG_IND_17_##s,         \
+   LTE_CACFG_IND_18_##s,         \
+   LTE_CACFG_IND_19_##s,         \
+   LTE_CACFG_IND_20_##s,         \
+   LTE_CACFG_IND_21_##s,         \
+   LTE_CACFG_IND_22_##s,         \
+   LTE_CACFG_IND_23_##s,         \
+   LTE_CACFG_IND_24_##s,         \
+   LTE_CACFG_IND_25_##s,         \
+   LTE_CACFG_IND_26_##s,         \
+   LTE_CACFG_IND_27_##s,         \
+   LTE_CACFG_IND_28_##s,         \
+   LTE_CACFG_IND_29_##s,         \
+   LTE_CACFG_IND_30_##s,         \
+   LTE_CACFG_IND_31_##s,         \
+   LTE_CACFG_IND_32_##s,         \
+   LTE_CACFG_IND_33_##s,         \
+   LTE_CACFG_IND_34_##s,         \
+   LTE_CACFG_IND_35_##s,         \
+   LTE_CACFG_IND_36_##s,         \
+   LTE_CACFG_IND_37_##s,         \
+}
+
+#define EL1_CUSTOM_LTE_MPR_ADJUST_DATA(s)      \
+{                                              \
+   LTE_RF_MPR_ADJUST(BAND_INDICATOR0_##s,  s), \
+   LTE_RF_MPR_ADJUST(BAND_INDICATOR1_##s,  s), \
+   LTE_RF_MPR_ADJUST(BAND_INDICATOR2_##s,  s), \
+   LTE_RF_MPR_ADJUST(BAND_INDICATOR3_##s,  s), \
+   LTE_RF_MPR_ADJUST(BAND_INDICATOR4_##s,  s), \
+   LTE_RF_MPR_ADJUST(BAND_INDICATOR5_##s,  s), \
+   LTE_RF_MPR_ADJUST(BAND_INDICATOR6_##s,  s), \
+   LTE_RF_MPR_ADJUST(BAND_INDICATOR7_##s,  s), \
+   LTE_RF_MPR_ADJUST(BAND_INDICATOR8_##s,  s), \
+   LTE_RF_MPR_ADJUST(BAND_INDICATOR9_##s,  s), \
+   LTE_RF_MPR_ADJUST(BAND_INDICATOR10_##s, s), \
+   LTE_RF_MPR_ADJUST(BAND_INDICATOR11_##s, s), \
+   LTE_RF_MPR_ADJUST(BAND_INDICATOR12_##s, s), \
+   LTE_RF_MPR_ADJUST(BAND_INDICATOR13_##s, s), \
+   LTE_RF_MPR_ADJUST(BAND_INDICATOR14_##s, s), \
+   LTE_RF_MPR_ADJUST(BAND_INDICATOR15_##s, s), \
+   LTE_RF_MPR_ADJUST(BAND_INDICATOR16_##s, s), \
+   LTE_RF_MPR_ADJUST(BAND_INDICATOR17_##s, s), \
+   LTE_RF_MPR_ADJUST(BAND_INDICATOR18_##s, s), \
+   LTE_RF_MPR_ADJUST(BAND_INDICATOR19_##s, s), \
+   LTE_RF_MPR_ADJUST(BAND_INDICATOR20_##s, s), \
+}
+
+#if IS_MPR_64QAM_SUPPORT
+#define EL1_CUSTOM_LTE_64QAM_MPR_ADJUST_DATA(s)      \
+{                                              \
+   LTE_RF_MPR_ADJUST_64QAM(BAND_INDICATOR0_##s,  s), \
+   LTE_RF_MPR_ADJUST_64QAM(BAND_INDICATOR1_##s,  s), \
+   LTE_RF_MPR_ADJUST_64QAM(BAND_INDICATOR2_##s,  s), \
+   LTE_RF_MPR_ADJUST_64QAM(BAND_INDICATOR3_##s,  s), \
+   LTE_RF_MPR_ADJUST_64QAM(BAND_INDICATOR4_##s,  s), \
+   LTE_RF_MPR_ADJUST_64QAM(BAND_INDICATOR5_##s,  s), \
+   LTE_RF_MPR_ADJUST_64QAM(BAND_INDICATOR6_##s,  s), \
+   LTE_RF_MPR_ADJUST_64QAM(BAND_INDICATOR7_##s,  s), \
+   LTE_RF_MPR_ADJUST_64QAM(BAND_INDICATOR8_##s,  s), \
+   LTE_RF_MPR_ADJUST_64QAM(BAND_INDICATOR9_##s,  s), \
+   LTE_RF_MPR_ADJUST_64QAM(BAND_INDICATOR10_##s, s), \
+   LTE_RF_MPR_ADJUST_64QAM(BAND_INDICATOR11_##s, s), \
+   LTE_RF_MPR_ADJUST_64QAM(BAND_INDICATOR12_##s, s), \
+   LTE_RF_MPR_ADJUST_64QAM(BAND_INDICATOR13_##s, s), \
+   LTE_RF_MPR_ADJUST_64QAM(BAND_INDICATOR14_##s, s), \
+   LTE_RF_MPR_ADJUST_64QAM(BAND_INDICATOR15_##s, s), \
+   LTE_RF_MPR_ADJUST_64QAM(BAND_INDICATOR16_##s, s), \
+   LTE_RF_MPR_ADJUST_64QAM(BAND_INDICATOR17_##s, s), \
+   LTE_RF_MPR_ADJUST_64QAM(BAND_INDICATOR18_##s, s), \
+   LTE_RF_MPR_ADJUST_64QAM(BAND_INDICATOR19_##s, s), \
+   LTE_RF_MPR_ADJUST_64QAM(BAND_INDICATOR20_##s, s), \
+}
+#endif  // End of IS_MPR_64QAM_SUPPORT
+
+#define EL1_CUSTOM_FE_ROUTE_DATA(s)        \
+{                                          \
+   LTE_SB_FE_SETTING(BAND_INDICATOR0,  s), \
+   LTE_SB_FE_SETTING(BAND_INDICATOR1,  s), \
+   LTE_SB_FE_SETTING(BAND_INDICATOR2,  s), \
+   LTE_SB_FE_SETTING(BAND_INDICATOR3,  s), \
+   LTE_SB_FE_SETTING(BAND_INDICATOR4,  s), \
+   LTE_SB_FE_SETTING(BAND_INDICATOR5,  s), \
+   LTE_SB_FE_SETTING(BAND_INDICATOR6,  s), \
+   LTE_SB_FE_SETTING(BAND_INDICATOR7,  s), \
+   LTE_SB_FE_SETTING(BAND_INDICATOR8,  s), \
+   LTE_SB_FE_SETTING(BAND_INDICATOR9,  s), \
+   LTE_SB_FE_SETTING(BAND_INDICATOR10, s), \
+   LTE_SB_FE_SETTING(BAND_INDICATOR11, s), \
+   LTE_SB_FE_SETTING(BAND_INDICATOR12, s), \
+   LTE_SB_FE_SETTING(BAND_INDICATOR13, s), \
+   LTE_SB_FE_SETTING(BAND_INDICATOR14, s), \
+   LTE_SB_FE_SETTING(BAND_INDICATOR15, s), \
+   LTE_SB_FE_SETTING(BAND_INDICATOR16, s), \
+   LTE_SB_FE_SETTING(BAND_INDICATOR17, s), \
+   LTE_SB_FE_SETTING(BAND_INDICATOR18, s), \
+   LTE_SB_FE_SETTING(BAND_INDICATOR19, s), \
+   LTE_SB_FE_SETTING(BAND_INDICATOR20, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_00, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_01, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_02, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_03, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_04, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_05, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_06, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_07, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_08, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_09, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_10, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_11, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_12, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_13, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_14, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_15, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_16, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_17, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_18, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_19, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_20, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_21, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_22, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_23, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_24, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_25, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_26, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_27, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_28, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_29, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_30, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_31, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_32, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_33, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_34, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_35, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_36, s), \
+   LTE_CA_FE_SETTING(LTE_CACFG_IND_37, s), \
+}
+
+#define EL1_CUSTOM_ANT_ROUTE_DATA(s)        \
+{                                           \
+   LTE_SB_ANT_SETTING(BAND_INDICATOR0,  s), \
+   LTE_SB_ANT_SETTING(BAND_INDICATOR1,  s), \
+   LTE_SB_ANT_SETTING(BAND_INDICATOR2,  s), \
+   LTE_SB_ANT_SETTING(BAND_INDICATOR3,  s), \
+   LTE_SB_ANT_SETTING(BAND_INDICATOR4,  s), \
+   LTE_SB_ANT_SETTING(BAND_INDICATOR5,  s), \
+   LTE_SB_ANT_SETTING(BAND_INDICATOR6,  s), \
+   LTE_SB_ANT_SETTING(BAND_INDICATOR7,  s), \
+   LTE_SB_ANT_SETTING(BAND_INDICATOR8,  s), \
+   LTE_SB_ANT_SETTING(BAND_INDICATOR9,  s), \
+   LTE_SB_ANT_SETTING(BAND_INDICATOR10, s), \
+   LTE_SB_ANT_SETTING(BAND_INDICATOR11, s), \
+   LTE_SB_ANT_SETTING(BAND_INDICATOR12, s), \
+   LTE_SB_ANT_SETTING(BAND_INDICATOR13, s), \
+   LTE_SB_ANT_SETTING(BAND_INDICATOR14, s), \
+   LTE_SB_ANT_SETTING(BAND_INDICATOR15, s), \
+   LTE_SB_ANT_SETTING(BAND_INDICATOR16, s), \
+   LTE_SB_ANT_SETTING(BAND_INDICATOR17, s), \
+   LTE_SB_ANT_SETTING(BAND_INDICATOR18, s), \
+   LTE_SB_ANT_SETTING(BAND_INDICATOR19, s), \
+   LTE_SB_ANT_SETTING(BAND_INDICATOR20, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_00, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_01, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_02, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_03, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_04, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_05, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_06, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_07, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_08, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_09, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_10, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_11, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_12, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_13, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_14, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_15, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_16, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_17, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_18, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_19, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_20, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_21, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_22, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_23, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_24, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_25, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_26, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_27, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_28, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_29, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_30, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_31, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_32, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_33, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_34, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_35, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_36, s), \
+   LTE_CA_ANT_SETTING(LTE_CACFG_IND_37, s), \
+}
+
+#define EL1_CUSTOM_VPA_SOURCE_DATA(s)      \
+{                                          \
+   LTE_VPA_SOURCE_CONFIG(BAND_INDICATOR0,  s), \
+   LTE_VPA_SOURCE_CONFIG(BAND_INDICATOR1,  s), \
+   LTE_VPA_SOURCE_CONFIG(BAND_INDICATOR2,  s), \
+   LTE_VPA_SOURCE_CONFIG(BAND_INDICATOR3,  s), \
+   LTE_VPA_SOURCE_CONFIG(BAND_INDICATOR4,  s), \
+   LTE_VPA_SOURCE_CONFIG(BAND_INDICATOR5,  s), \
+   LTE_VPA_SOURCE_CONFIG(BAND_INDICATOR6,  s), \
+   LTE_VPA_SOURCE_CONFIG(BAND_INDICATOR7,  s), \
+   LTE_VPA_SOURCE_CONFIG(BAND_INDICATOR8,  s), \
+   LTE_VPA_SOURCE_CONFIG(BAND_INDICATOR9,  s), \
+   LTE_VPA_SOURCE_CONFIG(BAND_INDICATOR10, s), \
+   LTE_VPA_SOURCE_CONFIG(BAND_INDICATOR11, s), \
+   LTE_VPA_SOURCE_CONFIG(BAND_INDICATOR12, s), \
+   LTE_VPA_SOURCE_CONFIG(BAND_INDICATOR13, s), \
+   LTE_VPA_SOURCE_CONFIG(BAND_INDICATOR14, s), \
+   LTE_VPA_SOURCE_CONFIG(BAND_INDICATOR15, s), \
+   LTE_VPA_SOURCE_CONFIG(BAND_INDICATOR16, s), \
+   LTE_VPA_SOURCE_CONFIG(BAND_INDICATOR17, s), \
+   LTE_VPA_SOURCE_CONFIG(BAND_INDICATOR18, s), \
+   LTE_VPA_SOURCE_CONFIG(BAND_INDICATOR19, s), \
+   LTE_VPA_SOURCE_CONFIG(BAND_INDICATOR20, s), \
+   LTE_BYPASS_VPA_SOURCE_CONFIG( BAND_BYPASS_INDICATOR0, s),  \
+   LTE_BYPASS_VPA_SOURCE_CONFIG( BAND_BYPASS_INDICATOR1, s),  \
+   LTE_BYPASS_VPA_SOURCE_CONFIG( BAND_BYPASS_INDICATOR2, s),  \
+   LTE_BYPASS_VPA_SOURCE_CONFIG( BAND_BYPASS_INDICATOR3, s),  \
+   LTE_BYPASS_VPA_SOURCE_CONFIG( BAND_BYPASS_INDICATOR4, s),  \
+   LTE_HRM_VPA_SOURCE_CONFIG( BAND_TX_HRM_INDICATOR0, s),  \
+   LTE_HRM_VPA_SOURCE_CONFIG( BAND_TX_HRM_INDICATOR1, s),  \
+   LTE_HRM_VPA_SOURCE_CONFIG( BAND_TX_HRM_INDICATOR2, s),  \
+   LTE_HRM_VPA_SOURCE_CONFIG( BAND_TX_HRM_INDICATOR3, s),  \
+   LTE_HRM_VPA_SOURCE_CONFIG( BAND_TX_HRM_INDICATOR4, s),  \
+}
+
+#define EL1_CUSTOM_RX_PDATA(s)                   \
+{                                                \
+   LTE_RF_RX_PDATABASE(BAND_INDICATOR0_##s,  s), \
+   LTE_RF_RX_PDATABASE(BAND_INDICATOR1_##s,  s), \
+   LTE_RF_RX_PDATABASE(BAND_INDICATOR2_##s,  s), \
+   LTE_RF_RX_PDATABASE(BAND_INDICATOR3_##s,  s), \
+   LTE_RF_RX_PDATABASE(BAND_INDICATOR4_##s,  s), \
+   LTE_RF_RX_PDATABASE(BAND_INDICATOR5_##s,  s), \
+   LTE_RF_RX_PDATABASE(BAND_INDICATOR6_##s,  s), \
+   LTE_RF_RX_PDATABASE(BAND_INDICATOR7_##s,  s), \
+   LTE_RF_RX_PDATABASE(BAND_INDICATOR8_##s,  s), \
+   LTE_RF_RX_PDATABASE(BAND_INDICATOR9_##s,  s), \
+   LTE_RF_RX_PDATABASE(BAND_INDICATOR10_##s, s), \
+   LTE_RF_RX_PDATABASE(BAND_INDICATOR11_##s, s), \
+   LTE_RF_RX_PDATABASE(BAND_INDICATOR12_##s, s), \
+   LTE_RF_RX_PDATABASE(BAND_INDICATOR13_##s, s), \
+   LTE_RF_RX_PDATABASE(BAND_INDICATOR14_##s, s), \
+   LTE_RF_RX_PDATABASE(BAND_INDICATOR15_##s, s), \
+   LTE_RF_RX_PDATABASE(BAND_INDICATOR16_##s, s), \
+   LTE_RF_RX_PDATABASE(BAND_INDICATOR17_##s, s), \
+   LTE_RF_RX_PDATABASE(BAND_INDICATOR18_##s, s), \
+   LTE_RF_RX_PDATABASE(BAND_INDICATOR19_##s, s), \
+   LTE_RF_RX_PDATABASE(BAND_INDICATOR20_##s, s), \
+}
+
+#define EL1_CUSTOM_TX_PDATA(s)                   \
+{                                                \
+   LTE_RF_TX_PDATABASE(BAND_INDICATOR0_##s,  s), \
+   LTE_RF_TX_PDATABASE(BAND_INDICATOR1_##s,  s), \
+   LTE_RF_TX_PDATABASE(BAND_INDICATOR2_##s,  s), \
+   LTE_RF_TX_PDATABASE(BAND_INDICATOR3_##s,  s), \
+   LTE_RF_TX_PDATABASE(BAND_INDICATOR4_##s,  s), \
+   LTE_RF_TX_PDATABASE(BAND_INDICATOR5_##s,  s), \
+   LTE_RF_TX_PDATABASE(BAND_INDICATOR6_##s,  s), \
+   LTE_RF_TX_PDATABASE(BAND_INDICATOR7_##s,  s), \
+   LTE_RF_TX_PDATABASE(BAND_INDICATOR8_##s,  s), \
+   LTE_RF_TX_PDATABASE(BAND_INDICATOR9_##s,  s), \
+   LTE_RF_TX_PDATABASE(BAND_INDICATOR10_##s, s), \
+   LTE_RF_TX_PDATABASE(BAND_INDICATOR11_##s, s), \
+   LTE_RF_TX_PDATABASE(BAND_INDICATOR12_##s, s), \
+   LTE_RF_TX_PDATABASE(BAND_INDICATOR13_##s, s), \
+   LTE_RF_TX_PDATABASE(BAND_INDICATOR14_##s, s), \
+   LTE_RF_TX_PDATABASE(BAND_INDICATOR15_##s, s), \
+   LTE_RF_TX_PDATABASE(BAND_INDICATOR16_##s, s), \
+   LTE_RF_TX_PDATABASE(BAND_INDICATOR17_##s, s), \
+   LTE_RF_TX_PDATABASE(BAND_INDICATOR18_##s, s), \
+   LTE_RF_TX_PDATABASE(BAND_INDICATOR19_##s, s), \
+   LTE_RF_TX_PDATABASE(BAND_INDICATOR20_##s, s), \
+}
+
+#define EL1_CUSTOM_RF_RXIO(s)                \
+{                                            \
+   LTE_RF_RXIOBASE(BAND_INDICATOR0_##s,  s), \
+   LTE_RF_RXIOBASE(BAND_INDICATOR1_##s,  s), \
+   LTE_RF_RXIOBASE(BAND_INDICATOR2_##s,  s), \
+   LTE_RF_RXIOBASE(BAND_INDICATOR3_##s,  s), \
+   LTE_RF_RXIOBASE(BAND_INDICATOR4_##s,  s), \
+   LTE_RF_RXIOBASE(BAND_INDICATOR5_##s,  s), \
+   LTE_RF_RXIOBASE(BAND_INDICATOR6_##s,  s), \
+   LTE_RF_RXIOBASE(BAND_INDICATOR7_##s,  s), \
+   LTE_RF_RXIOBASE(BAND_INDICATOR8_##s,  s), \
+   LTE_RF_RXIOBASE(BAND_INDICATOR9_##s,  s), \
+   LTE_RF_RXIOBASE(BAND_INDICATOR10_##s, s), \
+   LTE_RF_RXIOBASE(BAND_INDICATOR11_##s, s), \
+   LTE_RF_RXIOBASE(BAND_INDICATOR12_##s, s), \
+   LTE_RF_RXIOBASE(BAND_INDICATOR13_##s, s), \
+   LTE_RF_RXIOBASE(BAND_INDICATOR14_##s, s), \
+   LTE_RF_RXIOBASE(BAND_INDICATOR15_##s, s), \
+   LTE_RF_RXIOBASE(BAND_INDICATOR16_##s, s), \
+   LTE_RF_RXIOBASE(BAND_INDICATOR17_##s, s), \
+   LTE_RF_RXIOBASE(BAND_INDICATOR18_##s, s), \
+   LTE_RF_RXIOBASE(BAND_INDICATOR19_##s, s), \
+   LTE_RF_RXIOBASE(BAND_INDICATOR20_##s, s), \
+}
+
+#define EL1_CUSTOM_RF_TXIO(s)                \
+{                                            \
+   LTE_RF_TXIOBASE(BAND_INDICATOR0_##s,  s), \
+   LTE_RF_TXIOBASE(BAND_INDICATOR1_##s,  s), \
+   LTE_RF_TXIOBASE(BAND_INDICATOR2_##s,  s), \
+   LTE_RF_TXIOBASE(BAND_INDICATOR3_##s,  s), \
+   LTE_RF_TXIOBASE(BAND_INDICATOR4_##s,  s), \
+   LTE_RF_TXIOBASE(BAND_INDICATOR5_##s,  s), \
+   LTE_RF_TXIOBASE(BAND_INDICATOR6_##s,  s), \
+   LTE_RF_TXIOBASE(BAND_INDICATOR7_##s,  s), \
+   LTE_RF_TXIOBASE(BAND_INDICATOR8_##s,  s), \
+   LTE_RF_TXIOBASE(BAND_INDICATOR9_##s,  s), \
+   LTE_RF_TXIOBASE(BAND_INDICATOR10_##s, s), \
+   LTE_RF_TXIOBASE(BAND_INDICATOR11_##s, s), \
+   LTE_RF_TXIOBASE(BAND_INDICATOR12_##s, s), \
+   LTE_RF_TXIOBASE(BAND_INDICATOR13_##s, s), \
+   LTE_RF_TXIOBASE(BAND_INDICATOR14_##s, s), \
+   LTE_RF_TXIOBASE(BAND_INDICATOR15_##s, s), \
+   LTE_RF_TXIOBASE(BAND_INDICATOR16_##s, s), \
+   LTE_RF_TXIOBASE(BAND_INDICATOR17_##s, s), \
+   LTE_RF_TXIOBASE(BAND_INDICATOR18_##s, s), \
+   LTE_RF_TXIOBASE(BAND_INDICATOR19_##s, s), \
+   LTE_RF_TXIOBASE(BAND_INDICATOR20_##s, s), \
+}
+
+#define RF_BPI_EVT_OFST_RX_ON(s) \
+{                                \
+   TC_FPR0,                      \
+   TC_FPR1_##s,                  \
+   TC_FPR2_##s,                  \
+   TC_TPR0,                      \
+   TC_TPR1_##s,                  \
+   TC_TPR2_##s,                  \
+}
+
+#define RF_BPI_EVT_OFST_RX_OFF(s) \
+{                                 \
+  TC_FPR3_##s,                    \
+  TC_TPR3_##s,                    \
+  TC_FPR3C,                       \
+  TC_TPR3C,                       \
+}
+
+#define RF_BPI_EVT_OFST_TX_ON(s) \
+{                                \
+   TC_FPT0,                      \
+   TC_FPT1_##s,                  \
+   TC_FPT2_##s,                  \
+   TC_FPR3B,                     \
+   TC_TPT0,                      \
+   TC_TPT1_##s,                  \
+   TC_TPT2_##s,                  \
+   TC_TPR3B,                     \
+}
+
+#define RF_BPI_EVT_OFST_TX_OFF(s) \
+{                                 \
+   TC_FPT3_##s,                   \
+   TC_TPT3_##s,                   \
+}
+
+#define EL1_CUSTOM_RF_BPI_EVENT_TIME_OFFSET(s) \
+{                                              \
+   RF_BPI_EVT_OFST_RX_ON(s),                   \
+   RF_BPI_EVT_OFST_RX_OFF(s),                  \
+   RF_BPI_EVT_OFST_TX_ON(s),                   \
+   RF_BPI_EVT_OFST_TX_OFF(s),                  \
+}
+
+#define EL1_CUSTOM_RF_SPLIT_BAND(s)                 \
+{                                                   \
+   LTE_RF_SPLIT_BAND_IND(BAND_SPLIT_INDICATOR0, s), \
+   LTE_RF_SPLIT_BAND_IND(BAND_SPLIT_INDICATOR1, s), \
+   LTE_RF_SPLIT_BAND_IND(BAND_SPLIT_INDICATOR2, s), \
+   LTE_RF_SPLIT_BAND_IND(BAND_SPLIT_INDICATOR3, s), \
+   LTE_RF_SPLIT_BAND_IND(BAND_SPLIT_INDICATOR4, s), \
+}
+
+#define EL1_CUSTOM_RF_SPLIT_RFDATABASE(s)                 \
+{                                                         \
+   LTE_RF_SPLIT_RFDATABASE(BAND_SPLIT_INDICATOR0_##s, s), \
+   LTE_RF_SPLIT_RFDATABASE(BAND_SPLIT_INDICATOR1_##s, s), \
+   LTE_RF_SPLIT_RFDATABASE(BAND_SPLIT_INDICATOR2_##s, s), \
+   LTE_RF_SPLIT_RFDATABASE(BAND_SPLIT_INDICATOR3_##s, s), \
+   LTE_RF_SPLIT_RFDATABASE(BAND_SPLIT_INDICATOR4_##s, s), \
+}
+
+#define EL1_CUSTOM_RF_BAND_PARTIAL(s)                   \
+{                                                       \
+   LTE_RF_PARTIAL_BAND_IND(BAND_PARTIAL_INDICATOR0, s), \
+   LTE_RF_PARTIAL_BAND_IND(BAND_PARTIAL_INDICATOR1, s), \
+   LTE_RF_PARTIAL_BAND_IND(BAND_PARTIAL_INDICATOR2, s), \
+   LTE_RF_PARTIAL_BAND_IND(BAND_PARTIAL_INDICATOR3, s), \
+   LTE_RF_PARTIAL_BAND_IND(BAND_PARTIAL_INDICATOR4, s), \
+}
+
+#define EL1_CUSTOM_RF_BYPASS_BAND(s)                  \
+{                                                     \
+   LTE_RF_BYPASS_BAND_IND(BAND_BYPASS_INDICATOR0, s), \
+   LTE_RF_BYPASS_BAND_IND(BAND_BYPASS_INDICATOR1, s), \
+   LTE_RF_BYPASS_BAND_IND(BAND_BYPASS_INDICATOR2, s), \
+   LTE_RF_BYPASS_BAND_IND(BAND_BYPASS_INDICATOR3, s), \
+   LTE_RF_BYPASS_BAND_IND(BAND_BYPASS_INDICATOR4, s), \
+}
+
+#define EL1_CUSTOM_RF_BYPASS_RFDATABASE(s)                  \
+{                                                           \
+   LTE_RF_BYPASS_RFDATABASE(BAND_BYPASS_INDICATOR0_##s, s), \
+   LTE_RF_BYPASS_RFDATABASE(BAND_BYPASS_INDICATOR1_##s, s), \
+   LTE_RF_BYPASS_RFDATABASE(BAND_BYPASS_INDICATOR2_##s, s), \
+   LTE_RF_BYPASS_RFDATABASE(BAND_BYPASS_INDICATOR3_##s, s), \
+   LTE_RF_BYPASS_RFDATABASE(BAND_BYPASS_INDICATOR4_##s, s), \
+}
+
+#define TAS_BAND_IND(s)             \
+{                                   \
+   LTE_TAS_ENA_##s,                 \
+   LTE_TAS_WITH_TEST_SIM_ENA_##s,   \
+   LTE_TAS_MASK_##s,                \
+   LTE_TAS_INIT_ANT_##s,            \
+   LTE_FORCE_TX_ANTENNA_ENABLE_##s, \
+   LTE_FORCE_TX_ANTENNA_IDX_##s,    \
+   {                                \
+      BAND_TAS_INDICATOR0_##s,      \
+      BAND_TAS_INDICATOR1_##s,      \
+      BAND_TAS_INDICATOR2_##s,      \
+      BAND_TAS_INDICATOR3_##s,      \
+      BAND_TAS_INDICATOR4_##s,      \
+      BAND_TAS_INDICATOR5_##s,      \
+      BAND_TAS_INDICATOR6_##s,      \
+      BAND_TAS_INDICATOR7_##s,      \
+      BAND_TAS_INDICATOR8_##s,      \
+      BAND_TAS_INDICATOR9_##s,      \
+      BAND_TAS_INDICATOR10_##s,     \
+      BAND_TAS_INDICATOR11_##s,     \
+      BAND_TAS_INDICATOR12_##s,     \
+      BAND_TAS_INDICATOR13_##s,     \
+      BAND_TAS_INDICATOR14_##s,     \
+      BAND_TAS_INDICATOR15_##s,     \
+      BAND_TAS_INDICATOR16_##s,     \
+      BAND_TAS_INDICATOR17_##s,     \
+      BAND_TAS_INDICATOR18_##s,     \
+      BAND_TAS_INDICATOR19_##s,     \
+      BAND_TAS_INDICATOR20_##s,     \
+   },                               \
+}
+
+#define TAS_RF_DATABASE(s)                        \
+{                                                 \
+  (LTE_PDATA_TAS1( BAND_TAS_INDICATOR0_##s,  s)), \
+  (LTE_PDATA_TAS2( BAND_TAS_INDICATOR0_##s,  s)), \
+  (LTE_PDATA_TAS3( BAND_TAS_INDICATOR0_##s,  s)), \
+  (LTE_PDATA_TAS4( BAND_TAS_INDICATOR0_##s,  s)), \
+  (LTE_PDATA_TAS5( BAND_TAS_INDICATOR0_##s,  s)), \
+  (LTE_PDATA_TAS6( BAND_TAS_INDICATOR0_##s,  s)), \
+  (LTE_PDATA_TAS7( BAND_TAS_INDICATOR0_##s,  s)), \
+  (LTE_PDATA_TAS8( BAND_TAS_INDICATOR0_##s,  s)), \
+  (LTE_PDATA_TAS9( BAND_TAS_INDICATOR0_##s,  s)), \
+  (LTE_PDATA_TAS10(BAND_TAS_INDICATOR0_##s,  s)), \
+  (LTE_PDATA_TAS11(BAND_TAS_INDICATOR0_##s,  s)), \
+  (LTE_PDATA_TAS12(BAND_TAS_INDICATOR0_##s,  s)), \
+  (LTE_PDATA_TAS13(BAND_TAS_INDICATOR0_##s,  s)), \
+  (LTE_PDATA_TAS14(BAND_TAS_INDICATOR0_##s,  s)), \
+  (LTE_PDATA_TAS15(BAND_TAS_INDICATOR0_##s,  s)), \
+  (LTE_PDATA_TAS1( BAND_TAS_INDICATOR1_##s,  s)), \
+  (LTE_PDATA_TAS2( BAND_TAS_INDICATOR1_##s,  s)), \
+  (LTE_PDATA_TAS3( BAND_TAS_INDICATOR1_##s,  s)), \
+  (LTE_PDATA_TAS4( BAND_TAS_INDICATOR1_##s,  s)), \
+  (LTE_PDATA_TAS5( BAND_TAS_INDICATOR1_##s,  s)), \
+  (LTE_PDATA_TAS6( BAND_TAS_INDICATOR1_##s,  s)), \
+  (LTE_PDATA_TAS7( BAND_TAS_INDICATOR1_##s,  s)), \
+  (LTE_PDATA_TAS8( BAND_TAS_INDICATOR1_##s,  s)), \
+  (LTE_PDATA_TAS9( BAND_TAS_INDICATOR1_##s,  s)), \
+  (LTE_PDATA_TAS10(BAND_TAS_INDICATOR1_##s,  s)), \
+  (LTE_PDATA_TAS11(BAND_TAS_INDICATOR1_##s,  s)), \
+  (LTE_PDATA_TAS12(BAND_TAS_INDICATOR1_##s,  s)), \
+  (LTE_PDATA_TAS13(BAND_TAS_INDICATOR1_##s,  s)), \
+  (LTE_PDATA_TAS14(BAND_TAS_INDICATOR1_##s,  s)), \
+  (LTE_PDATA_TAS15(BAND_TAS_INDICATOR1_##s,  s)), \
+  (LTE_PDATA_TAS1( BAND_TAS_INDICATOR2_##s,  s)), \
+  (LTE_PDATA_TAS2( BAND_TAS_INDICATOR2_##s,  s)), \
+  (LTE_PDATA_TAS3( BAND_TAS_INDICATOR2_##s,  s)), \
+  (LTE_PDATA_TAS4( BAND_TAS_INDICATOR2_##s,  s)), \
+  (LTE_PDATA_TAS5( BAND_TAS_INDICATOR2_##s,  s)), \
+  (LTE_PDATA_TAS6( BAND_TAS_INDICATOR2_##s,  s)), \
+  (LTE_PDATA_TAS7( BAND_TAS_INDICATOR2_##s,  s)), \
+  (LTE_PDATA_TAS8( BAND_TAS_INDICATOR2_##s,  s)), \
+  (LTE_PDATA_TAS9( BAND_TAS_INDICATOR2_##s,  s)), \
+  (LTE_PDATA_TAS10(BAND_TAS_INDICATOR2_##s,  s)), \
+  (LTE_PDATA_TAS11(BAND_TAS_INDICATOR2_##s,  s)), \
+  (LTE_PDATA_TAS12(BAND_TAS_INDICATOR2_##s,  s)), \
+  (LTE_PDATA_TAS13(BAND_TAS_INDICATOR2_##s,  s)), \
+  (LTE_PDATA_TAS14(BAND_TAS_INDICATOR2_##s,  s)), \
+  (LTE_PDATA_TAS15(BAND_TAS_INDICATOR2_##s,  s)), \
+  (LTE_PDATA_TAS1( BAND_TAS_INDICATOR3_##s,  s)), \
+  (LTE_PDATA_TAS2( BAND_TAS_INDICATOR3_##s,  s)), \
+  (LTE_PDATA_TAS3( BAND_TAS_INDICATOR3_##s,  s)), \
+  (LTE_PDATA_TAS4( BAND_TAS_INDICATOR3_##s,  s)), \
+  (LTE_PDATA_TAS5( BAND_TAS_INDICATOR3_##s,  s)), \
+  (LTE_PDATA_TAS6( BAND_TAS_INDICATOR3_##s,  s)), \
+  (LTE_PDATA_TAS7( BAND_TAS_INDICATOR3_##s,  s)), \
+  (LTE_PDATA_TAS8( BAND_TAS_INDICATOR3_##s,  s)), \
+  (LTE_PDATA_TAS9( BAND_TAS_INDICATOR3_##s,  s)), \
+  (LTE_PDATA_TAS10(BAND_TAS_INDICATOR3_##s,  s)), \
+  (LTE_PDATA_TAS11(BAND_TAS_INDICATOR3_##s,  s)), \
+  (LTE_PDATA_TAS12(BAND_TAS_INDICATOR3_##s,  s)), \
+  (LTE_PDATA_TAS13(BAND_TAS_INDICATOR3_##s,  s)), \
+  (LTE_PDATA_TAS14(BAND_TAS_INDICATOR3_##s,  s)), \
+  (LTE_PDATA_TAS15(BAND_TAS_INDICATOR3_##s,  s)), \
+  (LTE_PDATA_TAS1( BAND_TAS_INDICATOR4_##s,  s)), \
+  (LTE_PDATA_TAS2( BAND_TAS_INDICATOR4_##s,  s)), \
+  (LTE_PDATA_TAS3( BAND_TAS_INDICATOR4_##s,  s)), \
+  (LTE_PDATA_TAS4( BAND_TAS_INDICATOR4_##s,  s)), \
+  (LTE_PDATA_TAS5( BAND_TAS_INDICATOR4_##s,  s)), \
+  (LTE_PDATA_TAS6( BAND_TAS_INDICATOR4_##s,  s)), \
+  (LTE_PDATA_TAS7( BAND_TAS_INDICATOR4_##s,  s)), \
+  (LTE_PDATA_TAS8( BAND_TAS_INDICATOR4_##s,  s)), \
+  (LTE_PDATA_TAS9( BAND_TAS_INDICATOR4_##s,  s)), \
+  (LTE_PDATA_TAS10(BAND_TAS_INDICATOR4_##s,  s)), \
+  (LTE_PDATA_TAS11(BAND_TAS_INDICATOR4_##s,  s)), \
+  (LTE_PDATA_TAS12(BAND_TAS_INDICATOR4_##s,  s)), \
+  (LTE_PDATA_TAS13(BAND_TAS_INDICATOR4_##s,  s)), \
+  (LTE_PDATA_TAS14(BAND_TAS_INDICATOR4_##s,  s)), \
+  (LTE_PDATA_TAS15(BAND_TAS_INDICATOR4_##s,  s)), \
+  (LTE_PDATA_TAS1( BAND_TAS_INDICATOR5_##s,  s)), \
+  (LTE_PDATA_TAS2( BAND_TAS_INDICATOR5_##s,  s)), \
+  (LTE_PDATA_TAS3( BAND_TAS_INDICATOR5_##s,  s)), \
+  (LTE_PDATA_TAS4( BAND_TAS_INDICATOR5_##s,  s)), \
+  (LTE_PDATA_TAS5( BAND_TAS_INDICATOR5_##s,  s)), \
+  (LTE_PDATA_TAS6( BAND_TAS_INDICATOR5_##s,  s)), \
+  (LTE_PDATA_TAS7( BAND_TAS_INDICATOR5_##s,  s)), \
+  (LTE_PDATA_TAS8( BAND_TAS_INDICATOR5_##s,  s)), \
+  (LTE_PDATA_TAS9( BAND_TAS_INDICATOR5_##s,  s)), \
+  (LTE_PDATA_TAS10(BAND_TAS_INDICATOR5_##s,  s)), \
+  (LTE_PDATA_TAS11(BAND_TAS_INDICATOR5_##s,  s)), \
+  (LTE_PDATA_TAS12(BAND_TAS_INDICATOR5_##s,  s)), \
+  (LTE_PDATA_TAS13(BAND_TAS_INDICATOR5_##s,  s)), \
+  (LTE_PDATA_TAS14(BAND_TAS_INDICATOR5_##s,  s)), \
+  (LTE_PDATA_TAS15(BAND_TAS_INDICATOR5_##s,  s)), \
+  (LTE_PDATA_TAS1( BAND_TAS_INDICATOR6_##s,  s)), \
+  (LTE_PDATA_TAS2( BAND_TAS_INDICATOR6_##s,  s)), \
+  (LTE_PDATA_TAS3( BAND_TAS_INDICATOR6_##s,  s)), \
+  (LTE_PDATA_TAS4( BAND_TAS_INDICATOR6_##s,  s)), \
+  (LTE_PDATA_TAS5( BAND_TAS_INDICATOR6_##s,  s)), \
+  (LTE_PDATA_TAS6( BAND_TAS_INDICATOR6_##s,  s)), \
+  (LTE_PDATA_TAS7( BAND_TAS_INDICATOR6_##s,  s)), \
+  (LTE_PDATA_TAS8( BAND_TAS_INDICATOR6_##s,  s)), \
+  (LTE_PDATA_TAS9( BAND_TAS_INDICATOR6_##s,  s)), \
+  (LTE_PDATA_TAS10(BAND_TAS_INDICATOR6_##s,  s)), \
+  (LTE_PDATA_TAS11(BAND_TAS_INDICATOR6_##s,  s)), \
+  (LTE_PDATA_TAS12(BAND_TAS_INDICATOR6_##s,  s)), \
+  (LTE_PDATA_TAS13(BAND_TAS_INDICATOR6_##s,  s)), \
+  (LTE_PDATA_TAS14(BAND_TAS_INDICATOR6_##s,  s)), \
+  (LTE_PDATA_TAS15(BAND_TAS_INDICATOR6_##s,  s)), \
+  (LTE_PDATA_TAS1( BAND_TAS_INDICATOR7_##s,  s)), \
+  (LTE_PDATA_TAS2( BAND_TAS_INDICATOR7_##s,  s)), \
+  (LTE_PDATA_TAS3( BAND_TAS_INDICATOR7_##s,  s)), \
+  (LTE_PDATA_TAS4( BAND_TAS_INDICATOR7_##s,  s)), \
+  (LTE_PDATA_TAS5( BAND_TAS_INDICATOR7_##s,  s)), \
+  (LTE_PDATA_TAS6( BAND_TAS_INDICATOR7_##s,  s)), \
+  (LTE_PDATA_TAS7( BAND_TAS_INDICATOR7_##s,  s)), \
+  (LTE_PDATA_TAS8( BAND_TAS_INDICATOR7_##s,  s)), \
+  (LTE_PDATA_TAS9( BAND_TAS_INDICATOR7_##s,  s)), \
+  (LTE_PDATA_TAS10(BAND_TAS_INDICATOR7_##s,  s)), \
+  (LTE_PDATA_TAS11(BAND_TAS_INDICATOR7_##s,  s)), \
+  (LTE_PDATA_TAS12(BAND_TAS_INDICATOR7_##s,  s)), \
+  (LTE_PDATA_TAS13(BAND_TAS_INDICATOR7_##s,  s)), \
+  (LTE_PDATA_TAS14(BAND_TAS_INDICATOR7_##s,  s)), \
+  (LTE_PDATA_TAS15(BAND_TAS_INDICATOR7_##s,  s)), \
+  (LTE_PDATA_TAS1( BAND_TAS_INDICATOR8_##s,  s)), \
+  (LTE_PDATA_TAS2( BAND_TAS_INDICATOR8_##s,  s)), \
+  (LTE_PDATA_TAS3( BAND_TAS_INDICATOR8_##s,  s)), \
+  (LTE_PDATA_TAS4( BAND_TAS_INDICATOR8_##s,  s)), \
+  (LTE_PDATA_TAS5( BAND_TAS_INDICATOR8_##s,  s)), \
+  (LTE_PDATA_TAS6( BAND_TAS_INDICATOR8_##s,  s)), \
+  (LTE_PDATA_TAS7( BAND_TAS_INDICATOR8_##s,  s)), \
+  (LTE_PDATA_TAS8( BAND_TAS_INDICATOR8_##s,  s)), \
+  (LTE_PDATA_TAS9( BAND_TAS_INDICATOR8_##s,  s)), \
+  (LTE_PDATA_TAS10(BAND_TAS_INDICATOR8_##s,  s)), \
+  (LTE_PDATA_TAS11(BAND_TAS_INDICATOR8_##s,  s)), \
+  (LTE_PDATA_TAS12(BAND_TAS_INDICATOR8_##s,  s)), \
+  (LTE_PDATA_TAS13(BAND_TAS_INDICATOR8_##s,  s)), \
+  (LTE_PDATA_TAS14(BAND_TAS_INDICATOR8_##s,  s)), \
+  (LTE_PDATA_TAS15(BAND_TAS_INDICATOR8_##s,  s)), \
+  (LTE_PDATA_TAS1( BAND_TAS_INDICATOR9_##s,  s)), \
+  (LTE_PDATA_TAS2( BAND_TAS_INDICATOR9_##s,  s)), \
+  (LTE_PDATA_TAS3( BAND_TAS_INDICATOR9_##s,  s)), \
+  (LTE_PDATA_TAS4( BAND_TAS_INDICATOR9_##s,  s)), \
+  (LTE_PDATA_TAS5( BAND_TAS_INDICATOR9_##s,  s)), \
+  (LTE_PDATA_TAS6( BAND_TAS_INDICATOR9_##s,  s)), \
+  (LTE_PDATA_TAS7( BAND_TAS_INDICATOR9_##s,  s)), \
+  (LTE_PDATA_TAS8( BAND_TAS_INDICATOR9_##s,  s)), \
+  (LTE_PDATA_TAS9( BAND_TAS_INDICATOR9_##s,  s)), \
+  (LTE_PDATA_TAS10(BAND_TAS_INDICATOR9_##s,  s)), \
+  (LTE_PDATA_TAS11(BAND_TAS_INDICATOR9_##s,  s)), \
+  (LTE_PDATA_TAS12(BAND_TAS_INDICATOR9_##s,  s)), \
+  (LTE_PDATA_TAS13(BAND_TAS_INDICATOR9_##s,  s)), \
+  (LTE_PDATA_TAS14(BAND_TAS_INDICATOR9_##s,  s)), \
+  (LTE_PDATA_TAS15(BAND_TAS_INDICATOR9_##s,  s)), \
+  (LTE_PDATA_TAS1( BAND_TAS_INDICATOR10_##s, s)), \
+  (LTE_PDATA_TAS2( BAND_TAS_INDICATOR10_##s, s)), \
+  (LTE_PDATA_TAS3( BAND_TAS_INDICATOR10_##s, s)), \
+  (LTE_PDATA_TAS4( BAND_TAS_INDICATOR10_##s, s)), \
+  (LTE_PDATA_TAS5( BAND_TAS_INDICATOR10_##s, s)), \
+  (LTE_PDATA_TAS6( BAND_TAS_INDICATOR10_##s, s)), \
+  (LTE_PDATA_TAS7( BAND_TAS_INDICATOR10_##s, s)), \
+  (LTE_PDATA_TAS8( BAND_TAS_INDICATOR10_##s, s)), \
+  (LTE_PDATA_TAS9( BAND_TAS_INDICATOR10_##s, s)), \
+  (LTE_PDATA_TAS10(BAND_TAS_INDICATOR10_##s, s)), \
+  (LTE_PDATA_TAS11(BAND_TAS_INDICATOR10_##s, s)), \
+  (LTE_PDATA_TAS12(BAND_TAS_INDICATOR10_##s, s)), \
+  (LTE_PDATA_TAS13(BAND_TAS_INDICATOR10_##s, s)), \
+  (LTE_PDATA_TAS14(BAND_TAS_INDICATOR10_##s, s)), \
+  (LTE_PDATA_TAS15(BAND_TAS_INDICATOR10_##s, s)), \
+  (LTE_PDATA_TAS1( BAND_TAS_INDICATOR11_##s, s)), \
+  (LTE_PDATA_TAS2( BAND_TAS_INDICATOR11_##s, s)), \
+  (LTE_PDATA_TAS3( BAND_TAS_INDICATOR11_##s, s)), \
+  (LTE_PDATA_TAS4( BAND_TAS_INDICATOR11_##s, s)), \
+  (LTE_PDATA_TAS5( BAND_TAS_INDICATOR11_##s, s)), \
+  (LTE_PDATA_TAS6( BAND_TAS_INDICATOR11_##s, s)), \
+  (LTE_PDATA_TAS7( BAND_TAS_INDICATOR11_##s, s)), \
+  (LTE_PDATA_TAS8( BAND_TAS_INDICATOR11_##s, s)), \
+  (LTE_PDATA_TAS9( BAND_TAS_INDICATOR11_##s, s)), \
+  (LTE_PDATA_TAS10(BAND_TAS_INDICATOR11_##s, s)), \
+  (LTE_PDATA_TAS11(BAND_TAS_INDICATOR11_##s, s)), \
+  (LTE_PDATA_TAS12(BAND_TAS_INDICATOR11_##s, s)), \
+  (LTE_PDATA_TAS13(BAND_TAS_INDICATOR11_##s, s)), \
+  (LTE_PDATA_TAS14(BAND_TAS_INDICATOR11_##s, s)), \
+  (LTE_PDATA_TAS15(BAND_TAS_INDICATOR11_##s, s)), \
+  (LTE_PDATA_TAS1( BAND_TAS_INDICATOR12_##s, s)), \
+  (LTE_PDATA_TAS2( BAND_TAS_INDICATOR12_##s, s)), \
+  (LTE_PDATA_TAS3( BAND_TAS_INDICATOR12_##s, s)), \
+  (LTE_PDATA_TAS4( BAND_TAS_INDICATOR12_##s, s)), \
+  (LTE_PDATA_TAS5( BAND_TAS_INDICATOR12_##s, s)), \
+  (LTE_PDATA_TAS6( BAND_TAS_INDICATOR12_##s, s)), \
+  (LTE_PDATA_TAS7( BAND_TAS_INDICATOR12_##s, s)), \
+  (LTE_PDATA_TAS8( BAND_TAS_INDICATOR12_##s, s)), \
+  (LTE_PDATA_TAS9( BAND_TAS_INDICATOR12_##s, s)), \
+  (LTE_PDATA_TAS10(BAND_TAS_INDICATOR12_##s, s)), \
+  (LTE_PDATA_TAS11(BAND_TAS_INDICATOR12_##s, s)), \
+  (LTE_PDATA_TAS12(BAND_TAS_INDICATOR12_##s, s)), \
+  (LTE_PDATA_TAS13(BAND_TAS_INDICATOR12_##s, s)), \
+  (LTE_PDATA_TAS14(BAND_TAS_INDICATOR12_##s, s)), \
+  (LTE_PDATA_TAS15(BAND_TAS_INDICATOR12_##s, s)), \
+  (LTE_PDATA_TAS1( BAND_TAS_INDICATOR13_##s, s)), \
+  (LTE_PDATA_TAS2( BAND_TAS_INDICATOR13_##s, s)), \
+  (LTE_PDATA_TAS3( BAND_TAS_INDICATOR13_##s, s)), \
+  (LTE_PDATA_TAS4( BAND_TAS_INDICATOR13_##s, s)), \
+  (LTE_PDATA_TAS5( BAND_TAS_INDICATOR13_##s, s)), \
+  (LTE_PDATA_TAS6( BAND_TAS_INDICATOR13_##s, s)), \
+  (LTE_PDATA_TAS7( BAND_TAS_INDICATOR13_##s, s)), \
+  (LTE_PDATA_TAS8( BAND_TAS_INDICATOR13_##s, s)), \
+  (LTE_PDATA_TAS9( BAND_TAS_INDICATOR13_##s, s)), \
+  (LTE_PDATA_TAS10(BAND_TAS_INDICATOR13_##s, s)), \
+  (LTE_PDATA_TAS11(BAND_TAS_INDICATOR13_##s, s)), \
+  (LTE_PDATA_TAS12(BAND_TAS_INDICATOR13_##s, s)), \
+  (LTE_PDATA_TAS13(BAND_TAS_INDICATOR13_##s, s)), \
+  (LTE_PDATA_TAS14(BAND_TAS_INDICATOR13_##s, s)), \
+  (LTE_PDATA_TAS15(BAND_TAS_INDICATOR13_##s, s)), \
+  (LTE_PDATA_TAS1( BAND_TAS_INDICATOR14_##s, s)), \
+  (LTE_PDATA_TAS2( BAND_TAS_INDICATOR14_##s, s)), \
+  (LTE_PDATA_TAS3( BAND_TAS_INDICATOR14_##s, s)), \
+  (LTE_PDATA_TAS4( BAND_TAS_INDICATOR14_##s, s)), \
+  (LTE_PDATA_TAS5( BAND_TAS_INDICATOR14_##s, s)), \
+  (LTE_PDATA_TAS6( BAND_TAS_INDICATOR14_##s, s)), \
+  (LTE_PDATA_TAS7( BAND_TAS_INDICATOR14_##s, s)), \
+  (LTE_PDATA_TAS8( BAND_TAS_INDICATOR14_##s, s)), \
+  (LTE_PDATA_TAS9( BAND_TAS_INDICATOR14_##s, s)), \
+  (LTE_PDATA_TAS10(BAND_TAS_INDICATOR14_##s, s)), \
+  (LTE_PDATA_TAS11(BAND_TAS_INDICATOR14_##s, s)), \
+  (LTE_PDATA_TAS12(BAND_TAS_INDICATOR14_##s, s)), \
+  (LTE_PDATA_TAS13(BAND_TAS_INDICATOR14_##s, s)), \
+  (LTE_PDATA_TAS14(BAND_TAS_INDICATOR14_##s, s)), \
+  (LTE_PDATA_TAS15(BAND_TAS_INDICATOR14_##s, s)), \
+  (LTE_PDATA_TAS1( BAND_TAS_INDICATOR15_##s, s)), \
+  (LTE_PDATA_TAS2( BAND_TAS_INDICATOR15_##s, s)), \
+  (LTE_PDATA_TAS3( BAND_TAS_INDICATOR15_##s, s)), \
+  (LTE_PDATA_TAS4( BAND_TAS_INDICATOR15_##s, s)), \
+  (LTE_PDATA_TAS5( BAND_TAS_INDICATOR15_##s, s)), \
+  (LTE_PDATA_TAS6( BAND_TAS_INDICATOR15_##s, s)), \
+  (LTE_PDATA_TAS7( BAND_TAS_INDICATOR15_##s, s)), \
+  (LTE_PDATA_TAS8( BAND_TAS_INDICATOR15_##s, s)), \
+  (LTE_PDATA_TAS9( BAND_TAS_INDICATOR15_##s, s)), \
+  (LTE_PDATA_TAS10(BAND_TAS_INDICATOR15_##s, s)), \
+  (LTE_PDATA_TAS11(BAND_TAS_INDICATOR15_##s, s)), \
+  (LTE_PDATA_TAS12(BAND_TAS_INDICATOR15_##s, s)), \
+  (LTE_PDATA_TAS13(BAND_TAS_INDICATOR15_##s, s)), \
+  (LTE_PDATA_TAS14(BAND_TAS_INDICATOR15_##s, s)), \
+  (LTE_PDATA_TAS15(BAND_TAS_INDICATOR15_##s, s)), \
+  (LTE_PDATA_TAS1( BAND_TAS_INDICATOR16_##s, s)), \
+  (LTE_PDATA_TAS2( BAND_TAS_INDICATOR16_##s, s)), \
+  (LTE_PDATA_TAS3( BAND_TAS_INDICATOR16_##s, s)), \
+  (LTE_PDATA_TAS4( BAND_TAS_INDICATOR16_##s, s)), \
+  (LTE_PDATA_TAS5( BAND_TAS_INDICATOR16_##s, s)), \
+  (LTE_PDATA_TAS6( BAND_TAS_INDICATOR16_##s, s)), \
+  (LTE_PDATA_TAS7( BAND_TAS_INDICATOR16_##s, s)), \
+  (LTE_PDATA_TAS8( BAND_TAS_INDICATOR16_##s, s)), \
+  (LTE_PDATA_TAS9( BAND_TAS_INDICATOR16_##s, s)), \
+  (LTE_PDATA_TAS10(BAND_TAS_INDICATOR16_##s, s)), \
+  (LTE_PDATA_TAS11(BAND_TAS_INDICATOR16_##s, s)), \
+  (LTE_PDATA_TAS12(BAND_TAS_INDICATOR16_##s, s)), \
+  (LTE_PDATA_TAS13(BAND_TAS_INDICATOR16_##s, s)), \
+  (LTE_PDATA_TAS14(BAND_TAS_INDICATOR16_##s, s)), \
+  (LTE_PDATA_TAS15(BAND_TAS_INDICATOR16_##s, s)), \
+  (LTE_PDATA_TAS1( BAND_TAS_INDICATOR17_##s, s)), \
+  (LTE_PDATA_TAS2( BAND_TAS_INDICATOR17_##s, s)), \
+  (LTE_PDATA_TAS3( BAND_TAS_INDICATOR17_##s, s)), \
+  (LTE_PDATA_TAS4( BAND_TAS_INDICATOR17_##s, s)), \
+  (LTE_PDATA_TAS5( BAND_TAS_INDICATOR17_##s, s)), \
+  (LTE_PDATA_TAS6( BAND_TAS_INDICATOR17_##s, s)), \
+  (LTE_PDATA_TAS7( BAND_TAS_INDICATOR17_##s, s)), \
+  (LTE_PDATA_TAS8( BAND_TAS_INDICATOR17_##s, s)), \
+  (LTE_PDATA_TAS9( BAND_TAS_INDICATOR17_##s, s)), \
+  (LTE_PDATA_TAS10(BAND_TAS_INDICATOR17_##s, s)), \
+  (LTE_PDATA_TAS11(BAND_TAS_INDICATOR17_##s, s)), \
+  (LTE_PDATA_TAS12(BAND_TAS_INDICATOR17_##s, s)), \
+  (LTE_PDATA_TAS13(BAND_TAS_INDICATOR17_##s, s)), \
+  (LTE_PDATA_TAS14(BAND_TAS_INDICATOR17_##s, s)), \
+  (LTE_PDATA_TAS15(BAND_TAS_INDICATOR17_##s, s)), \
+  (LTE_PDATA_TAS1( BAND_TAS_INDICATOR18_##s, s)), \
+  (LTE_PDATA_TAS2( BAND_TAS_INDICATOR18_##s, s)), \
+  (LTE_PDATA_TAS3( BAND_TAS_INDICATOR18_##s, s)), \
+  (LTE_PDATA_TAS4( BAND_TAS_INDICATOR18_##s, s)), \
+  (LTE_PDATA_TAS5( BAND_TAS_INDICATOR18_##s, s)), \
+  (LTE_PDATA_TAS6( BAND_TAS_INDICATOR18_##s, s)), \
+  (LTE_PDATA_TAS7( BAND_TAS_INDICATOR18_##s, s)), \
+  (LTE_PDATA_TAS8( BAND_TAS_INDICATOR18_##s, s)), \
+  (LTE_PDATA_TAS9( BAND_TAS_INDICATOR18_##s, s)), \
+  (LTE_PDATA_TAS10(BAND_TAS_INDICATOR18_##s, s)), \
+  (LTE_PDATA_TAS11(BAND_TAS_INDICATOR18_##s, s)), \
+  (LTE_PDATA_TAS12(BAND_TAS_INDICATOR18_##s, s)), \
+  (LTE_PDATA_TAS13(BAND_TAS_INDICATOR18_##s, s)), \
+  (LTE_PDATA_TAS14(BAND_TAS_INDICATOR18_##s, s)), \
+  (LTE_PDATA_TAS15(BAND_TAS_INDICATOR18_##s, s)), \
+  (LTE_PDATA_TAS1( BAND_TAS_INDICATOR19_##s, s)), \
+  (LTE_PDATA_TAS2( BAND_TAS_INDICATOR19_##s, s)), \
+  (LTE_PDATA_TAS3( BAND_TAS_INDICATOR19_##s, s)), \
+  (LTE_PDATA_TAS4( BAND_TAS_INDICATOR19_##s, s)), \
+  (LTE_PDATA_TAS5( BAND_TAS_INDICATOR19_##s, s)), \
+  (LTE_PDATA_TAS6( BAND_TAS_INDICATOR19_##s, s)), \
+  (LTE_PDATA_TAS7( BAND_TAS_INDICATOR19_##s, s)), \
+  (LTE_PDATA_TAS8( BAND_TAS_INDICATOR19_##s, s)), \
+  (LTE_PDATA_TAS9( BAND_TAS_INDICATOR19_##s, s)), \
+  (LTE_PDATA_TAS10(BAND_TAS_INDICATOR19_##s, s)), \
+  (LTE_PDATA_TAS11(BAND_TAS_INDICATOR19_##s, s)), \
+  (LTE_PDATA_TAS12(BAND_TAS_INDICATOR19_##s, s)), \
+  (LTE_PDATA_TAS13(BAND_TAS_INDICATOR19_##s, s)), \
+  (LTE_PDATA_TAS14(BAND_TAS_INDICATOR19_##s, s)), \
+  (LTE_PDATA_TAS15(BAND_TAS_INDICATOR19_##s, s)), \
+  (LTE_PDATA_TAS1( BAND_TAS_INDICATOR20_##s, s)), \
+  (LTE_PDATA_TAS2( BAND_TAS_INDICATOR20_##s, s)), \
+  (LTE_PDATA_TAS3( BAND_TAS_INDICATOR20_##s, s)), \
+  (LTE_PDATA_TAS4( BAND_TAS_INDICATOR20_##s, s)), \
+  (LTE_PDATA_TAS5( BAND_TAS_INDICATOR20_##s, s)), \
+  (LTE_PDATA_TAS6( BAND_TAS_INDICATOR20_##s, s)), \
+  (LTE_PDATA_TAS7( BAND_TAS_INDICATOR20_##s, s)), \
+  (LTE_PDATA_TAS8( BAND_TAS_INDICATOR20_##s, s)), \
+  (LTE_PDATA_TAS9( BAND_TAS_INDICATOR20_##s, s)), \
+  (LTE_PDATA_TAS10(BAND_TAS_INDICATOR20_##s, s)), \
+  (LTE_PDATA_TAS11(BAND_TAS_INDICATOR20_##s, s)), \
+  (LTE_PDATA_TAS12(BAND_TAS_INDICATOR20_##s, s)), \
+  (LTE_PDATA_TAS13(BAND_TAS_INDICATOR20_##s, s)), \
+  (LTE_PDATA_TAS14(BAND_TAS_INDICATOR20_##s, s)), \
+  (LTE_PDATA_TAS15(BAND_TAS_INDICATOR20_##s, s)), \
+}
+
+#define EL1_CUSTOM_RF_TAS_PARAMETER(s) \
+{                                      \
+   TAS_BAND_IND(s),                    \
+   TAS_RF_DATABASE(s),                 \
+}
+
+#define EL1_CUSTOM_RF_TX_POWER_BACKOFF(s)     \
+{                                             \
+   LTE_TX_POWER_BACKOFF(BAND_INDICATOR0,  s), \
+   LTE_TX_POWER_BACKOFF(BAND_INDICATOR1,  s), \
+   LTE_TX_POWER_BACKOFF(BAND_INDICATOR2,  s), \
+   LTE_TX_POWER_BACKOFF(BAND_INDICATOR3,  s), \
+   LTE_TX_POWER_BACKOFF(BAND_INDICATOR4,  s), \
+   LTE_TX_POWER_BACKOFF(BAND_INDICATOR5,  s), \
+   LTE_TX_POWER_BACKOFF(BAND_INDICATOR6,  s), \
+   LTE_TX_POWER_BACKOFF(BAND_INDICATOR7,  s), \
+   LTE_TX_POWER_BACKOFF(BAND_INDICATOR8,  s), \
+   LTE_TX_POWER_BACKOFF(BAND_INDICATOR9,  s), \
+   LTE_TX_POWER_BACKOFF(BAND_INDICATOR10, s), \
+   LTE_TX_POWER_BACKOFF(BAND_INDICATOR11, s), \
+   LTE_TX_POWER_BACKOFF(BAND_INDICATOR12, s), \
+   LTE_TX_POWER_BACKOFF(BAND_INDICATOR13, s), \
+   LTE_TX_POWER_BACKOFF(BAND_INDICATOR14, s), \
+   LTE_TX_POWER_BACKOFF(BAND_INDICATOR15, s), \
+   LTE_TX_POWER_BACKOFF(BAND_INDICATOR16, s), \
+   LTE_TX_POWER_BACKOFF(BAND_INDICATOR17, s), \
+   LTE_TX_POWER_BACKOFF(BAND_INDICATOR18, s), \
+   LTE_TX_POWER_BACKOFF(BAND_INDICATOR19, s), \
+   LTE_TX_POWER_BACKOFF(BAND_INDICATOR20, s), \
+}
+   
+#define EL1_CUSTOM_LTE_TX_RAMP_DATA(s)     \
+{                                          \
+   {                                       \
+      &LTE_RAMP_DATA(BAND_INDICATOR0,  s), \
+      &LTE_RAMP_DATA(BAND_INDICATOR1,  s), \
+      &LTE_RAMP_DATA(BAND_INDICATOR2,  s), \
+      &LTE_RAMP_DATA(BAND_INDICATOR3,  s), \
+      &LTE_RAMP_DATA(BAND_INDICATOR4,  s), \
+      &LTE_RAMP_DATA(BAND_INDICATOR5,  s), \
+      &LTE_RAMP_DATA(BAND_INDICATOR6,  s), \
+      &LTE_RAMP_DATA(BAND_INDICATOR7,  s), \
+      &LTE_RAMP_DATA(BAND_INDICATOR8,  s), \
+      &LTE_RAMP_DATA(BAND_INDICATOR9,  s), \
+      &LTE_RAMP_DATA(BAND_INDICATOR10, s), \
+      &LTE_RAMP_DATA(BAND_INDICATOR11, s), \
+      &LTE_RAMP_DATA(BAND_INDICATOR12, s), \
+      &LTE_RAMP_DATA(BAND_INDICATOR13, s), \
+      &LTE_RAMP_DATA(BAND_INDICATOR14, s), \
+      &LTE_RAMP_DATA(BAND_INDICATOR15, s), \
+      &LTE_RAMP_DATA(BAND_INDICATOR16, s), \
+      &LTE_RAMP_DATA(BAND_INDICATOR17, s), \
+      &LTE_RAMP_DATA(BAND_INDICATOR18, s), \
+      &LTE_RAMP_DATA(BAND_INDICATOR19, s), \
+      &LTE_RAMP_DATA(BAND_INDICATOR20, s), \
+   },                                      \
+}
+
+#define EL1_CUSTOM_LTE_TX_PA_OCT_LVL_DATA(s)       \
+{                                                  \
+   {                                               \
+      &LTE_PA_OCT_LEVEL_DATA(BAND_INDICATOR0,  s), \
+      &LTE_PA_OCT_LEVEL_DATA(BAND_INDICATOR1,  s), \
+      &LTE_PA_OCT_LEVEL_DATA(BAND_INDICATOR2,  s), \
+      &LTE_PA_OCT_LEVEL_DATA(BAND_INDICATOR3,  s), \
+      &LTE_PA_OCT_LEVEL_DATA(BAND_INDICATOR4,  s), \
+      &LTE_PA_OCT_LEVEL_DATA(BAND_INDICATOR5,  s), \
+      &LTE_PA_OCT_LEVEL_DATA(BAND_INDICATOR6,  s), \
+      &LTE_PA_OCT_LEVEL_DATA(BAND_INDICATOR7,  s), \
+      &LTE_PA_OCT_LEVEL_DATA(BAND_INDICATOR8,  s), \
+      &LTE_PA_OCT_LEVEL_DATA(BAND_INDICATOR9,  s), \
+      &LTE_PA_OCT_LEVEL_DATA(BAND_INDICATOR10, s), \
+      &LTE_PA_OCT_LEVEL_DATA(BAND_INDICATOR11, s), \
+      &LTE_PA_OCT_LEVEL_DATA(BAND_INDICATOR12, s), \
+      &LTE_PA_OCT_LEVEL_DATA(BAND_INDICATOR13, s), \
+      &LTE_PA_OCT_LEVEL_DATA(BAND_INDICATOR14, s), \
+      &LTE_PA_OCT_LEVEL_DATA(BAND_INDICATOR15, s), \
+      &LTE_PA_OCT_LEVEL_DATA(BAND_INDICATOR16, s), \
+      &LTE_PA_OCT_LEVEL_DATA(BAND_INDICATOR17, s), \
+      &LTE_PA_OCT_LEVEL_DATA(BAND_INDICATOR18, s), \
+      &LTE_PA_OCT_LEVEL_DATA(BAND_INDICATOR19, s), \
+      &LTE_PA_OCT_LEVEL_DATA(BAND_INDICATOR20, s), \
+   },                                              \
+}
+
+#define EL1_CUSTOM_LTE_DPD_TX_RAMP_DATA(s)     \
+{                                              \
+   {                                           \
+      &LTE_DPD_RAMP_DATA(BAND_INDICATOR0,  s), \
+      &LTE_DPD_RAMP_DATA(BAND_INDICATOR1,  s), \
+      &LTE_DPD_RAMP_DATA(BAND_INDICATOR2,  s), \
+      &LTE_DPD_RAMP_DATA(BAND_INDICATOR3,  s), \
+      &LTE_DPD_RAMP_DATA(BAND_INDICATOR4,  s), \
+      &LTE_DPD_RAMP_DATA(BAND_INDICATOR5,  s), \
+      &LTE_DPD_RAMP_DATA(BAND_INDICATOR6,  s), \
+      &LTE_DPD_RAMP_DATA(BAND_INDICATOR7,  s), \
+      &LTE_DPD_RAMP_DATA(BAND_INDICATOR8,  s), \
+      &LTE_DPD_RAMP_DATA(BAND_INDICATOR9,  s), \
+      &LTE_DPD_RAMP_DATA(BAND_INDICATOR10, s), \
+      &LTE_DPD_RAMP_DATA(BAND_INDICATOR11, s), \
+      &LTE_DPD_RAMP_DATA(BAND_INDICATOR12, s), \
+      &LTE_DPD_RAMP_DATA(BAND_INDICATOR13, s), \
+      &LTE_DPD_RAMP_DATA(BAND_INDICATOR14, s), \
+      &LTE_DPD_RAMP_DATA(BAND_INDICATOR15, s), \
+      &LTE_DPD_RAMP_DATA(BAND_INDICATOR16, s), \
+      &LTE_DPD_RAMP_DATA(BAND_INDICATOR17, s), \
+      &LTE_DPD_RAMP_DATA(BAND_INDICATOR18, s), \
+      &LTE_DPD_RAMP_DATA(BAND_INDICATOR19, s), \
+      &LTE_DPD_RAMP_DATA(BAND_INDICATOR20, s), \
+   },                                          \
+}
+
+#define EL1_CUSTOM_LTE_DPD_TX_PA_OCT_LVL_DATA(s)       \
+{                                                      \
+   {                                                   \
+      &LTE_DPD_PA_OCT_LEVEL_DATA(BAND_INDICATOR0,  s), \
+      &LTE_DPD_PA_OCT_LEVEL_DATA(BAND_INDICATOR1,  s), \
+      &LTE_DPD_PA_OCT_LEVEL_DATA(BAND_INDICATOR2,  s), \
+      &LTE_DPD_PA_OCT_LEVEL_DATA(BAND_INDICATOR3,  s), \
+      &LTE_DPD_PA_OCT_LEVEL_DATA(BAND_INDICATOR4,  s), \
+      &LTE_DPD_PA_OCT_LEVEL_DATA(BAND_INDICATOR5,  s), \
+      &LTE_DPD_PA_OCT_LEVEL_DATA(BAND_INDICATOR6,  s), \
+      &LTE_DPD_PA_OCT_LEVEL_DATA(BAND_INDICATOR7,  s), \
+      &LTE_DPD_PA_OCT_LEVEL_DATA(BAND_INDICATOR8,  s), \
+      &LTE_DPD_PA_OCT_LEVEL_DATA(BAND_INDICATOR9,  s), \
+      &LTE_DPD_PA_OCT_LEVEL_DATA(BAND_INDICATOR10, s), \
+      &LTE_DPD_PA_OCT_LEVEL_DATA(BAND_INDICATOR11, s), \
+      &LTE_DPD_PA_OCT_LEVEL_DATA(BAND_INDICATOR12, s), \
+      &LTE_DPD_PA_OCT_LEVEL_DATA(BAND_INDICATOR13, s), \
+      &LTE_DPD_PA_OCT_LEVEL_DATA(BAND_INDICATOR14, s), \
+      &LTE_DPD_PA_OCT_LEVEL_DATA(BAND_INDICATOR15, s), \
+      &LTE_DPD_PA_OCT_LEVEL_DATA(BAND_INDICATOR16, s), \
+      &LTE_DPD_PA_OCT_LEVEL_DATA(BAND_INDICATOR17, s), \
+      &LTE_DPD_PA_OCT_LEVEL_DATA(BAND_INDICATOR18, s), \
+      &LTE_DPD_PA_OCT_LEVEL_DATA(BAND_INDICATOR19, s), \
+      &LTE_DPD_PA_OCT_LEVEL_DATA(BAND_INDICATOR20, s), \
+   },                                                  \
+}
+
+#define EL1_CUSTOM_LTE_BYPASS_TX_RAMP_DATA(s)           \
+{                                                       \
+   {                                                    \
+      &LTE_BYPASS_RAMP_DATA(BAND_BYPASS_INDICATOR0, s), \
+      &LTE_BYPASS_RAMP_DATA(BAND_BYPASS_INDICATOR1, s), \
+      &LTE_BYPASS_RAMP_DATA(BAND_BYPASS_INDICATOR2, s), \
+      &LTE_BYPASS_RAMP_DATA(BAND_BYPASS_INDICATOR3, s), \
+      &LTE_BYPASS_RAMP_DATA(BAND_BYPASS_INDICATOR4, s), \
+   },                                                   \
+}
+
+#define EL1_CUSTOM_LTE_BYPASS_TX_PA_OCT_LVL_DATA(s)             \
+{                                                               \
+   {                                                            \
+      &LTE_BYPASS_PA_OCT_LEVEL_DATA(BAND_BYPASS_INDICATOR0, s), \
+      &LTE_BYPASS_PA_OCT_LEVEL_DATA(BAND_BYPASS_INDICATOR1, s), \
+      &LTE_BYPASS_PA_OCT_LEVEL_DATA(BAND_BYPASS_INDICATOR2, s), \
+      &LTE_BYPASS_PA_OCT_LEVEL_DATA(BAND_BYPASS_INDICATOR3, s), \
+      &LTE_BYPASS_PA_OCT_LEVEL_DATA(BAND_BYPASS_INDICATOR4, s), \
+   },                                                           \
+}
+
+#define EL1_CUSTOM_LTE_HRM_TX_RAMP_DATA(s)              \
+{                                                       \
+   {                                                    \
+      &LTE_TX_HRM_RAMP_DATA(BAND_TX_HRM_INDICATOR0, s), \
+      &LTE_TX_HRM_RAMP_DATA(BAND_TX_HRM_INDICATOR1, s), \
+      &LTE_TX_HRM_RAMP_DATA(BAND_TX_HRM_INDICATOR2, s), \
+      &LTE_TX_HRM_RAMP_DATA(BAND_TX_HRM_INDICATOR3, s), \
+      &LTE_TX_HRM_RAMP_DATA(BAND_TX_HRM_INDICATOR4, s), \
+   },                                                   \
+}
+
+#define EL1_CUSTOM_LTE_HRM_TX_PA_OCT_LVL_DATA(s)                \
+{                                                               \
+   {                                                            \
+      &LTE_TX_HRM_PA_OCT_LEVEL_DATA(BAND_TX_HRM_INDICATOR0, s), \
+      &LTE_TX_HRM_PA_OCT_LEVEL_DATA(BAND_TX_HRM_INDICATOR1, s), \
+      &LTE_TX_HRM_PA_OCT_LEVEL_DATA(BAND_TX_HRM_INDICATOR2, s), \
+      &LTE_TX_HRM_PA_OCT_LEVEL_DATA(BAND_TX_HRM_INDICATOR3, s), \
+      &LTE_TX_HRM_PA_OCT_LEVEL_DATA(BAND_TX_HRM_INDICATOR4, s), \
+   },                                                           \
+}
+
+#define EL1_CUSTOM_LTE_DPD_BYPASS_TX_RAMP_DATA(s)           \
+{                                                           \
+   {                                                        \
+      &LTE_DPD_BYPASS_RAMP_DATA(BAND_BYPASS_INDICATOR0, s), \
+      &LTE_DPD_BYPASS_RAMP_DATA(BAND_BYPASS_INDICATOR1, s), \
+      &LTE_DPD_BYPASS_RAMP_DATA(BAND_BYPASS_INDICATOR2, s), \
+      &LTE_DPD_BYPASS_RAMP_DATA(BAND_BYPASS_INDICATOR3, s), \
+      &LTE_DPD_BYPASS_RAMP_DATA(BAND_BYPASS_INDICATOR4, s), \
+   },                                                       \
+}
+
+#define EL1_CUSTOM_LTE_DPD_BYPASS_TX_PA_OCT_LVL_DATA(s)             \
+{                                                                   \
+   {                                                                \
+      &LTE_DPD_BYPASS_PA_OCT_LEVEL_DATA(BAND_BYPASS_INDICATOR0, s), \
+      &LTE_DPD_BYPASS_PA_OCT_LEVEL_DATA(BAND_BYPASS_INDICATOR1, s), \
+      &LTE_DPD_BYPASS_PA_OCT_LEVEL_DATA(BAND_BYPASS_INDICATOR2, s), \
+      &LTE_DPD_BYPASS_PA_OCT_LEVEL_DATA(BAND_BYPASS_INDICATOR3, s), \
+      &LTE_DPD_BYPASS_PA_OCT_LEVEL_DATA(BAND_BYPASS_INDICATOR4, s), \
+   },                                                               \
+}
+
+#define EL1_CUSTOM_LTE_DPD_FAC_COMMON_ALGO_PARAM_TABLE(s)  \
+{                                                          \
+   {                                                       \
+      &LTE_DPD_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR0 , s), \
+      &LTE_DPD_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR1 , s), \
+      &LTE_DPD_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR2 , s), \
+      &LTE_DPD_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR3 , s), \
+      &LTE_DPD_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR4 , s), \
+      &LTE_DPD_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR5 , s), \
+      &LTE_DPD_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR6 , s), \
+      &LTE_DPD_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR7 , s), \
+      &LTE_DPD_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR8 , s), \
+      &LTE_DPD_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR9 , s), \
+      &LTE_DPD_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR10, s), \
+      &LTE_DPD_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR11, s), \
+      &LTE_DPD_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR12, s), \
+      &LTE_DPD_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR13, s), \
+      &LTE_DPD_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR14, s), \
+      &LTE_DPD_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR15, s), \
+      &LTE_DPD_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR16, s), \
+      &LTE_DPD_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR17, s), \
+      &LTE_DPD_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR18, s), \
+      &LTE_DPD_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR19, s), \
+      &LTE_DPD_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR20, s), \
+   },                                                      \
+}
+
+#define EL1_CUSTOM_LTE_CIM3_FAC_COMMON_ALGO_PARAM_TABLE(s)  \
+{							    \
+   {							    \
+      &LTE_CIM3_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR0 , s), \
+      &LTE_CIM3_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR1 , s), \
+      &LTE_CIM3_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR2 , s), \
+      &LTE_CIM3_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR3 , s), \
+      &LTE_CIM3_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR4 , s), \
+      &LTE_CIM3_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR5 , s), \
+      &LTE_CIM3_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR6 , s), \
+      &LTE_CIM3_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR7 , s), \
+      &LTE_CIM3_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR8 , s), \
+      &LTE_CIM3_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR9 , s), \
+      &LTE_CIM3_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR10, s), \
+      &LTE_CIM3_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR11, s), \
+      &LTE_CIM3_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR12, s), \
+      &LTE_CIM3_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR13, s), \
+      &LTE_CIM3_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR14, s), \
+      &LTE_CIM3_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR15, s), \
+      &LTE_CIM3_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR16, s), \
+      &LTE_CIM3_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR17, s), \
+      &LTE_CIM3_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR18, s), \
+      &LTE_CIM3_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR19, s), \
+      &LTE_CIM3_FAC_COMMON_ALGO_PARAM(BAND_INDICATOR20, s), \
+   },                                                       \
+}
+
+#define EL1_CUSTOM_LTE_BYPASS_DPD_FAC_COMMON_ALGO_PARAM_TABLE(s)        \
+{                                                                       \
+   {                                                                    \
+      &LTE_BYPASS_DPD_FAC_COMMON_ALGO_PARAM(BAND_BYPASS_INDICATOR0, s), \
+      &LTE_BYPASS_DPD_FAC_COMMON_ALGO_PARAM(BAND_BYPASS_INDICATOR1, s), \
+      &LTE_BYPASS_DPD_FAC_COMMON_ALGO_PARAM(BAND_BYPASS_INDICATOR2, s), \
+      &LTE_BYPASS_DPD_FAC_COMMON_ALGO_PARAM(BAND_BYPASS_INDICATOR3, s), \
+      &LTE_BYPASS_DPD_FAC_COMMON_ALGO_PARAM(BAND_BYPASS_INDICATOR4, s), \
+   },                                                                   \
+}
+
+#define EL1_CUSTOM_LTE_BYPASS_CIM3_FAC_COMMON_ALGO_PARAM_TABLE(s)        \
+{				                                         \
+   {							                 \
+      &LTE_BYPASS_CIM3_FAC_COMMON_ALGO_PARAM(BAND_BYPASS_INDICATOR0, s), \
+      &LTE_BYPASS_CIM3_FAC_COMMON_ALGO_PARAM(BAND_BYPASS_INDICATOR1, s), \
+      &LTE_BYPASS_CIM3_FAC_COMMON_ALGO_PARAM(BAND_BYPASS_INDICATOR2, s), \
+      &LTE_BYPASS_CIM3_FAC_COMMON_ALGO_PARAM(BAND_BYPASS_INDICATOR3, s), \
+      &LTE_BYPASS_CIM3_FAC_COMMON_ALGO_PARAM(BAND_BYPASS_INDICATOR4, s), \
+   },                                                                    \
+}
+
+#define EL1_CUSTOM_LTE_DPD_HRM_TX_RAMP_DATA(s)           \
+{                                                           \
+   {                                                        \
+      &LTE_TX_HRM_DPD_RAMP_DATA(BAND_TX_HRM_INDICATOR0, s), \
+	  &LTE_TX_HRM_DPD_RAMP_DATA(BAND_TX_HRM_INDICATOR1, s), \
+	  &LTE_TX_HRM_DPD_RAMP_DATA(BAND_TX_HRM_INDICATOR2, s), \
+	  &LTE_TX_HRM_DPD_RAMP_DATA(BAND_TX_HRM_INDICATOR3, s), \
+	  &LTE_TX_HRM_DPD_RAMP_DATA(BAND_TX_HRM_INDICATOR4, s), \
+   },                                                       \
+}
+
+#define EL1_CUSTOM_LTE_DPD_HRM_TX_PA_OCT_LVL_DATA(s)             \
+{                                                                   \
+   {                                                                \
+	  &LTE_TX_HRM_DPD_PA_OCT_LEVEL_DATA(BAND_TX_HRM_INDICATOR0, s), \
+	  &LTE_TX_HRM_DPD_PA_OCT_LEVEL_DATA(BAND_TX_HRM_INDICATOR1, s), \
+	  &LTE_TX_HRM_DPD_PA_OCT_LEVEL_DATA(BAND_TX_HRM_INDICATOR2, s), \
+	  &LTE_TX_HRM_DPD_PA_OCT_LEVEL_DATA(BAND_TX_HRM_INDICATOR3, s), \
+	  &LTE_TX_HRM_DPD_PA_OCT_LEVEL_DATA(BAND_TX_HRM_INDICATOR4, s), \
+   },                                                               \
+}
+
+#define EL1_CUSTOM_LTE_HRM_DPD_FAC_COMMON_ALGO_PARAM_TABLE(s)        \
+{                                                                       \
+   {                                                                    \
+      &LTE_TX_HRM_DPD_FAC_COMMON_ALGO_PARAM(BAND_TX_HRM_INDICATOR0, s), \
+      &LTE_TX_HRM_DPD_FAC_COMMON_ALGO_PARAM(BAND_TX_HRM_INDICATOR1, s), \
+	  &LTE_TX_HRM_DPD_FAC_COMMON_ALGO_PARAM(BAND_TX_HRM_INDICATOR2, s), \
+	  &LTE_TX_HRM_DPD_FAC_COMMON_ALGO_PARAM(BAND_TX_HRM_INDICATOR3, s), \
+	  &LTE_TX_HRM_DPD_FAC_COMMON_ALGO_PARAM(BAND_TX_HRM_INDICATOR4, s), \
+   },                                                                   \
+}
+
+#define EL1_CUSTOM_LTE_HRM_CIM3_FAC_COMMON_ALGO_PARAM_TABLE(s)        \
+{				                                                         \
+   {														             \
+      &LTE_TX_HRM_CIM3_FAC_COMMON_ALGO_PARAM(BAND_TX_HRM_INDICATOR0, s), \
+      &LTE_TX_HRM_CIM3_FAC_COMMON_ALGO_PARAM(BAND_TX_HRM_INDICATOR1, s), \
+	  &LTE_TX_HRM_CIM3_FAC_COMMON_ALGO_PARAM(BAND_TX_HRM_INDICATOR2, s), \
+	  &LTE_TX_HRM_CIM3_FAC_COMMON_ALGO_PARAM(BAND_TX_HRM_INDICATOR3, s), \
+	  &LTE_TX_HRM_CIM3_FAC_COMMON_ALGO_PARAM(BAND_TX_HRM_INDICATOR4, s), \
+   },                                                                    \
+}
+
+#define EL1_CUSTOM_LTE_RX_PATH_LOSS_DATA(s)             \
+{                                                       \
+   {                                                    \
+      &LTE_RSSI_GAIN_TABLE_TYPE1(BAND_INDICATOR0,   s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1(BAND_INDICATOR1,   s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1(BAND_INDICATOR2,   s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1(BAND_INDICATOR3,   s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1(BAND_INDICATOR4,   s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1(BAND_INDICATOR5,   s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1(BAND_INDICATOR6,   s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1(BAND_INDICATOR7,   s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1(BAND_INDICATOR8,   s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1(BAND_INDICATOR9,   s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1(BAND_INDICATOR10,  s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1(BAND_INDICATOR11,  s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1(BAND_INDICATOR12,  s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1(BAND_INDICATOR13,  s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1(BAND_INDICATOR14,  s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1(BAND_INDICATOR15,  s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1(BAND_INDICATOR16,  s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1(BAND_INDICATOR17,  s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1(BAND_INDICATOR18,  s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1(BAND_INDICATOR19,  s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1(BAND_INDICATOR20,  s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route21, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route22, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route23, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route24, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route25, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route26, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route27, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route28, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route29, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route30, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route31, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route32, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route33, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route34, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route35, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route36, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route37, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route38, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route39, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route40, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route41, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route42, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route43, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route44, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route45, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route46, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route47, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route48, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route49, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route50, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route51, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route52, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route53, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route54, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route55, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route56, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route57, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route58, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route59, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route60, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route61, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route62, s), \
+      &LTE_RSSI_GAIN_TABLE_TYPE1_ROUTE(LTE_Route63, s), \
+   },                                                   \
+   {                                                    \
+      &LTE_RSSI_GAIN_TABLE_TYPE2(LTE_Route96,  s),      \
+      &LTE_RSSI_GAIN_TABLE_TYPE2(LTE_Route97,  s),      \
+      &LTE_RSSI_GAIN_TABLE_TYPE2(LTE_Route98,  s),      \
+      &LTE_RSSI_GAIN_TABLE_TYPE2(LTE_Route99,  s),      \
+      &LTE_RSSI_GAIN_TABLE_TYPE2(LTE_Route100, s),      \
+      &LTE_RSSI_GAIN_TABLE_TYPE2(LTE_Route101, s),      \
+      &LTE_RSSI_GAIN_TABLE_TYPE2(LTE_Route102, s),      \
+      &LTE_RSSI_GAIN_TABLE_TYPE2(LTE_Route103, s),      \
+   },                                                   \
+}
+
+#define EL1_CUSTOM_LTE_ET_TX_EVENT(s)                         \
+{                                                             \
+   LTE_ET_TX_EVENT_TABLE_##s,                                 \
+}
+
+#define EL1_CUSTOM_LTE_ET_TX_DATA(s)                          \
+{                                                             \
+   LTE_ET_TX_DATA_TABLE_##s,                                  \
+}
+
+#define EL1_CUSTOM_LTE_ET_TPC_EVENT(s)                        \
+{                                                             \
+   LTE_ET_TPC_EVENT_TABLE_##s,                                \
+}                                                  
+
+#define EL1_CUSTOM_LTE_ET_TPC_DATA(s)                         \
+{                                                             \
+   LTE_ET_TPC_DATA_TABLE_##s,                                 \
+}
+
+#define EL1_CUSTOM_LTE_ET_TPC_SECTION_DATA(s)                 \
+{                                                             \
+   LTE_ET_TPC_SECTION_DATA_TABLE_##s,                         \
+}
+
+#define EL1_CUSTOM_LTE_ET_LOOKUP_VPA_DATA(s)                  \
+{                                                             \
+   LTE_ET_LOOKUP_VPA_DATA_TABLE_##s,                          \
+}
+
+#define EL1_CUSTOM_LTE_ET_LOOKUP_VPA_SECTION_DATA(s)          \
+{                                                             \
+   LTE_ET_LOOKUP_VPA_SECTION_DATA_TABLE_##s,                  \
+}
+
+#define EL1_CUSTOM_LTE_ET_BW_SWITCH_DATA(s)                   \
+{                                                             \
+   LTE_ET_BW_SWITCH_DATA_TABLE_##s,                           \
+}
+
+#define EL1_CUSTOM_LTE_ET_BW_SWITCH_SECTION_DATA(s)           \
+{                                                             \
+   LTE_ET_BW_SWITCH_SECTION_DATA_TABLE_##s,                   \
+}
+
+#define EL1_CUSTOM_LTE_ET_MODE_SETTING_DATA(s)                \
+{                                                             \
+   LTE_ETM_MODE_SETTING_DATA_TABLE_##s,                       \
+}
+
+#define EL1_CUSTOM_LTE_EtCompParamPerBand(s)                  \
+{                                                             \
+   LTE_EtCompParamPerBand_##s,                                \
+}
+
+#define EL1_CUSTOM_LTE_EtVinLutDataPerBand(s)                 \
+{                                                             \
+   LTE_EtVinLutTblPerBand_##s,                                \
+}
+
+#define EL1_CUSTOM_LTE_BYPASS_EtCompParamPerBand(s)           \
+{                                                             \
+   LTE_BYPASS_EtCompParamPerBand_##s,                         \
+}
+
+#define EL1_CUSTOM_LTE_BYPASS_EtVinLutDataPerBand(s)          \
+{                                                             \
+   LTE_BYPASS_EtVinLutTblPerBand_##s,                         \
+}
+
+#define EL1_CUSTOM_LTE_ET_OUTER_LOOP_GAIN_SETTING(s)          \
+{                                                             \
+   LTE_ET_OUTER_LOOP_GAIN_DATA_TABLE_##s,                     \
+}
+
+#define EL1_CUSTOM_LTE_ET_VPA_OFFSET_VOLTAGE_SETTING(s)       \
+{                                                             \
+   LTE_ET_VPA_OFFSET_VOLTAGE_DATA_TABLE_##s,                  \
+}
+
+#define EL1_CUSTOM_LTE_ET_MINIMUM_OUTPUT_VOLTAGE_SETTING(s)   \
+{                                                             \
+   LTE_ET_MINIMUM_OUTPUT_VOLTAGE_DATA_TABLE_##s,              \
+}
+
+#define EL1_CUSTOM_LTE_ET_MAXIMUM_OUTPUT_VOLTAGE_SETTING(s)   \
+{                                                             \
+   LTE_ET_MAXIMUM_OUTPUT_VOLTAGE_DATA_TABLE_##s,              \
+}
+#define EL1_CUSTOM_LTE_TEMP_DAC_DATA(s) \
+{                                       \
+   &TempDacTable_##s,                   \
+}
+
+#define EL1_CUSTOM_LTE_PCFE_SA_TUNE_PARAM_CUSTOM_DATA(s) \
+{                                                        \
+   &LTE_PCFE_SA_Tune_Param_Custom_Data_##s,              \
+}
+
+#define EL1_CUSTOM_LTE_MIPI_ENABLE(s) IS_MIPI_FRONT_END_ENABLE_##s
+#define EL1_CUSTOM_LTE_LTE_ET_ENABLE(s) IS_LTE_ET_FRONT_END_ENABLE_##s
+
+#if IS_4G_DPD_SUPPORT
+
+#if IS_MIPI_ANT_TUNER_SUPPORT
+#define EL1_CUSTOM_LTE_MIPI_EVENT_DATA_TABLE(s) \
+{                                               \
+   LTE_MIPI_RX_EVENT_TABLE_##s,                 \
+   LTE_MIPI_RX_DATA_TABLE_##s,                  \
+   LTE_MIPI_TX_EVENT_TABLE_##s,                 \
+   LTE_MIPI_TX_DATA_TABLE_##s,                  \
+   LTE_MIPI_TPC_EVENT_TABLE_##s,                \
+   LTE_MIPI_TPC_DATA_TABLE_##s,                 \
+   LTE_MIPI_PA_TPC_SECTION_DATA_##s,            \
+   LTE_MIPI_DPD_TPC_EVENT_TABLE_##s,            \
+   LTE_MIPI_DPD_TPC_DATA_TABLE_##s,             \
+   LTE_MIPI_DPD_PA_TPC_SECTION_DATA_##s,        \
+   LTE_MIPI_INITIAL_CW_##s,                     \
+   LTE_MIPI_SLEEP_CW_##s,                       \
+   LTE_MIPI_ASM_ISOLATION_DATA_##s,             \
+   LTE_MIPI_RX_EVENT_SIZE_TABLE_##s,            \
+   LTE_MIPI_RX_DATA_SIZE_TABLE_##s,             \
+   LTE_MIPI_TX_EVENT_SIZE_TABLE_##s,            \
+   LTE_MIPI_TX_DATA_SIZE_TABLE_##s,             \
+   LTE_MIPI_TPC_EVENT_SIZE_TABLE_##s,           \
+   LTE_MIPI_PA_TPC_SECTION_DATA_SIZE_##s,       \
+   LTE_MIPI_DPD_TPC_EVENT_SIZE_TABLE_##s,       \
+   LTE_MIPI_DPD_PA_TPC_SECTION_DATA_SIZE_##s,   \
+   LTE_MIPI_ANTRX_EVENT_TABLE_##s,                 \
+   LTE_MIPI_ANTRX_DATA_TABLE_##s,                  \
+   LTE_MIPI_ANTTX_EVENT_TABLE_##s,                 \
+   LTE_MIPI_ANTTX_DATA_TABLE_##s,                  \
+   LTE_MIPI_ANTCA_EVENT_TABLE_##s,                 \
+   LTE_MIPI_ANTCA_DATA_TABLE_##s,                  \
+   LTE_MIPI_ANTRX_EVENT_SIZE_TABLE_##s,            \
+   LTE_MIPI_ANTRX_DATA_SIZE_TABLE_##s,             \
+   LTE_MIPI_ANTTX_EVENT_SIZE_TABLE_##s,            \
+   LTE_MIPI_ANTTX_DATA_SIZE_TABLE_##s,             \
+   LTE_MIPI_ANTCA_EVENT_SIZE_TABLE_##s,            \
+   LTE_MIPI_ANTCA_DATA_SIZE_TABLE_##s,             \
+}
+
+#define EL1_CUSTOM_LTE_MIPI_BYPASS_EVENT_DATA_TABLE(s) \
+{                                                      \
+   LTE_MIPI_BYPASS_TX_EVENT_TABLE_##s,                 \
+   LTE_MIPI_BYPASS_TX_DATA_TABLE_##s,                  \
+   LTE_MIPI_BYPASS_TPC_EVENT_TABLE_##s,                \
+   LTE_MIPI_BYPASS_TPC_DATA_TABLE_##s,                 \
+   LTE_MIPI_BYPASS_PA_TPC_SECTION_DATA_##s,            \
+   LTE_MIPI_DPD_BYPASS_TPC_EVENT_TABLE_##s,            \
+   LTE_MIPI_DPD_BYPASS_TPC_DATA_TABLE_##s,             \
+   LTE_MIPI_DPD_BYPASS_PA_TPC_SECTION_DATA_##s,        \
+   LTE_MIPI_BYPASS_TX_EVENT_SIZE_TABLE_##s,            \
+   LTE_MIPI_BYPASS_TX_DATA_SIZE_TABLE_##s,             \
+   LTE_MIPI_BYPASS_TPC_EVENT_SIZE_TABLE_##s,           \
+   LTE_MIPI_BYPASS_PA_TPC_SECTION_DATA_SIZE_##s,       \
+   LTE_MIPI_DPD_BYPASS_TPC_EVENT_SIZE_TABLE_##s,       \
+   LTE_MIPI_DPD_BYPASS_PA_TPC_SECTION_DATA_SIZE_##s,   \
+}
+#else // IS_MIPI_ANT_TUNER_SUPPORT == 0
+#define EL1_CUSTOM_LTE_MIPI_EVENT_DATA_TABLE(s) \
+{                                               \
+   LTE_MIPI_RX_EVENT_TABLE_##s,                 \
+   LTE_MIPI_RX_DATA_TABLE_##s,                  \
+   LTE_MIPI_TX_EVENT_TABLE_##s,                 \
+   LTE_MIPI_TX_DATA_TABLE_##s,                  \
+   LTE_MIPI_TPC_EVENT_TABLE_##s,                \
+   LTE_MIPI_TPC_DATA_TABLE_##s,                 \
+   LTE_MIPI_PA_TPC_SECTION_DATA_##s,            \
+   LTE_MIPI_DPD_TPC_EVENT_TABLE_##s,            \
+   LTE_MIPI_DPD_TPC_DATA_TABLE_##s,             \
+   LTE_MIPI_DPD_PA_TPC_SECTION_DATA_##s,        \
+   LTE_MIPI_INITIAL_CW_##s,                     \
+   LTE_MIPI_SLEEP_CW_##s,                       \
+   LTE_MIPI_ASM_ISOLATION_DATA_##s,             \
+   LTE_MIPI_RX_EVENT_SIZE_TABLE_##s,            \
+   LTE_MIPI_RX_DATA_SIZE_TABLE_##s,             \
+   LTE_MIPI_TX_EVENT_SIZE_TABLE_##s,            \
+   LTE_MIPI_TX_DATA_SIZE_TABLE_##s,             \
+   LTE_MIPI_TPC_EVENT_SIZE_TABLE_##s,           \
+   LTE_MIPI_PA_TPC_SECTION_DATA_SIZE_##s,       \
+   LTE_MIPI_DPD_TPC_EVENT_SIZE_TABLE_##s,       \
+   LTE_MIPI_DPD_PA_TPC_SECTION_DATA_SIZE_##s,   \
+}
+
+#define EL1_CUSTOM_LTE_MIPI_BYPASS_EVENT_DATA_TABLE(s) \
+{                                                      \
+   LTE_MIPI_BYPASS_TX_EVENT_TABLE_##s,                 \
+   LTE_MIPI_BYPASS_TX_DATA_TABLE_##s,                  \
+   LTE_MIPI_BYPASS_TPC_EVENT_TABLE_##s,                \
+   LTE_MIPI_BYPASS_TPC_DATA_TABLE_##s,                 \
+   LTE_MIPI_BYPASS_PA_TPC_SECTION_DATA_##s,            \
+   LTE_MIPI_DPD_BYPASS_TPC_EVENT_TABLE_##s,            \
+   LTE_MIPI_DPD_BYPASS_TPC_DATA_TABLE_##s,             \
+   LTE_MIPI_DPD_BYPASS_PA_TPC_SECTION_DATA_##s,        \
+   LTE_MIPI_BYPASS_TX_EVENT_SIZE_TABLE_##s,            \
+   LTE_MIPI_BYPASS_TX_DATA_SIZE_TABLE_##s,             \
+   LTE_MIPI_BYPASS_TPC_EVENT_SIZE_TABLE_##s,           \
+   LTE_MIPI_BYPASS_PA_TPC_SECTION_DATA_SIZE_##s,       \
+   LTE_MIPI_DPD_BYPASS_TPC_EVENT_SIZE_TABLE_##s,       \
+   LTE_MIPI_DPD_BYPASS_PA_TPC_SECTION_DATA_SIZE_##s,   \
+}
+#endif//end IS_MIPI_ANT_TUNER_SUPPORT
+
+#else//IS_4G_DPD_SUPPORT ==0
+
+#if IS_MIPI_ANT_TUNER_SUPPORT
+
+#define EL1_CUSTOM_LTE_MIPI_EVENT_DATA_TABLE(s) \
+{                                               \
+   LTE_MIPI_RX_EVENT_TABLE_##s,                 \
+   LTE_MIPI_RX_DATA_TABLE_##s,                  \
+   LTE_MIPI_TX_EVENT_TABLE_##s,                 \
+   LTE_MIPI_TX_DATA_TABLE_##s,                  \
+   LTE_MIPI_TPC_EVENT_TABLE_##s,                \
+   LTE_MIPI_TPC_DATA_TABLE_##s,                 \
+   LTE_MIPI_PA_TPC_SECTION_DATA_##s,            \
+   LTE_MIPI_INITIAL_CW_##s,                     \
+   LTE_MIPI_SLEEP_CW_##s,                       \
+   LTE_MIPI_ASM_ISOLATION_DATA_##s,             \
+   LTE_MIPI_RX_EVENT_SIZE_TABLE_##s,            \
+   LTE_MIPI_RX_DATA_SIZE_TABLE_##s,             \
+   LTE_MIPI_TX_EVENT_SIZE_TABLE_##s,            \
+   LTE_MIPI_TX_DATA_SIZE_TABLE_##s,             \
+   LTE_MIPI_TPC_EVENT_SIZE_TABLE_##s,           \
+   LTE_MIPI_PA_TPC_SECTION_DATA_SIZE_##s,       \
+   LTE_MIPI_ANTRX_EVENT_TABLE_##s,                 \
+   LTE_MIPI_ANTRX_DATA_TABLE_##s,                  \
+   LTE_MIPI_ANTTX_EVENT_TABLE_##s,                 \
+   LTE_MIPI_ANTTX_DATA_TABLE_##s,                  \
+   LTE_MIPI_ANTCA_EVENT_TABLE_##s,                 \
+   LTE_MIPI_ANTCA_DATA_TABLE_##s,                  \
+   LTE_MIPI_ANTRX_EVENT_SIZE_TABLE_##s,            \
+   LTE_MIPI_ANTRX_DATA_SIZE_TABLE_##s,             \
+   LTE_MIPI_ANTTX_EVENT_SIZE_TABLE_##s,            \
+   LTE_MIPI_ANTTX_DATA_SIZE_TABLE_##s,             \
+   LTE_MIPI_ANTCA_EVENT_SIZE_TABLE_##s,            \
+   LTE_MIPI_ANTCA_DATA_SIZE_TABLE_##s,             \
+}
+
+#define EL1_CUSTOM_LTE_MIPI_BYPASS_EVENT_DATA_TABLE(s) \
+{                                                      \
+   LTE_MIPI_BYPASS_TX_EVENT_TABLE_##s,                 \
+   LTE_MIPI_BYPASS_TX_DATA_TABLE_##s,                  \
+   LTE_MIPI_BYPASS_TPC_EVENT_TABLE_##s,                \
+   LTE_MIPI_BYPASS_TPC_DATA_TABLE_##s,                 \
+   LTE_MIPI_BYPASS_PA_TPC_SECTION_DATA_##s,            \
+   LTE_MIPI_BYPASS_TX_EVENT_SIZE_TABLE_##s,            \
+   LTE_MIPI_BYPASS_TX_DATA_SIZE_TABLE_##s,             \
+   LTE_MIPI_BYPASS_TPC_EVENT_SIZE_TABLE_##s,           \
+   LTE_MIPI_BYPASS_PA_TPC_SECTION_DATA_SIZE_##s,       \
+}
+#else// IS_MIPI_ANT_TUNER_SUPPORT == 0
+#define EL1_CUSTOM_LTE_MIPI_EVENT_DATA_TABLE(s) \
+{                                               \
+   LTE_MIPI_RX_EVENT_TABLE_##s,                 \
+   LTE_MIPI_RX_DATA_TABLE_##s,                  \
+   LTE_MIPI_TX_EVENT_TABLE_##s,                 \
+   LTE_MIPI_TX_DATA_TABLE_##s,                  \
+   LTE_MIPI_TPC_EVENT_TABLE_##s,                \
+   LTE_MIPI_TPC_DATA_TABLE_##s,                 \
+   LTE_MIPI_PA_TPC_SECTION_DATA_##s,            \
+   LTE_MIPI_INITIAL_CW_##s,                     \
+   LTE_MIPI_SLEEP_CW_##s,                       \
+   LTE_MIPI_ASM_ISOLATION_DATA_##s,             \
+   LTE_MIPI_RX_EVENT_SIZE_TABLE_##s,            \
+   LTE_MIPI_RX_DATA_SIZE_TABLE_##s,             \
+   LTE_MIPI_TX_EVENT_SIZE_TABLE_##s,            \
+   LTE_MIPI_TX_DATA_SIZE_TABLE_##s,             \
+   LTE_MIPI_TPC_EVENT_SIZE_TABLE_##s,           \
+   LTE_MIPI_PA_TPC_SECTION_DATA_SIZE_##s,       \
+}
+
+#define EL1_CUSTOM_LTE_MIPI_BYPASS_EVENT_DATA_TABLE(s) \
+{                                                      \
+   LTE_MIPI_BYPASS_TX_EVENT_TABLE_##s,                 \
+   LTE_MIPI_BYPASS_TX_DATA_TABLE_##s,                  \
+   LTE_MIPI_BYPASS_TPC_EVENT_TABLE_##s,                \
+   LTE_MIPI_BYPASS_TPC_DATA_TABLE_##s,                 \
+   LTE_MIPI_BYPASS_PA_TPC_SECTION_DATA_##s,            \
+   LTE_MIPI_BYPASS_TX_EVENT_SIZE_TABLE_##s,            \
+   LTE_MIPI_BYPASS_TX_DATA_SIZE_TABLE_##s,             \
+   LTE_MIPI_BYPASS_TPC_EVENT_SIZE_TABLE_##s,           \
+   LTE_MIPI_BYPASS_PA_TPC_SECTION_DATA_SIZE_##s,       \
+}
+#endif//end IS_MIPI_ANT_TUNER_SUPPORT
+#endif//end IS_4G_DPD_SUPPORT
+
+#if IS_4G_TX_POWER_OFFSET_SUPPORT || IS_4G_SAR_TX_POWER_OFFSET_SUPPORT
+#define LTE_TX_POWER_OFFSET_DATA_TABLE(s)              \
+{                                                      \
+   {                                                   \
+      &LTE_TX_POWER_OFFSET_DATA(BAND_INDICATOR0,  s),  \
+      &LTE_TX_POWER_OFFSET_DATA(BAND_INDICATOR1,  s),  \
+      &LTE_TX_POWER_OFFSET_DATA(BAND_INDICATOR2,  s),  \
+      &LTE_TX_POWER_OFFSET_DATA(BAND_INDICATOR3,  s),  \
+      &LTE_TX_POWER_OFFSET_DATA(BAND_INDICATOR4,  s),  \
+      &LTE_TX_POWER_OFFSET_DATA(BAND_INDICATOR5,  s),  \
+      &LTE_TX_POWER_OFFSET_DATA(BAND_INDICATOR6,  s),  \
+      &LTE_TX_POWER_OFFSET_DATA(BAND_INDICATOR7,  s),  \
+      &LTE_TX_POWER_OFFSET_DATA(BAND_INDICATOR8,  s),  \
+      &LTE_TX_POWER_OFFSET_DATA(BAND_INDICATOR9,  s),  \
+      &LTE_TX_POWER_OFFSET_DATA(BAND_INDICATOR10, s),  \
+      &LTE_TX_POWER_OFFSET_DATA(BAND_INDICATOR11, s),  \
+      &LTE_TX_POWER_OFFSET_DATA(BAND_INDICATOR12, s),  \
+      &LTE_TX_POWER_OFFSET_DATA(BAND_INDICATOR13, s),  \
+      &LTE_TX_POWER_OFFSET_DATA(BAND_INDICATOR14, s),  \
+      &LTE_TX_POWER_OFFSET_DATA(BAND_INDICATOR15, s),  \
+      &LTE_TX_POWER_OFFSET_DATA(BAND_INDICATOR16, s),  \
+      &LTE_TX_POWER_OFFSET_DATA(BAND_INDICATOR17, s),  \
+      &LTE_TX_POWER_OFFSET_DATA(BAND_INDICATOR18, s),  \
+      &LTE_TX_POWER_OFFSET_DATA(BAND_INDICATOR19, s),  \
+      &LTE_TX_POWER_OFFSET_DATA(BAND_INDICATOR20, s),  \
+   },                                                  \
+}
+#endif
+
+#if IS_4G_HPUE_FEATURE_SUPPORT
+#define LTE_HPUE_PARAMETER_TABLE(s)\
+{                                  \
+   LTE_HPUE_ENA_##s,               \
+   {                               \
+      BAND_HPUE_INDICATOR0_##s,    \
+      BAND_HPUE_INDICATOR1_##s,    \
+      BAND_HPUE_INDICATOR2_##s,    \
+   }                               \
+}
+
+#define LTE_AMPR_NS04_HPUE_PARAMETER_TABLE(s) LTE_AMPR_NS4_HPUE_##s
+
+
+#endif
+#endif /* _LTE_CUSTOM_DRDI_H_*/

@@ -1,0 +1,6 @@
+        PCORE_EXTRAM_RXDATA$$ZI$$Base = .;		
+        * (EXTRAM_RXDATA)
+        . = ALIGN(4);
+        PCORE_EXTRAM_RXDATA$$ZI$$Limit = .;
+        PCORE_EXTRAM_RXDATA$$ZI$$Length = ABSOLUTE(PCORE_EXTRAM_RXDATA$$ZI$$Limit - PCORE_EXTRAM_RXDATA$$ZI$$Base);
+        LONG(0);

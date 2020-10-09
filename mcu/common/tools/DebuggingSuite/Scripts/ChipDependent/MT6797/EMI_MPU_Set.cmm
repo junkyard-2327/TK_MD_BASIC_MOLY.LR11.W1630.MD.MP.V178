@@ -1,0 +1,207 @@
+; ------------------------------------
+; configuration
+; 0 is no protection
+; 1 is RW for secure access
+; 2 is RW for secure access and non-secure read access
+; 3 is RW for secure access and non-secure write access
+; 4 is R for secure/non-secure access
+; 5 is RW forbidden
+; 6 is security write forbidden
+;0xC3083000 ? 0x24541689 // Unlock
+;0xC3000160 ? 0x1C001C01 // region0: 0x1C00_0000 ~ 0x1C00FFFF
+;0xC30001A0 ? 0x924; // set region0: domain0~domain3 readonly
+;0xC30001A4 ? 0x924; // set region0: domain4~domain7 readonly
+&EMI_ROEND=V.VALUE(&Image$$CACHED_EXTSRAM$$Base)
+;&L1RWZI=((&EMI_ROEND)&(0x0FFFFFFF)|(0x40000000))
+;&EMIMPU_ROM=(((&L1RWZI>>0x10)+0x1)|0x40000000)
+&L1RWZI=((&EMI_ROEND)&(0x0FFFFFFF))
+;0x0~L1RWZI
+&EMIMPU_ROM=((&L1RWZI>>0x10)-0x1)
+
+&R0D0_APC=4
+&R0D1_APC=4
+&R0D2_APC=4
+&R0D3_APC=4
+&R0D4_APC=4
+&R0D5_APC=4
+&R0D6_APC=4
+&R0D7_APC=4
+
+&R1D0_APC=4
+&R1D1_APC=4
+&R1D2_APC=4
+&R1D3_APC=4
+&R1D4_APC=0
+&R1D5_APC=0
+&R1D6_APC=0
+&R1D7_APC=0
+
+&R2D0_APC=0
+&R2D1_APC=0
+&R2D2_APC=0
+&R2D3_APC=0
+&R2D4_APC=0
+&R2D5_APC=0
+&R2D6_APC=0
+&R2D7_APC=0
+
+&R3D0_APC=0
+&R3D1_APC=0
+&R3D2_APC=0
+&R3D3_APC=0
+&R3D4_APC=0
+&R3D5_APC=0
+&R3D6_APC=0
+&R3D7_APC=0
+
+&R4D0_APC=0
+&R4D1_APC=0
+&R4D2_APC=0
+&R4D3_APC=0
+&R4D4_APC=0
+&R4D5_APC=0
+&R4D6_APC=0
+&R4D7_APC=0
+
+&R5D0_APC=0
+&R5D1_APC=0
+&R5D2_APC=0
+&R5D3_APC=0
+&R5D4_APC=0
+&R5D5_APC=0
+&R5D6_APC=0
+&R5D7_APC=0
+
+&R6D0_APC=0
+&R6D1_APC=0
+&R6D2_APC=0
+&R6D3_APC=0
+&R6D4_APC=0
+&R6D5_APC=0
+&R6D6_APC=0
+&R6D7_APC=0
+
+&R7D0_APC=0
+&R7D1_APC=0
+&R7D2_APC=0
+&R7D3_APC=0
+&R7D4_APC=0
+&R7D5_APC=0
+&R7D6_APC=0
+&R7D7_APC=0
+
+&R0LOCK=0
+&R1LOCK=0
+&R2LOCK=0
+&R3LOCK=0
+&R4LOCK=0
+&R5LOCK=0
+&R6LOCK=0
+&R7LOCK=0
+; ------------------------------------
+&BASE_ADDR_EMI=0xC3000000
+&BASE_ADDR_MEMSYS=0xC3080000
+
+LOCAL &reg_val
+LOCAL &reg_val_1
+LOCAL &reg_val_2
+LOCAL &reg_val_3
+LOCAL &reg_val_4
+LOCAL &reg_val_5
+LOCAL &reg_val_6
+LOCAL &reg_val_7
+
+;Unlock EMI Password
+D.S SD:&BASE_ADDR_MEMSYS+0x3000 %LE %LONG 0x24541689; MEMSYS_PASSWORD
+
+; Region 0's MPU address
+D.S SD:&BASE_ADDR_EMI+0x0160 %LE %LONG &EMIMPU_ROM  
+; Region 1's MPU address
+D.S SD:&BASE_ADDR_EMI+0x0168 %LE %LONG 0x40004FFF
+; Region 2's MPU address
+D.S SD:&BASE_ADDR_EMI+0x0170 %LE %LONG 0x40004FFF
+; Region 3's MPU address
+D.S SD:&BASE_ADDR_EMI+0x0178 %LE %LONG 0x40004FFF
+; Region 4's MPU address
+D.S SD:&BASE_ADDR_EMI+0x0180 %LE %LONG 0x40004FFF
+; Region 5's MPU address
+D.S SD:&BASE_ADDR_EMI+0x0188 %LE %LONG 0x40004FFF
+; Region 6's MPU address
+D.S SD:&BASE_ADDR_EMI+0x0190 %LE %LONG 0x40004FFF
+; Region 7's MPU address
+D.S SD:&BASE_ADDR_EMI+0x0198 %LE %LONG 0x40004FFF
+
+&reg_val=(&R1LOCK<<0x1F)|(&R1D3_APC<<0x19)|(&R1D2_APC<<0x16)|(&R1D1_APC<<0x13)|(&R1D0_APC<<0x10)|(&R0LOCK<<0xF)|(&R0D3_APC<<9)|(&R0D2_APC<<6)|(&R0D1_APC<<3)|(&R0D0_APC<<0)
+; Region 0 and Region 1's domain 0 ~ domain 3 R or W
+D.S SD:&BASE_ADDR_EMI+0x01A0 %LE %LONG &reg_val
+
+&reg_val_1=(&R1D7_APC<<0x19)|(&R1D6_APC<<0x16)|(&R1D5_APC<<0x13)|(&R1D4_APC<<0x10)|(&R0D7_APC<<9)|(&R0D6_APC<<6)|(&R0D5_APC<<3)|(&R0D4_APC<<0)
+; Region 0 and Region 1's domain 4 ~ domain 7 R or W
+D.S SD:&BASE_ADDR_EMI+0x01A4 %LE %LONG &reg_val_1
+
+
+&reg_val_2=(&R3LOCK<<0x1F)|(&R3D3_APC<<0x19)|(&R3D2_APC<<0x16)|(&R3D1_APC<<0x13)|(&R3D0_APC<<0x10)|(&R2LOCK<<0xF)|(&R2D3_APC<<9)|(&R2D2_APC<<6)|(&R2D1_APC<<3)|(&R2D0_APC<<0)
+; Region 2 and Region 3's domain 0 ~ domain 3 R or W
+D.S SD:&BASE_ADDR_EMI+0x01A8 %LE %LONG &reg_val_2
+
+&reg_val_3=(&R3D7_APC<<0x19)|(&R3D6_APC<<0x16)|(&R3D5_APC<<0x13)|(&R3D4_APC<<0x10)|(&R2D7_APC<<9)|(&R2D6_APC<<6)|(&R2D5_APC<<3)|(&R2D4_APC<<0)
+; Region 2 and Region 3's domain 4 ~ domain 7 R or W
+D.S SD:&BASE_ADDR_EMI+0x01AC %LE %LONG &reg_val_3
+
+&reg_val_4=(&R5LOCK<<0x1F)|(&R5D3_APC<<0x19)|(&R5D2_APC<<0x16)|(&R5D1_APC<<0x13)|(&R5D0_APC<<0x10)|(&R4LOCK<<0xF)|(&R4D3_APC<<9)|(&R4D2_APC<<6)|(&R4D1_APC<<3)|(&R4D0_APC<<0)
+; Region 4 and Region 5's domain 0 ~ domain 3 R or W
+D.S SD:&BASE_ADDR_EMI+0x01B0 %LE %LONG &reg_val_4
+
+&reg_val_5=(&R5D7_APC<<0x19)|(&R5D6_APC<<0x16)|(&R5D5_APC<<0x13)|(&R5D4_APC<<0x10)|(&R4D7_APC<<9)|(&R4D6_APC<<6)|(&R4D5_APC<<3)|(&R4D4_APC<<0)
+; Region 4 and Region 5's domain 4 ~ domain 7 R or W
+D.S SD:&BASE_ADDR_EMI+0x01B4 %LE %LONG &reg_val_5
+
+&reg_val_6=(&R7LOCK<<0x1F)|(&R7D3_APC<<0x19)|(&R7D2_APC<<0x16)|(&R7D1_APC<<0x13)|(&R7D0_APC<<0x10)|(&R6LOCK<<0xF)|(&R6D3_APC<<9)|(&R6D2_APC<<6)|(&R6D1_APC<<3)|(&R6D0_APC<<0)
+; Region 6 and Region 7's domain 0 ~ domain 3 R or W
+D.S SD:&BASE_ADDR_EMI+0x01B8 %LE %LONG &reg_val_6
+
+&reg_val_7=(&R7D7_APC<<0x19)|(&R7D6_APC<<0x16)|(&R7D5_APC<<0x13)|(&R7D4_APC<<0x10)|(&R6D7_APC<<9)|(&R6D6_APC<<6)|(&R6D5_APC<<3)|(&R6D4_APC<<0)
+; Region 6 and Region 7's domain 4 ~ domain 7 R or W
+D.S SD:&BASE_ADDR_EMI+0x01BC %LE %LONG &reg_val_7
+
+; Region 8's MPU address
+;D.S SD:&BASE_ADDR_EMI+0x0260 %LE %LONG 0x00001FFF  
+; Region 9's MPU address
+;D.S SD:&BASE_ADDR_EMI+0x0268 %LE %LONG 0x00001FFF
+; Region 10's MPU address
+;D.S SD:&BASE_ADDR_EMI+0x0270 %LE %LONG 0x00001FFF
+; Region 11's MPU address
+;D.S SD:&BASE_ADDR_EMI+0x0278 %LE %LONG 0x00001FFF
+; Region 12's MPU address
+;D.S SD:&BASE_ADDR_EMI+0x0280 %LE %LONG 0x00001FFF
+; Region 13's MPU address
+;D.S SD:&BASE_ADDR_EMI+0x0288 %LE %LONG 0x00001FFF
+; Region 14's MPU address
+;D.S SD:&BASE_ADDR_EMI+0x0290 %LE %LONG 0x00001FFF
+; Region 15's MPU address
+;D.S SD:&BASE_ADDR_EMI+0x0298 %LE %LONG 0x00001FFF
+
+; Region 8 and Region 9's domain 0 ~ domain 3 R or W
+D.S SD:&BASE_ADDR_EMI+0x02A0 %LE %LONG 0x0
+; Region 8 and Region 9's domain 4 ~ domain 7 R or W
+D.S SD:&BASE_ADDR_EMI+0x02A4 %LE %LONG 0x0
+
+; Region 10 and Region 11's domain 0 ~ domain 3 R or W
+D.S SD:&BASE_ADDR_EMI+0x02A8 %LE %LONG 0x0
+; Region 10 and Region 11's domain 4 ~ domain 7 R or W
+D.S SD:&BASE_ADDR_EMI+0x02AC %LE %LONG 0x0
+
+; Region 12 and Region 13's domain 0 ~ domain 3 R or W
+D.S SD:&BASE_ADDR_EMI+0x02B0 %LE %LONG 0x0
+
+; Region 12 and Region 13's domain 4 ~ domain 7 R or W
+D.S SD:&BASE_ADDR_EMI+0x02B4 %LE %LONG 0x0
+
+; Region 14 and Region 15's domain 0 ~ domain 3 R or W
+D.S SD:&BASE_ADDR_EMI+0x02B8 %LE %LONG 0x0
+
+; Region 14 and Region 15's domain 4 ~ domain 7 R or W
+D.S SD:&BASE_ADDR_EMI+0x02BC %LE %LONG 0x0
+
+;Lock EMI Password
+D.S SD:&BASE_ADDR_MEMSYS+0x3000 %LE %LONG 0x0; MEMSYS_PASSWORD

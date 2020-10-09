@@ -1,0 +1,57 @@
+;===============================================
+;CMM START
+;===============================================
+
+; ==================
+; Set up port info
+; ==================
+Do MD_DualCoreDebugging_L1Core.csf
+
+; ==================
+; Open debugging tool bar
+; ==================
+menu.reset
+menu.reprogram MD_DualCoreDebugging_PlatformInit
+
+; ==================
+; Open Customer tool bar
+; ==================
+Do MD_L_Customer_ToolBar.cmm
+
+;VectorCatch.RESET OFF
+
+; ==================
+; load L1Core symbol
+; ==================
+DO MD_L_LoadSymbol.cmm
+
+; ==================
+; attach on L1CORE
+; ==================
+DO MD_L_Attach.cmm
+
+; ==================
+; set L1Core PC to INT_Initialize
+; untrap L1Core from bootslave
+; ==================
+D.S SD:0xF60F0104 %LE %LONG 0x6291F8EE
+D.S SD:0xF60F0100 %LE %LONG 0x1
+;R.S PC VARADDR(INT_Initialize)
+
+; ==================
+; set breakpoint
+; ==================
+DO MD_DualCoreDebugging_L_BreakPoint.cmm
+
+winclear
+winpos 0% 0% 70% 80%
+d.l
+winpos 70% 0% 30% 80%
+Register
+winpos 0% 76% 50% 50%
+Break.List
+winpos 50% 76% 50% 50%
+sYmbol.Browse
+
+PRINT "Init Done"
+ENDDO

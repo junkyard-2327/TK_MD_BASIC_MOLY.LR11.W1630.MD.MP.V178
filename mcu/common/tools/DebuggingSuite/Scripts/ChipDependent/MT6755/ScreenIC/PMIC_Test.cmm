@@ -1,0 +1,32 @@
+
+CPUTYPE CORTEXR4
+system.cpu cortexr4
+system.multicore SWDP on
+
+; cloase all windows to avoid read DRAM before initializing DRAM
+;WinCloseAll
+
+; attach APCORE
+DO ap_attach.cmm
+
+; load elf
+D.LOAD.ELF PMIC_Init.elf
+GO
+WAIT 1s
+DO ap_attach.cmm
+PMIC_INIT_POLLING:
+&VAL=D.L(EAHB:0xC359009C)
+IF &VAL!=0x1
+(
+    PRINT "Reg PMIC Init Fail!"
+    GOTO PMIC_TEST_FAIL
+)
+&VAL=D.L(UM:VARADDR(g_check_bringup))
+IF &VAL!=0x1
+(
+    PRINT "Sym PMIC Init Fail!"
+    GOTO PMIC_TEST_FAIL
+)
+
+PRINT "PMIC Init Done!"
+PMIC_TEST_FAIL:

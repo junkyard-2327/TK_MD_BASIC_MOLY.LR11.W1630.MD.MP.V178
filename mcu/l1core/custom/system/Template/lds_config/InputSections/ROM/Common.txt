@@ -1,0 +1,14 @@
+        *libel1d.a: (.text*)
+        *libel1d.a: (.rodata*)
+        * (EXTSRAM_SHARE_BUFFER)
+        * (SNORCODE*)
+        * (SECOND_PART*)
+        * (EXCLUDE_FILE (*libsst.a *libdhl.a *drv_l1gdma.obj *init_memory_stack.obj) .text*)
+        ROM_TEXT$$Limit = . ;
+        * (EXCLUDE_FILE (*libdhl.a) .rodata*)
+        * (i.*)
+        * (.ARM.extab*)
+        SST_PROTECT$$Base = . ;
+        * (.text*)
+        * (.rodata*)
+        KEEP(* (Keep_CODE))

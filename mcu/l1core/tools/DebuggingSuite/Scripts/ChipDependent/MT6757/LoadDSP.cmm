@@ -1,0 +1,28 @@
+GLOBAL &DSP_BIN_NC_ADDR
+&DSP_BIN_NC_ADDR=Var.VALUE(dsp_bin_ro)
+IF &DSP_BIN_NC_ADDR>0xA0000000
+    &DSP_BIN_NC_ADDR=&DSP_BIN_NC_ADDR-0xA0000000
+
+local &result
+dialog.yesno "Do you need to load DSP bin ?"
+entry &result
+if &result
+( 
+	; try to load patial image for checking
+	d.load.binary dsp.bin &DSP_BIN_NC_ADDR++0x200 /nosymbol
+	
+	&IMG_HDR_MAGIC=Var.Value(dsp_bin_ro[0])
+	
+	IF (&IMG_HDR_MAGIC==0x58881688)
+	(
+		PRINT "The dsp image contains IMG HEADER, bypass it!"
+		d.load.binary dsp.bin &DSP_BIN_NC_ADDR /SKIP 0x200 /nosymbol
+		PRINT "Load DSP image done (the dsp image contains IMG HEADER, I bypassed it)"
+	)
+	else
+	(
+		PRINT "The dsp image dose not contain IMG HEADER"
+		d.load.binary dsp.bin &DSP_BIN_NC_ADDR /nosymbol
+		PRINT "Load DSP image done"	
+	)
+)

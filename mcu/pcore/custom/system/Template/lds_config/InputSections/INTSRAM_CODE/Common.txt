@@ -1,0 +1,3 @@
+            *libkal.a: (INTSRAM_ROCODE*)
+            * (INTSRAM_ROCODE*)
+            * (INTERNBLOCK2_RO)

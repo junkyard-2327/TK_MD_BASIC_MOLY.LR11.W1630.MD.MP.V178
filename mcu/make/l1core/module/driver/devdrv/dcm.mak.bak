@@ -1,0 +1,12 @@
+##############################################################################
+#                             devdrv/gpt                                     #
+##############################################################################
+SRC_LIST  += ${CORE_ROOT}/driver/devdrv/dcm/src/drv_dcm.c \
+             ${CORE_ROOT}/driver/devdrv/dcm/src/dcm_service.c \
+             ${CORE_ROOT}/driver/devdrv/dcm/src/drv_lpm.c
+
+SRC_PATH  += ${CORE_ROOT}/driver/devdrv/dcm/src
+
+INC_DIR   += ${CORE_ROOT}/driver/devdrv/dcm/inc \
+             ${CORE_ROOT}/interface/driver/cirq \
+

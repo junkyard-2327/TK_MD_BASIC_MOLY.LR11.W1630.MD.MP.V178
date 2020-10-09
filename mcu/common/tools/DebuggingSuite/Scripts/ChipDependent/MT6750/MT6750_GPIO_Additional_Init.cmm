@@ -1,0 +1,60 @@
+
+PRINT "MD GPIO Configuration by CMM"
+;;;;;;;;;; register base
+; MD access AP view: 0xC, AP access AP view: 0x1
+&AP_GPIO_base=0xC0005000
+&mclass="pm"
+
+&tmp1=0
+&tmp2=0
+
+;Uart init
+&GPIO_BASE=0xC0005000
+&GPIO_CFG1_BASE=0xC0002200
+&GPIO_CFG3_BASE=0xC0002600
+;GPIO 13 --> MD_URXD0, GPIO 14 --> MD_UTXD0
+;Set GPIO mode, bit[14:9]
+D.S SD:&GPIO_BASE+0x0310 %LE %LONG (0x0|(data.long(SD:&GPIO_BASE+0x0310)&~(0x7E00)))
+;URXD0 pull up enable bit[11]
+;D.S SD:&GPIO_CFG1_BASE+0x60 %LE %LONG (0x0800|data.long(SD:&GPIO_CFG1_BASE+0x60))
+;D.S SD:&GPIO_CFG1_BASE+0x80 %LE %LONG (0x0800|data.long(SD:&GPIO_CFG1_BASE+0x80))
+
+;GPIO 105 --> MD_URXD0, GPIO 106 --> MD_UTXD0
+;Set GPIO mode, bit[21:16]
+D.S SD:&GPIO_BASE+0x03A0 %LE %LONG (0x1B0000|(data.long(SD:&GPIO_BASE+0x03A0)&~(0x3F0000)))
+;URXD0 pull up enable bit[22]
+D.S SD:&GPIO_CFG3_BASE+0x60 %LE %LONG (0x400000|data.long(SD:&GPIO_CFG3_BASE+0x60))
+D.S SD:&GPIO_CFG3_BASE+0x80 %LE %LONG (0x400000|data.long(SD:&GPIO_CFG3_BASE+0x80))
+
+
+
+
+
+;PRINT "------------------------------------------------------------------------"
+;PRINT "BSI driving config"
+;PRINT "-------------------"
+;&GPIO_DRV0_G2_9=(&AP_GPIO_base+0x0A74)
+;&GPIO_DRV0_G2_9_MASK=0x60
+;&GPIO_DRV0_G2_9_VAL=0x20
+;&tmp1=DATA.LONG(&mclass:&GPIO_DRV0_G2_9)
+;&tmp2=(((&tmp1)&(~&GPIO_DRV0_G2_9_MASK))|(&GPIO_DRV0_G2_9_VAL))
+;PRINT "GPIO_DRV0_G2_9(0x" &GPIO_DRV0_G2_9 ") = 0x" FORMAT.HEX(8,&tmp1)
+;PRINT "GPIO_DRV0_G2_9_MASK = 0x" FORMAT.HEX(8,&GPIO_DRV0_G2_9_MASK)
+;PRINT "GPIO_DRV0_G2_9_VAL = 0x" FORMAT.HEX(8,&GPIO_DRV0_G2_9_VAL)
+;PRINT "        TARGET = 0x" FORMAT.HEX(8,&tmp2)
+;Data.Set &mclass:&GPIO_DRV0_G2_9 %LE %LONG &tmp2
+
+;&GPIO_DRV0_G3_0=(&AP_GPIO_base+0x1B70)
+;&GPIO_DRV0_G3_0_MASK=0x06
+;&GPIO_DRV0_G3_0_VAL=0x02
+;&tmp1=DATA.LONG(&mclass:&GPIO_DRV0_G3_0)
+;&tmp2=(((&tmp1)&(~&GPIO_DRV0_G3_0_MASK))|(&GPIO_DRV0_G3_0_VAL))
+;PRINT "GPIO_DRV0_G3_0(0x" &GPIO_DRV0_G3_0 ") = 0x" FORMAT.HEX(8,&tmp1)
+;PRINT "GPIO_DRV0_G3_0_MASK = 0x" FORMAT.HEX(8,&GPIO_DRV0_G3_0_MASK)
+;PRINT "GPIO_DRV0_G3_0_VAL = 0x" FORMAT.HEX(8,&GPIO_DRV0_G3_0_VAL)
+;PRINT " 	   TARGET = 0x" FORMAT.HEX(8,&tmp2)
+;Data.Set &mclass:&GPIO_DRV0_G3_0 %LE %LONG &tmp2
+
+PRINT "MD GPIO Configuration Completed"
+
+

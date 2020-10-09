@@ -1,0 +1,29 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ECTDSP.men
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ADD
+TOOLBAR
+(
+	SEPARATOR
+	TOOLITEM "Break DSPs when CR4s break" "DO ECTDSP.cmm"
+	[
+
+
+RBBB  BBBB BBBBB
+BR    B      B
+BBRB  B      B
+B  R  B      B
+BBBBR BBBB   B
+     R
+      R
+BBBB   RBB  BBB
+B   B B R   B  B
+B   B  BBR  BBB
+B   B     R B    
+BBBB   BBB RB   
+            
+           
+	]
+
+	SEPARATOR
+)

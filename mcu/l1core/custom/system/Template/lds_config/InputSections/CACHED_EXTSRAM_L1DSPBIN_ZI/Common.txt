@@ -1,0 +1,5 @@
+         . = ALIGN(0x10000);   /* for dsp and rmpu, base end and must align 64KB */
+         * (DSP_BIN_ZI)
+         LONG(0);              /* dummy word to avoid empty section */
+         . = ALIGN(0x10000);
+         L1CORE_DSP$$Limit = . ;/* to be get by pcore */

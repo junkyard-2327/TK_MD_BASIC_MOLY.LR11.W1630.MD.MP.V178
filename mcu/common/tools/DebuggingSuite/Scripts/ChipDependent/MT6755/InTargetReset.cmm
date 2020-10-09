@@ -1,0 +1,10 @@
+;================================
+;Whole system reset cmm
+;================================
+
+
+sys.m prepare
+Data.Set EAHB:0x93670100 %Long 0x55000000
+Data.Set EAHB:0x93670118 %Long 0xBFFFFFF7 // workaround for bootrom reset in FPGA
+Data.Set EAHB:0x93670304 %Long 0x16880001
+system.down

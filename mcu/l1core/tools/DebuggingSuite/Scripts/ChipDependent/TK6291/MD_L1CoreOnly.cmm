@@ -1,0 +1,84 @@
+;===============================================
+;CMM START
+;===============================================
+
+winclear
+AREA.RESet
+AREA.Create dram
+AREA.Select dram
+AREA.view   dram
+AREA.Clear  dram
+
+;DO PMIC_Init.cmm
+
+VectorCatch.RESET OFF
+
+; ==================
+; Open Customer tool bar
+; ==================
+Do MD_L_Customer_ToolBar.cmm
+
+; ==================
+; attach on L1CORE
+; ==================
+DO MD_L_Attach.cmm
+
+; ==================
+; DO Misc HW Config
+; ==================
+DO MD_HW_Config_Misc.cmm
+
+; ==================
+; WDT Disable for load code to long
+; ==================
+DO disable_WDT.cmm
+
+; ==================
+; EMI Initialize
+; ==================
+DO emi_init.cmm AP_Attach.cmm MD_L_Attach.cmm
+
+; ==================
+; load L1Core code
+; ==================
+; define and init elf,src,bin path
+GLOBAL &OPT_MD_L_ELF_PATH
+GLOBAL &OPT_MD_L_SRC_PATH
+GLOBAL &OPT_MD_L_BIN_PATH
+DO L_BuildInfo.cmm
+
+; load elf and source code
+D.LOAD.ELF &OPT_MD_L_ELF_PATH /RELPATH /PATH &OPT_MD_L_SRC_PATH /PATH &OPT_MD_L_SRC_PATH/l1core /PATH &OPT_MD_L_SRC_PATH/common
+
+; ==================
+; Initialize boot vector in TCM
+; ==================
+data.copy Load$$INTSRAM_CODE$$Base--(Load$$INTSRAM_CODE$$Base+0x40) 0x0
+
+; set PC to INT_Initialize
+R.S PC VARADDR(INT_Initialize)
+
+; set needed breakpoint
+setbreak INT_Initialize %hw
+setbreak kal_fatal_error_handler_int %hw
+setbreak kal_assert_fail_specific %hw
+setbreak IdleTask %hw
+setbreak TCCT_Schedule %hw
+
+winclear
+winpos 0% 0% 70% 80%
+d.l
+winpos 70% 0% 30% 80%
+Register
+winpos 0% 76% 50% 50%
+Break.List
+winpos 50% 76% 50% 50%
+sYmbol.Browse
+
+menu.reprogram LoadDSP
+
+;===============================================
+;CMM END
+;===============================================
+PRINT "Init Done"
+ENDDO

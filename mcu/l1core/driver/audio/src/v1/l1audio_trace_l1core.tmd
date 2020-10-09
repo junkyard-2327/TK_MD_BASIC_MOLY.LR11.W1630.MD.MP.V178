@@ -1,0 +1,234 @@
+/*****************************************************************************
+*  Copyright Statement:
+*  --------------------
+*  This software is protected by Copyright and the information contained
+*  herein is confidential. The software may not be copied and the information
+*  contained herein may not be used or disclosed except with the written
+*  permission of MediaTek Inc. (C) 2005
+*
+*  BY OPENING THIS FILE, BUYER HEREBY UNEQUIVOCALLY ACKNOWLEDGES AND AGREES
+*  THAT THE SOFTWARE/FIRMWARE AND ITS DOCUMENTATIONS ("MEDIATEK SOFTWARE")
+*  RECEIVED FROM MEDIATEK AND/OR ITS REPRESENTATIVES ARE PROVIDED TO BUYER ON
+*  AN "AS-IS" BASIS ONLY. MEDIATEK EXPRESSLY DISCLAIMS ANY AND ALL WARRANTIES,
+*  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF
+*  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR NONINFRINGEMENT.
+*  NEITHER DOES MEDIATEK PROVIDE ANY WARRANTY WHATSOEVER WITH RESPECT TO THE
+*  SOFTWARE OF ANY THIRD PARTY WHICH MAY BE USED BY, INCORPORATED IN, OR
+*  SUPPLIED WITH THE MEDIATEK SOFTWARE, AND BUYER AGREES TO LOOK ONLY TO SUCH
+*  THIRD PARTY FOR ANY WARRANTY CLAIM RELATING THERETO. MEDIATEK SHALL ALSO
+*  NOT BE RESPONSIBLE FOR ANY MEDIATEK SOFTWARE RELEASES MADE TO BUYER'S
+*  SPECIFICATION OR TO CONFORM TO A PARTICULAR STANDARD OR OPEN FORUM.
+*
+*  BUYER'S SOLE AND EXCLUSIVE REMEDY AND MEDIATEK'S ENTIRE AND CUMULATIVE
+*  LIABILITY WITH RESPECT TO THE MEDIATEK SOFTWARE RELEASED HEREUNDER WILL BE,
+*  AT MEDIATEK'S OPTION, TO REVISE OR REPLACE THE MEDIATEK SOFTWARE AT ISSUE,
+*  OR REFUND ANY SOFTWARE LICENSE FEES OR SERVICE CHARGE PAID BY BUYER TO
+*  MEDIATEK FOR SUCH MEDIATEK SOFTWARE AT ISSUE.
+*
+*  THE TRANSACTION CONTEMPLATED HEREUNDER SHALL BE CONSTRUED IN ACCORDANCE
+*  WITH THE LAWS OF THE STATE OF CALIFORNIA, USA, EXCLUDING ITS CONFLICT OF
+*  LAWS PRINCIPLES.  ANY DISPUTES, CONTROVERSIES OR CLAIMS ARISING THEREOF AND
+*  RELATED THERETO SHALL BE SETTLED BY ARBITRATION IN SAN FRANCISCO, CA, UNDER
+*  THE RULES OF THE INTERNATIONAL CHAMBER OF COMMERCE (ICC).
+*
+*****************************************************************************/
+/*****************************************************************************
+ *
+ * Filename:
+ * ---------
+ *   l1audio.tmd
+ *
+ * Project:
+ * --------
+ *   Maui_Software
+ *
+ * Description:
+ * ------------
+ *   Trace messages of L1audio
+ *
+ * Author:
+ * -------
+ *   Phil Hsieh (mtk00209)
+ *
+ *============================================================================
+ *             HISTORY
+ * Below this line, this part is controlled by PVCS VM. DO NOT MODIFY!!
+ *------------------------------------------------------------------------------
+ * $Revision:   1.12  $
+ * $Modtime:   Jun 26 2005 23:25:38  $
+ * $Log:   //mtkvs01/vmdata/Maui_sw/archives/mcu/l1audio/l1audio_trace.tmd-arc  $
+ *
+ * 05 11 2016 thomas.chen
+ * [MOLY00177679] [CU Pre-test][魅族Z180][MT6750][?4G][第一?摸底??]???音通??束后接??行窄??音通?，接通?MT端??高清?音HD??
+ * 	
+ * 	.
+ *
+ * 05 05 2016 fu-shing.ju
+ * [MOLY00174395] [EVS] Speech Driver
+ * EVS Speech Driver.
+ *
+ * 05 03 2016 kuenyeh.hsieh
+ * [MOLY00175495] [OpenDSP] Control source of echo reference buffer - General
+ *
+ * 03 24 2016 kuenyeh.hsieh
+ * [MOLY00170948] [Blocking][MT6755][Jade M6][MP3][MTBF][Lab][HQ][Ericsson]":(MCU_PCORE) [ASSERT] file:pcore/driver/audio/src/v1/sp_enhance.c line:2129"during MTBF test.
+ *
+ * 02 25 2016 ys.hsieh
+ * [MOLY00164966] 4G_G.711 speech driver porting
+ * 4G_G.711 speech driver porting (W1603)
+ *
+ * 01 13 2016 kuenyeh.hsieh
+ * [MOLY00159919]Sync OpenDSP code to W1539.MD.MP
+ *
+ * 10 26 2015 daniel.lu
+ * [MOLY00145680] Speech aux function phase in(VM SN, VM timestamp,etc.)
+ * Phase in OpenDSP.
+ *
+ * 08 18 2015 thomas.chen
+ * [MOLY00137836] [Jade-L1][MP1][BT][Carkit IOT][歌?]dial out red screen occur
+ * .
+ *
+ * 07 15 2015 daniel.lu
+ * [MOLY00128810] MT6755 speech ENH SAL check in
+ * MT6755 speech ENH SAL check in
+ *
+ * 06 11 2015 ting-ni.chen
+ * [MOLY00120200] 6291Plus development
+ * 6291 L 1trace modification.
+ *
+ * 05 25 2015 thomas.chen
+ * [MOLY00115639] Add PS trace in L1Core
+ * .
+ *
+ * 05 22 2015 thomas.chen
+ * [MOLY00115635] SpeechDriver  RegisterBackup in L1Core
+ * .
+ *
+ 
+*
+*   Rev 1.0   Sep 29 2003 12:47:50   admin
+*Initial revision.
+ *------------------------------------------------------------------------------
+ * Upper this line, this part is controlled by PVCS VM. DO NOT MODIFY!!
+ *============================================================================
+ ****************************************************************************/
+
+[Default]
+	LCORE_L1Audio
+	ON
+
+[MODEM_TYPE]
+	LCORE_AUDIO
+
+[Class]
+        AFE_Inf_H            on
+        AM_Inf_H             on
+
+[String]
+        L1AUDIO_Str_onoff
+	      {
+                "off",
+                "on"
+	      }
+	      
+         L1Audio_Speech_State_L
+         {            
+                "2G speech on",
+                "3G speech on",
+                "4G speech on",
+                "Idle"
+         }
+ 
+         SAL_PROC_NAME
+         {
+         			"2G_CALL_OPEN",
+         			"2G_CALL_CLOSE",
+         			"2G_CALL_HANDOVER",
+         			"3G_CALL_OPEN",
+         			"3G_CALL_CLOSE",
+         			"BGSND_SWITCH",
+         			"BGSND_CONFIG",
+         			"BKF_SWITCH",
+         			"ENH_PATH_ENABLE",
+         			"ENH_SWITCH",
+         			"SPH_PAR_BKF_ADDR",
+         			"SPH_PAR_MODE_ADDR",
+         			"SPH_PAR_COMMON_ADDR",
+         			"SPH_PAR_DMNR_ADDR",
+         			"PCM_EX_CONFIG",
+         			"PCM_EX_SET_STATE",
+         			"LOOKBACK_ENABLE",
+         			"BT_CONFIG",
+         			"CTM_SWITCH",
+         			"SAL_INIT",
+         			"VM_CONFIG",
+         			"SAL_SET_DEVICE",
+         			"SAL_NOTCHFILTER_ENABLE",
+         			"SAL_8K_RESYNC",
+         			"SAL_VOLTE_SETINFO",
+         			"SAL_2G_SMR_SWITCH",
+         			"SAL_PAR_INTERNAL_ADDR",
+         			"SAL_PCM_ROUTER_OPEN",
+         			"SAL_PCM_ROUTER_CLOSE",
+         			"4G_G_CODEC_CALL_OPEN",
+         			"4G_G_CODEC_CALL_CLOSE",
+         			"ENH_DYNAMIC_STATE_PARAMETER_INIT",
+         			"SPH_PAR_MODE2_NB_ADDR",
+         			"SPH_PAR_MODE3_NB_ADDR",
+         			"SPH_PAR_MODE2_WB_ADDR",
+         			"SPH_PAR_MODE3_WB_ADDR",
+         			"SPH_PAR_FS_ADDR",
+         			"SPH_OPEN_DSP_CTRL",
+         			"4G_EXCOD_CALL_OPEN",
+         			"4G_EXCOD_CALL_CLOSE"
+         }
+
+         SAL_DSP_VALUE_NAME
+         {
+         			"UPDATE_3G_ENC_RATE",
+         			"UPDATE_3G_DEC_RATE",
+         			"UPDATE_MUTE_CTRL",
+         			"UPDATE_SCH_DELAY",
+         			"UPDATE_8K_CTRL",
+         			"UPDATE_ENH_DYNAMIC_CTRL",
+         			"HANDOVER_STATUS",
+         			"UPDATE_AGC1_CTRL",
+         			"UPDATE_SIDETONE_GAIN",
+         			"UPDATE_SIDETONE_CTRL",
+         			"UPDATE_AGC2_CTRL",
+         			"UPDATE_AGC3_CTRL",
+         			"UPDATE_AGC4_CTRL",
+         			"UPDATE_ENH_DYNAMIC_STATE_SET",
+         			"UPDATE_ENH_DYNAMIC_STATE_CHECK",
+         			"UPDATE_ENH_FLAG_PAR",
+         			"UPDATE_OPEN_DSP_HANDSHAKE_MD",
+         			"UPDATE_OPEN_DSP_TIMEOUT_THRESHOLD",
+         			"UPDATE_OPEN_DSP_CTRL",
+         			"FAKE_SCH_DELAY",
+         			"UPDATE_ECHO_REF_SOURCE"
+         }
+                  
+         
+         
+[Message]
+      info    L1Audio_Msg_AM_AudioManager_L               AM_Inf_H             "2G AM Manager, handover=%d speech mode = %b  sub_ch=%d am_state=%s"
+      info    L1Audio_Msg_AM_AudioManager2_L              AM_Inf_H             "2G AM Manager, ul_speech_mode_L=%b ul_sub_channel_L = %d"
+      info    L1Audio_Msg_AM_Handover                     AM_Inf_H             "AM handover occurs, speech mode=%b sub_channel=%b"
+      info    L1Audio_Msg_AM_AudioManagerInfo             AM_Inf_H             "AM Update AudioMgr Info, speech mode=%b sub_channel=%b"
+      info    L1Audio_Msg_TCH_NOTIFY_L                    AM_Inf_H             "AM TCH %s notify L1Audio, am_state : %s"
+
+      info    L1Audio_Msg_AM_Speech_L                     AM_Inf_H             "AM_Speech %d"
+      info    L1Audio_Msg_PutQ_L                          AM_Inf_H             "AM_PutQ %d"
+      info    L1Audio_Msg_GetQ_L                          AM_Inf_H             "AM_GetQ code_address=%xd param=%d %d %d %d %d %d"      
+        info    L1Audio_Msg_SAL_SET_VALUE                 AM_Inf_H             "SphAL update : %s = %xd"
+        info    L1Audio_Msg_SAL_SET_VALUE_MULTI           AM_Inf_H             "SphAL update : %s = [%xd] [%xd] [%xd] [%xd] [%xd]"
+				info    L1Audio_Msg_SAL_PROC                      AM_Inf_H             "SphAL proc : %s : [%xd] [%xd] [%xd] [%xd]"
+        info    L1Audio_Msg_L1D_GetRF_L                     AM_Inf_H             " L1D_GetRF %d"		
+        info    L1Audio_Msg_AM_DELAY_TABLE                AM_Inf_H             "AM Speech PCM Delay Table ID %d"
+        info    L1Audio_Msg_VBI_RESET                     AM_Inf_H             "VBI Reset"
+        info    L1Audio_Msg_VBI_END                       AM_Inf_H             "VBI End"
+        info    L1Audio_Msg_AM_SRC1                       AM_Inf_H             "AM SRCCtrl_1=%xd codec=%xd speech_mode=%xd"
+        info    L1Audio_Msg_AM_SRC2                       AM_Inf_H             "AM SRCCtrl_2=%xd codec=%xd speech_mode=%xd"                        
+        info    L1Audio_Msg_AM_3G_Reset_Time_Drift_L        AM_Inf_H             "AM 3G L1D Resync Reset"    
+        info    L1Audio_Msg_AM_L1D_Backup_L                 AM_Inf_H             "AM L1D backup %d %xd"                
+        info    L1Audio_Msg_AM_HandoverInfo_L               AM_Inf_H             "AM %d cntHandover_L %d hasHandover_L %d"              

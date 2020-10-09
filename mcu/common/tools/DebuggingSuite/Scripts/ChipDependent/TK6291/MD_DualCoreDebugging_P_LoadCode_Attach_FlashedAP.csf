@@ -1,0 +1,72 @@
+;===============================================
+;CMM START
+;===============================================
+
+; ==================
+; Set up port info
+; ==================
+Do MD_DualCoreDebugging_PSCore.csf
+
+wait 3s
+
+; MD Only BringUp Type
+&OPT_MD_BRINGUP_TYPE=1
+;; 0: CA7 CVD load AP .elf to init EMI,PMIC,GIO
+;; 1: Already Flash download DummyAP by flash tool
+
+; ==================
+; Open debugging tool bar
+; ==================
+menu.reset
+menu.reprogram MD_DualCoreDebugging_PlatformInit
+
+; ==================
+; Open Customer tool bar
+; ==================
+Do MD_P_Customer_ToolBar.cmm
+
+VectorCatch.RESET OFF
+
+; ==================
+; Load code to RAM
+; ==================
+Do MD_DualCoreDebugging_PlatformInit.cmm &OPT_MD_BRINGUP_TYPE
+
+; ==================
+; load PSCore symbol
+; ==================
+DO MD_P_LoadSymbol.cmm
+
+; ==================
+; attach on PSCORE
+; ==================
+DO MD_P_Attach.cmm
+
+; ==================
+; set PSCore PC to INT_Initialize
+; untrap PSCore from bootslave
+; ==================
+R.S PC VARADDR(INT_Initialize)
+
+; ==================
+; EMI MPU, set code section as RO
+; ==================
+DO EMI_MPU_Set.cmm
+
+; ==================
+; set breakpoint
+; ==================
+DO MD_DualCoreDebugging_P_BreakPoint.cmm
+
+winclear
+winpos 0% 0% 70% 80%
+d.l
+winpos 70% 0% 30% 80%
+Register
+winpos 0% 76% 50% 50%
+Break.List
+winpos 50% 76% 50% 50%
+sYmbol.Browse
+
+PRINT "Init Done"
+ENDDO

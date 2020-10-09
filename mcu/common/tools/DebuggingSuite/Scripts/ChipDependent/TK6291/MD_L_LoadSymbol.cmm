@@ -1,0 +1,24 @@
+;===============================================
+;CMM START
+;===============================================
+
+; ==================
+; load L1Core symbol
+; ==================
+; get PSCore information
+DO P_BuildInfo.cmm
+
+; change execution dir to cmm foler of L1Core
+CHDIR &L_CMM_RELATIVE_PATH
+
+; get L1Core information
+DO L_BuildInfo.cmm
+
+; load symbol
+D.LOAD.ELF &OPT_MD_L_ELF_PATH /RELPATH /PATH &OPT_MD_L_SRC_PATH /PATH &OPT_MD_L_SRC_PATH/l1core /PATH &OPT_MD_L_SRC_PATH/common /nocode
+
+; change back execution dir to cmm foler of PSCore
+CHDIR &P_CMM_RELATIVE_PATH
+
+PRINT "Load L1Core symbol done"
+ENDDO
